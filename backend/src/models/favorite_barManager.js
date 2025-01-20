@@ -1,6 +1,6 @@
 const AbstractManager = require("./AbstractManager");
 
-class favoriteBarManager extends AbstractManager {
+class FavoriteBarManager extends AbstractManager {
     constructor(){
         super({table: "favorite_bar"});
     }
@@ -20,4 +20,4 @@ class favoriteBarManager extends AbstractManager {
       }
 }
 
-module.exports = favoriteBarManager;
+module.exports = FavoriteBarManager;
