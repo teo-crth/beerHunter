@@ -1,8 +1,7 @@
 const models = require("../models");
-const { destroy } = require("./itemControllers");
 
 const browse = (req, res) => {
-    models.comment
+    models.comment_image
         .findAll()
         .then(([rows]) => {
             res.send(rows);
@@ -14,7 +13,7 @@ const browse = (req, res) => {
 };
 
 const read = (req, res) => {
-    models.comment
+    models.comment_image
         .find(req.params.id)
         .then(([rows]) => {
             if (rows[0] == null) {
@@ -30,14 +29,14 @@ const read = (req, res) => {
 };
 
 const edit = (req, res) => {
-    const comment = req.body;
+    const comment_image = req.body;
 
     // TODO validations (length, format...)
 
-    comment.id = parseInt(req.params.id, 10);
+    comment_image.id = parseInt(req.params.id, 10);
 
     models.comment
-        .update(comment)
+        .update(comment_image)
         .then(([result]) => {
             if (result.affectedRows === 0) {
                 res.sendStatus(404);
@@ -52,12 +51,12 @@ const edit = (req, res) => {
 };
 
 const add = (req, res) => {
-    const comment = req.body;
+    const comment_image = req.body;
 
     // TODO validations (length, format...)
 
-    models.comment
-        .insert(comment)
+    models.comment_image
+        .insert(comment_image)
         .then(([result]) => {
             res.location(`/user_comments/${result.insertId}`).sendStatus(201);
         })
@@ -68,7 +67,7 @@ const add = (req, res) => {
 };
 
 const destroy = (req, res) => {
-    models.comments
+    models.comments_image
         .delete(req.params.id)
         .then(([result]) => {
             if (result.affectedRows === 0) {
