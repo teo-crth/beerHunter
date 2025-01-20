@@ -20,4 +20,4 @@ class UserCommentManager extends AbstractManager {
       }
 }
 
-module.exports = userCommentManager;
+module.exports = UserCommentManager;
