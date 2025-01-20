@@ -1,13 +1,13 @@
 const AbstractManager = require("./AbstractManager");
 
-class user_commentManager extends AbstractManager {
+class userCommentManager extends AbstractManager {
     constructor(){
         super({table: "user_comment"});
     }
 
     insert(user_comment){
         return this.database.query(
-            `INSERT INTO ${this.table} (text , date, rate, comment_image_id, user_id, bar_id) VALUES ($1, 2$, $3, $4, $5, $6)`,
+            `INSERT INTO ${this.table} (text , date, rate, comment_image_id, user_id, bar_id) VALUES ($1, $2, $3, $4, $5, $6)`,
             [user_comment.text, user_comment.date, user_comment.rate, user_comment.comment_image_id, user_comment.user_id, user_comment.bar_id]
         )
     }
@@ -19,3 +19,5 @@ class user_commentManager extends AbstractManager {
         );
       }
 }
+
+module.exports = userCommentManager;
