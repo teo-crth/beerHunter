@@ -1,6 +1,6 @@
 const AbstractManager = require("./AbstractManager");
 
-class userCommentManager extends AbstractManager {
+class UserCommentManager extends AbstractManager {
     constructor(){
         super({table: "user_comment"});
     }
