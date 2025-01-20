@@ -58,7 +58,7 @@ const add = (req, res) => {
     models.comment_image
         .insert(comment_image)
         .then(([result]) => {
-            res.location(`/user_comments/${result.insertId}`).sendStatus(201);
+            res.location(`/comment_image/${result.insertId}`).sendStatus(201);
         })
         .catch((err) => {
             console.error(err);

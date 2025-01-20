@@ -2,30 +2,26 @@ const AbstractManager = require("./AbstractManager");
 
 class CommentImageManager extends AbstractManager {
     constructor() {
-        super({ table: "user_comment" });
+        super({ table: "comment_image" });
     }
 
     insert(comment_image) {
-        return this.database.query(`INSERT INTO ${this.table} (text, date, rate, comment_image_id, user_id, bar_id) VALUES ($1, $2, $3, $4, $5, $6)`, [
-            comment_image.text,
-            comment_image.date,
-            comment_image.rate,
-            comment_image.comment_image_id,
-            comment_image.user_id,
-            comment_image.bar_id
+        return this.database.query(`INSERT INTO ${this.table} (image_link, image_alt, user_comment_id) VALUES ($1, $2, $3)`, [
+            comment_image.image_link,
+            comment_image.image_alt,
+            comment_image.user_comment_id,
+            comment_image.id
         ]);
     }
 
     update(bar) {
-        return this.database.query(`UPDATE ${this.table} SET text = $1, date = $2, rate = $3, comment_image_id = $4, user_id = $5, bar_id = $6`, [
-            comment_image.text,
-            comment_image.date,
-            comment_image.rate,
-            comment_image.comment_image_id,
-            comment_image.user_id,
-            comment_image.bar_id                   
+        return this.database.query(`UPDATE ${this.table} SET image_link = $1, image_alt = $2, user_comment_id = $3 WHERE id = $4`, [
+            comment_image.image_link,
+            comment_image.image_alt,
+            comment_image.user_comment_id,
+            comment_image.id                  
         ]);
     }
 
 }
-module.exports = commentManager;
+module.exports = CommentImageManager;
