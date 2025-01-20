@@ -13,7 +13,7 @@ class CommentImageManager extends AbstractManager {
         ]);
     }
 
-    update(bar) {
+    update(comment_image) {
         return this.database.query(`UPDATE ${this.table} SET image_link = $1, image_alt = $2, user_comment_id = $3 WHERE id = $4`, [
             comment_image.image_link,
             comment_image.image_alt,
