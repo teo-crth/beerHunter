@@ -1,13 +1,13 @@
 const AbstractManager = require("./AbstractManager");
 
-class favorite_barManager extends AbstractManager {
+class favoriteBarManager extends AbstractManager {
     constructor(){
         super({table: "favorite_bar"});
     }
 
     insert(favorite_bar){
         return this.database.query(
-            `INSERT INTO ${this.table} (user_id, bar_id) VALUES ($1, 2$)`,
+            `INSERT INTO ${this.table} (user_id, bar_id) VALUES ($1, $2)`,
             [favorite_bar.user_id, favorite_bar.bar_id]
         )
     }
@@ -19,3 +19,5 @@ class favorite_barManager extends AbstractManager {
         );
       }
 }
+
+module.exports = favoriteBarManager;
