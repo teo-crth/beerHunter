@@ -5,6 +5,11 @@ class BarManager extends AbstractManager {
         super({ table: "bar" });
     }
 
+    findCommentsOfOneBar(id) {
+        return this.database.query(`SELECT * FROM  user_comment WHERE bar_id = ?`, 
+          [id]);
+      }
+
     insert(bar) {
         return this.database.query(`INSERT INTO ${this.table} (name, address, latitude, longitude, rate, opening_hours) VALUES (?, ?, ?, ?, ?, ?)`, [
             bar.name,

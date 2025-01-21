@@ -12,6 +12,18 @@ const browse = (req, res) => {
         });
 };
 
+const findAssociateComments = (req, res) => {
+  models.bar
+    .findCommentsOfOneBar(req.params.id)
+    .then(([rows]) => {
+      res.send(rows);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.sendStatus(500);
+    });
+};
+
 const read = (req, res) => {
     models.bar
         .find(req.params.id)
@@ -88,4 +100,5 @@ module.exports = {
     edit,
     add,
     destroy,
+    findAssociateComments
 };
