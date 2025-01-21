@@ -11,7 +11,7 @@ const commentImageControllers = require("./controllers/commentImageControllers")
 
 // GET
 router.get("/api/bars/:id/beers", beerAvailableControllers.browse);
-router.get("/api/bars/:id/comments", barControllers.browse);
+router.get("/api/bars/:id/comments", userCommentControllers.browse);
 router.get("/api/bars/:id", barControllers.read);
 router.get("/api/bars/:city", barControllers.browse);
 router.get("/api/bars", barControllers.browse);
@@ -20,7 +20,7 @@ router.get("/api/beers/:id", beerControllers.read);
 router.get("/api/beers/:type", beerControllers.browse);
 router.get("/api/beers", beerControllers.browse);
 
-router.get("/api/users/:id/comments/", usersControllers.browse);
+router.get("/api/users/:id/comments/", usersControllers.findAssociateComments);
 router.get("/api/users/:id/favorite-bars/", usersControllers.browse);
 router.get("/api/users/:id", usersControllers.read);
 router.get("/api/users", usersControllers.browse);

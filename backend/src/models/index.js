@@ -42,8 +42,8 @@ models.beer = new BeerManager();
 models.beer.setDatabase(pool);
 
 const UserCommentManager = require("./userCommentManager");
-models.comment = new UserCommentManager();
-models.comment.setDatabase(pool);
+models.user_comment = new UserCommentManager();
+models.user_comment.setDatabase(pool);
 
 const UsersManager = require("./usersManager");
 models.users = new UsersManager();

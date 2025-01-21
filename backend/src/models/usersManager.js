@@ -5,6 +5,11 @@ class UsersManager extends AbstractManager {
     super({ table: "users" });
   }
 
+  findCommentsOfOneUser(id) {
+    return this.database.query(`SELECT * FROM  user_comment WHERE user_id = ?`, 
+      [id]);
+  }
+
   insert(users) {
     return this.database.query(
         `INSERT INTO ${this.table} (email, birth_date, password, address, city, name, theme) values (?, ?, ?, ?, ?, ?, ?)`,
