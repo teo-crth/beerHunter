@@ -14,7 +14,10 @@ class BeerTypeManager extends AbstractManager {
   update(beer_type) {
     return this.database.query(
       `UPDATE ${this.table} SET name = $1 WHERE id = $2`,
-      [beer_type.name]
+      [beer_type.name,
+        beer_type.id
+    ]
+
     );
   }
 }
