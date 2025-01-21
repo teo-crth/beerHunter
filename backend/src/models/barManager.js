@@ -10,25 +10,29 @@ class BarManager extends AbstractManager {
           [id]);
       }
 
-    insert(bar) {
-        return this.database.query(`INSERT INTO ${this.table} (name, address, latitude, longitude, rate, opening_hours) VALUES (?, ?, ?, ?, ?, ?)`, [
-            bar.name,
-            bar.address,
-            bar.latitude,
-            bar.longitude,
-            bar.rate,
-            bar.opening_hours
-        ]);
-    }
 
-    update(bar) {
-        return this.database.query(`UPDATE ${this.table} SET name = ?, address = ?, latitude = ?, longitude = ?, rate = ?, opening_hours = ? WHERE id = ?`, [
+
+    insert(bar) {
+        return this.database.query(`INSERT INTO ${this.table} (name, address, latitude, longitude, rate, opening_hours, city_id) VALUES (?, ?, ?, ?, ?, ?, ?)`, [
             bar.name,
             bar.address,
             bar.latitude,
             bar.longitude,
             bar.rate,
             bar.opening_hours,
+            bar.city_id
+        ]);
+    }
+
+    update(bar) {
+        return this.database.query(`UPDATE ${this.table} SET name = ?, address = ?, latitude = ?, longitude = ?, rate = ?, opening_hours = ?, city_id = ? WHERE id = ?`, [
+            bar.name,
+            bar.address,
+            bar.latitude,
+            bar.longitude,
+            bar.rate,
+            bar.opening_hours,
+            bar.city_id,
             bar.id
         ]);
     }

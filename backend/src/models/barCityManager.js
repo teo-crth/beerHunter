@@ -1,6 +1,6 @@
 const AbstractManager = require("./AbstractManager");
 
-class barCityManager extends AbstractManager {
+class BarCityManager extends AbstractManager {
     constructor() {
         super({ table: "bar_city" });
     }
@@ -21,4 +21,4 @@ class barCityManager extends AbstractManager {
     }
 }
 
-module.exports = BeerAvailableManager;
+module.exports = BarCityManager;

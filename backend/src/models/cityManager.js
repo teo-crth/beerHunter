@@ -5,7 +5,7 @@ class CityManager extends AbstractManager {
     super({ table: "city" });
   }
 
-  findBarOfOneCity(id) {
+  findBarsOfOneCity(id) {
     return this.database.query(`SELECT * FROM  bar WHERE city_id = ?`, 
       [id]);
   }
@@ -24,4 +24,4 @@ class CityManager extends AbstractManager {
   }
 }
 
-module.exports = BeerManager;
+module.exports = CityManager;

@@ -1,7 +1,7 @@
 const models = require("../models");
 
 const browse = (req, res) => {
-    models.bar_city
+    models.city
         .findAll()
         .then(([rows]) => {
             res.send(rows);
@@ -12,8 +12,20 @@ const browse = (req, res) => {
         });
 };
 
+const findAssociateBars = (req, res) => {
+  models.city
+    .findBarsOfOneCity(req.params.id)
+    .then(([rows]) => {
+      res.send(rows);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.sendStatus(500);
+    });
+};
+
 const read = (req, res) => {
-    models.bar_city
+    models.city
         .find(req.params.id)
         .then(([rows]) => {
             if (rows[0] == null) {
@@ -29,14 +41,14 @@ const read = (req, res) => {
 };
 
 const edit = (req, res) => {
-    const barCity = req.body;
+    const city = req.body;
 
     // TODO validations (length, format...)
 
-    barCity.id = parseInt(req.params.id, 10);
+    city.id = parseInt(req.params.id, 10);
 
-    models.bar_city
-        .update(barCity)
+    models.city
+        .update(city)
         .then(([result]) => {
             if (result.affectedRows === 0) {
                 res.sendStatus(404);
@@ -51,14 +63,14 @@ const edit = (req, res) => {
 };
 
 const add = (req, res) => {
-    const barCity = req.body;
+    const city = req.body;
 
     // TODO validations (length, format...)
 
-    models.bar_city
-        .insert(barCity)
+    models.city
+        .insert(city)
         .then(([result]) => {
-            res.location(`/bar_city/${result.insertId}`).sendStatus(201);
+            res.location(`api/citys/${result.insertId}`).sendStatus(201);
         })
         .catch((err) => {
             console.error(err);
@@ -67,7 +79,7 @@ const add = (req, res) => {
 };
 
 const destroy = (req, res) => {
-    models.bar_city
+    models.city
         .delete(req.params.id)
         .then(([result]) => {
             if (result.affectedRows === 0) {
@@ -88,4 +100,5 @@ module.exports = {
     edit,
     add,
     destroy,
+    findAssociateBars
 };
