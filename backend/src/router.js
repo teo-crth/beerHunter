@@ -10,7 +10,7 @@ const beerAvailableControllers = require("./controllers/beerAvailableControllers
 const commentImageControllers = require("./controllers/commentImageControllers");
 
 // GET
-router.get("/api/bars/:id/beers", beerAvailableControllers.browse); // A FAIRE XAVIER
+router.get("/api/bars/:id/beers", barControllers.findAssociateBeers);
 router.get("/api/bars/:id/comments", barControllers.findAssociateComments);
 router.get("/api/bars/:id", barControllers.read);
 router.get("/api/bars/:city", barControllers.browse); // A FAIRE PAUL
