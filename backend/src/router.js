@@ -9,6 +9,7 @@ const userCommentControllers = require("./controllers/userCommentControllers");
 const beerAvailableControllers = require("./controllers/beerAvailableControllers");
 const commentImageControllers = require("./controllers/commentImageControllers");
 const favoriteBarControllers = require("./controllers/favoriteBarControllers");
+// const cityControllers = require("./controllers/cityControllers");
 
 // GET
 
@@ -31,24 +32,28 @@ router.get("/api/comments/:id/images", userCommentControllers.findAssociateImage
 router.get("/api/comments/:id", userCommentControllers.read);
 router.get("/api/comments", userCommentControllers.browse);
 
+// router.get("/api/cities", cityControllers.browse);
+
 
 // PUT
 router.put("/api/bars/:id", barControllers.edit);
 router.put("/api/beers/:id", beerControllers.edit);
 router.put("/api/users/:id", usersControllers.edit);
 router.put("/api/comments/:id", userCommentControllers.edit);
-
+// router.put("/api/cities/:id", cityControllers.edit);
 
 // POST
 router.post("/api/bars", barControllers.add);
 router.post("/api/beers", beerControllers.add);
 router.post("/api/users", usersControllers.add);
 router.post("/api/comments", userCommentControllers.add);
+// router.post("/api/cities/:id", cityControllers.add);
 
 // DELETE
 router.delete("/api/bars/:id", barControllers.destroy);
 router.delete("/api/beers/:id", beerControllers.destroy);
 router.delete("/api/users/:id", usersControllers.destroy);
 router.delete("/api/comments/:id", userCommentControllers.destroy);
+// router.delete("/api/cities/:id", cityControllers.destroy);
 
 module.exports = router;
