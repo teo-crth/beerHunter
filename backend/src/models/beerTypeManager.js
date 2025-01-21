@@ -7,13 +7,13 @@ class BeerTypeManager extends AbstractManager {
 
   insert(beer_type) {
     return this.database.query(
-        `INSERT INTO ${this.table} (name) values ($1)`,
+        `INSERT INTO ${this.table} (name) values (?)`,
         [beer_type.name]);
   }
 
   update(beer_type) {
     return this.database.query(
-      `UPDATE ${this.table} SET name = $1 WHERE id = $2`,
+      `UPDATE ${this.table} SET name = ? WHERE id = ?`,
       [beer_type.name,
         beer_type.id
     ]
