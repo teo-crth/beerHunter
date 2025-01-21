@@ -6,12 +6,21 @@ class BarManager extends AbstractManager {
     }
 
     findCommentsOfOneBar(id) {
-        return this.database.query(`SELECT * FROM  user_comment WHERE bar_id = ?`, 
-          [id]);
-      }
+        return this.database.query(`SELECT * FROM  user_comment WHERE bar_id = ?`,
+            [id]);
+    }
+
+    findBeersOfOneBar(id) {
+        return this.database.query(`SELECT bar.*, beer.*
+            FROM bar
+            JOIN beer_available ON bar.id = beer_available.bar_id
+            JOIN beer ON beer_available.beer_id = beer.id
+            WHERE bar.id = ?`, [id]);
+    }
+
 
     insert(bar) {
-        return this.database.query(`INSERT INTO ${this.table} (name, address, latitude, longitude, rate, opening_hours) VALUES (?, ?, ?, ?, ?, ?)`, [
+        return this.database.query(`INSERT INTO ${this.table} (name, address, latitude, longitude, rate, opening_hours) VALUES(?, ?, ?, ?, ?, ?)`, [
             bar.name,
             bar.address,
             bar.latitude,
@@ -22,7 +31,7 @@ class BarManager extends AbstractManager {
     }
 
     update(bar) {
-        return this.database.query(`UPDATE ${this.table} SET name = ?, address = ?, latitude = ?, longitude = ?, rate = ?, opening_hours = ? WHERE id = ?`, [
+        return this.database.query(`UPDATE ${this.table} SET name = ?, address = ?, latitude = ?, longitude = ?, rate = ?, opening_hours = ? WHERE id = ? `, [
             bar.name,
             bar.address,
             bar.latitude,

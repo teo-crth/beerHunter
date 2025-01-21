@@ -13,15 +13,27 @@ const browse = (req, res) => {
 };
 
 const findAssociateComments = (req, res) => {
-  models.bar
-    .findCommentsOfOneBar(req.params.id)
-    .then(([rows]) => {
-      res.send(rows);
-    })
-    .catch((err) => {
-      console.error(err);
-      res.sendStatus(500);
-    });
+    models.bar
+        .findCommentsOfOneBar(req.params.id)
+        .then(([rows]) => {
+            res.send(rows);
+        })
+        .catch((err) => {
+            console.error(err);
+            res.sendStatus(500);
+        });
+};
+
+const findAssociateBeers = (req, res) => {
+    models.bar
+        .findBeersOfOneBar(req.params.id)
+        .then(([rows]) => {
+            res.send(rows);
+        })
+        .catch((err) => {
+            console.error(err);
+            res.sendStatus(500);
+        });
 };
 
 const read = (req, res) => {
@@ -100,5 +112,6 @@ module.exports = {
     edit,
     add,
     destroy,
-    findAssociateComments
+    findAssociateComments,
+    findAssociateBeers
 };
