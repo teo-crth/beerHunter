@@ -8,8 +8,10 @@ const usersControllers = require("./controllers/usersControllers");
 const userCommentControllers = require("./controllers/userCommentControllers");
 const beerAvailableControllers = require("./controllers/beerAvailableControllers");
 const commentImageControllers = require("./controllers/commentImageControllers");
+const favoriteBarControllers = require("./controllers/favoriteBarControllers");
 
 // GET
+
 router.get("/api/bars/:id/beers", barControllers.findAssociateBeers);
 router.get("/api/bars/:id/comments", barControllers.findAssociateComments);
 router.get("/api/bars/:id", barControllers.read);
@@ -21,11 +23,11 @@ router.get("/api/beers/:type", beerControllers.browse); // A FAIRE ALEX
 router.get("/api/beers", beerControllers.browse);
 
 router.get("/api/users/:id/comments/", usersControllers.findAssociateComments);
-router.get("/api/users/:id/favorite-bars/", usersControllers.browse); // A FAIRE TEO
+router.get("/api/users/:id/favorite-bars/", usersControllers.findAssociateFavorite);
 router.get("/api/users/:id", usersControllers.read);
 router.get("/api/users", usersControllers.browse);
 
-router.get("/api/comments/:id/images", commentImageControllers.browse); // A FAIRE TEO
+router.get("/api/comments/:id/images", userCommentControllers.findAssociateImage);
 router.get("/api/comments/:id", userCommentControllers.read);
 router.get("/api/comments", userCommentControllers.browse);
 
