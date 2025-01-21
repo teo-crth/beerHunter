@@ -46,8 +46,8 @@ models.comment = new UserCommentManager();
 models.comment.setDatabase(pool);
 
 const UsersManager = require("./usersManager");
-models.user = new UsersManager();
-models.user.setDatabase(pool);
+models.users = new UsersManager();
+models.users.setDatabase(pool);
 
 const BeerAvailableManager = require("./beerAvailableManager");
 models.beerAvailable = new BeerAvailableManager();
@@ -60,6 +60,10 @@ models.commentImage.setDatabase(pool);
 const FavoriteBarManager = require("./favoriteBarManager");
 models.favoriteBar = new FavoriteBarManager();
 models.favoriteBar.setDatabase(pool);
+
+const BeerTypeManager = require("./beerTypeManager");
+models.beerType = new BeerTypeManager();
+models.beerType.setDatabase(pool);
 
 
 // bonus: use a proxy to personalize error message,

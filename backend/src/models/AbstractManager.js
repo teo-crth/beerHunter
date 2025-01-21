@@ -4,7 +4,7 @@ class AbstractManager {
   }
 
   find(id) {
-    return this.database.query(`SELECT * FROM  ${this.table} WHERE id = $1`, 
+    return this.database.query(`SELECT * FROM  ${this.table} WHERE id = ?`, 
       [id]);
   }
 
@@ -13,7 +13,7 @@ class AbstractManager {
   }
 
   delete(id) {
-    return this.database.query(`DELETE FROM ${this.table} WHERE id = $1`, [id]);
+    return this.database.query(`DELETE FROM ${this.table} WHERE id = ?`, [id]);
   }
 
   setDatabase(database) {
