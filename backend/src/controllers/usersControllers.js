@@ -24,6 +24,18 @@ const findAssociateComments = (req, res) => {
     });
 };
 
+const findAssociateFavorite = (req, res) => {
+  models.users
+    .findFavoriteBarsOfOneUser(req.params.id)
+    .then(([rows]) => {
+      res.send(rows);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.sendStatus(500);
+    });
+};
+
 const read = (req, res) => {
   models.users
     .find(req.params.id)
@@ -101,4 +113,5 @@ module.exports = {
   add,
   destroy,
   findAssociateComments,
+  findAssociateFavorite,
 };
