@@ -6,7 +6,7 @@ class CommentImageManager extends AbstractManager {
     }
 
     insert(comment_image) {
-        return this.database.query(`INSERT INTO ${this.table} (image_link, image_alt, user_comment_id) VALUES ($1, $2, $3)`, [
+        return this.database.query(`INSERT INTO ${this.table} (image_link, image_alt, user_comment_id) VALUES (?, ?, ?)`, [
             comment_image.image_link,
             comment_image.image_alt,
             comment_image.user_comment_id
@@ -14,7 +14,7 @@ class CommentImageManager extends AbstractManager {
     }
 
     update(comment_image) {
-        return this.database.query(`UPDATE ${this.table} SET image_link = $1, image_alt = $2, user_comment_id = $3 WHERE id = $4`, [
+        return this.database.query(`UPDATE ${this.table} SET image_link = ?, image_alt = ?, user_comment_id = ? WHERE id = ?`, [
             comment_image.image_link,
             comment_image.image_alt,
             comment_image.user_comment_id,
