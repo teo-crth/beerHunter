@@ -5,6 +5,13 @@ class BeerTypeManager extends AbstractManager {
     super({ table: "beer_type" });
   }
 
+  findBeerOfOneType(type) {
+    return this.database.query(`SELECT beer.*
+    FROM beer
+    JOIN beer_type ON beer.beer_type_id = beer_type.id
+    WHERE beer_type.name = ?`,[type]);
+  }
+
   insert(beer_type) {
     return this.database.query(
         `INSERT INTO ${this.table} (name) values (?)`,

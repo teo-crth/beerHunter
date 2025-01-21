@@ -8,6 +8,7 @@ const usersControllers = require("./controllers/usersControllers");
 const userCommentControllers = require("./controllers/userCommentControllers");
 const beerAvailableControllers = require("./controllers/beerAvailableControllers");
 const commentImageControllers = require("./controllers/commentImageControllers");
+const beerTypeControllers = require("./controllers/beerTypeControllers");
 
 // GET
 router.get("/api/bars/:id/beers", beerAvailableControllers.browse); // A FAIRE XAVIER
@@ -17,7 +18,7 @@ router.get("/api/bars/:city", barControllers.browse); // A FAIRE PAUL
 router.get("/api/bars", barControllers.browse);
 
 router.get("/api/beers/:id", beerControllers.read);
-router.get("/api/beers/:type", beerControllers.browse); // A FAIRE ALEX
+router.get("/api/beers/:type", beerTypeControllers.findAssociateBeerType); // A FAIRE ALEX
 router.get("/api/beers", beerControllers.browse);
 
 router.get("/api/users/:id/comments/", usersControllers.findAssociateComments);
