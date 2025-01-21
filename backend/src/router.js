@@ -26,7 +26,7 @@ router.get("/api/users/:id/favorite-bars/", usersControllers.findAssociateFavori
 router.get("/api/users/:id", usersControllers.read);
 router.get("/api/users", usersControllers.browse);
 
-router.get("/api/comments/:id/images", commentImageControllers.browse); // A FAIRE TEO
+router.get("/api/comments/:id/images", userCommentControllers.findAssociateImage);
 router.get("/api/comments/:id", userCommentControllers.read);
 router.get("/api/comments", userCommentControllers.browse);
 
