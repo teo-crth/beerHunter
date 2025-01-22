@@ -31,8 +31,9 @@ router.get("/api/users", usersControllers.browse);
 router.get("/api/comments/:id/images", userCommentControllers.findAssociateImage);
 router.get("/api/comments/:id", userCommentControllers.read);
 router.get("/api/comments", userCommentControllers.browse);
-router.get("/api/cities", cityControllers.browse);
 
+router.get("/api/cities", cityControllers.browse);
+router.put("/api/cities/:id", cityControllers.read);
 
 // PUT
 router.put("/api/bars/:id", barControllers.edit);
