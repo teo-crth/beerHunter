@@ -53,14 +53,19 @@ const read = (req, res) => {
 };
 
 const edit = (req, res) => {
-  const users = req.body;
+  const userData = req.body;
 
   // TODO validations (length, format...)
 
-  users.id = parseInt(req.params.id, 10);
+  userData.id = parseInt(req.params.id, 10);
+
+  if (req.file) {
+    const profilePicturePath = path.join("assets", "profil-pictures", req.file.filename);
+    userData.profilePicture = profilePicturePath; // Ajoute le chemin de l'image au corps de la requête
+  }
 
   models.users
-    .update(users)
+    .update(userData)
     .then(([result]) => {
       if (result.affectedRows === 0) {
         res.sendStatus(404);
