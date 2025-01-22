@@ -65,6 +65,14 @@ const BeerTypeManager = require("./beerTypeManager");
 models.beer_type = new BeerTypeManager();
 models.beer_type.setDatabase(pool);
 
+const CityManager = require("./cityManager");
+models.city = new CityManager();
+models.city.setDatabase(pool);
+
+const BarCityManager = require("./barCityManager");
+models.bar_city = new BarCityManager();
+models.bar_city.setDatabase(pool);
+
 
 // bonus: use a proxy to personalize error message,
 // when asking for a non existing model

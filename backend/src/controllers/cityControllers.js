@@ -1,7 +1,7 @@
 const models = require("../models");
 
 const browse = (req, res) => {
-    models.bar
+    models.city
         .findAll()
         .then(([rows]) => {
             res.send(rows);
@@ -12,32 +12,20 @@ const browse = (req, res) => {
         });
 };
 
-const findAssociateComments = (req, res) => {
-    models.bar
-        .findCommentsOfOneBar(req.params.id)
-        .then(([rows]) => {
-            res.send(rows);
-        })
-        .catch((err) => {
-            console.error(err);
-            res.sendStatus(500);
-        });
-};
-
-const findAssociateBeers = (req, res) => {
-    models.bar
-        .findBeersOfOneBar(req.params.id)
-        .then(([rows]) => {
-            res.send(rows);
-        })
-        .catch((err) => {
-            console.error(err);
-            res.sendStatus(500);
-        });
+const findAssociateBars = (req, res) => {
+  models.city
+    .findBarsOfOneCity(req.params.city, req.params.region)
+    .then(([rows]) => {
+      res.send(rows);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.sendStatus(500);
+    });
 };
 
 const read = (req, res) => {
-    models.bar
+    models.city
         .find(req.params.id)
         .then(([rows]) => {
             if (rows[0] == null) {
@@ -53,14 +41,14 @@ const read = (req, res) => {
 };
 
 const edit = (req, res) => {
-    const bar = req.body;
+    const city = req.body;
 
     // TODO validations (length, format...)
 
-    bar.id = parseInt(req.params.id, 10);
+    city.id = parseInt(req.params.id, 10);
 
-    models.bar
-        .update(bar)
+    models.city
+        .update(city)
         .then(([result]) => {
             if (result.affectedRows === 0) {
                 res.sendStatus(404);
@@ -75,14 +63,14 @@ const edit = (req, res) => {
 };
 
 const add = (req, res) => {
-    const bar = req.body;
+    const city = req.body;
 
     // TODO validations (length, format...)
 
-    models.bar
-        .insert(bar)
+    models.city
+        .insert(city)
         .then(([result]) => {
-            res.location(`api/bars/${result.insertId}`).sendStatus(201);
+            res.location(`api/citys/${result.insertId}`).sendStatus(201);
         })
         .catch((err) => {
             console.error(err);
@@ -91,7 +79,7 @@ const add = (req, res) => {
 };
 
 const destroy = (req, res) => {
-    models.bar
+    models.city
         .delete(req.params.id)
         .then(([result]) => {
             if (result.affectedRows === 0) {
@@ -112,6 +100,5 @@ module.exports = {
     edit,
     add,
     destroy,
-    findAssociateComments,
-    findAssociateBeers
+    findAssociateBars
 };
