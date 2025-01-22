@@ -33,7 +33,7 @@ router.get("/api/comments/:id", userCommentControllers.read);
 router.get("/api/comments", userCommentControllers.browse);
 
 router.get("/api/cities", cityControllers.browse);
-router.put("/api/cities/:id", cityControllers.read);
+router.get("/api/cities/:id", cityControllers.read);
 
 // PUT
 router.put("/api/bars/:id", barControllers.edit);
