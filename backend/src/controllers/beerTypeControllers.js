@@ -12,6 +12,18 @@ const browse = (req, res) => {
     });
 };
 
+const findAssociateBeerType = (req, res) => {
+    models.beer_type
+      .findBeerOfOneType(req.params.type)
+      .then(([rows]) => {
+        res.send(rows);
+      })
+      .catch((err) => {
+        console.error(err);
+        res.sendStatus(500);
+      });
+  };
+
 const read = (req, res) => {
   models.beer_type
     .find(req.params.id)
@@ -58,7 +70,7 @@ const add = (req, res) => {
   models.beer_type
     .insert(beer_type)
     .then(([result]) => {
-      res.location(`/beer_type/${result.insertId}`).sendStatus(201);
+      res.location(`api/beer_type/${result.insertId}`).sendStatus(201);
     })
     .catch((err) => {
       console.error(err);
@@ -88,4 +100,5 @@ module.exports = {
   edit,
   add,
   destroy,
+  findAssociateBeerType,
 };

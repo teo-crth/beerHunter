@@ -8,8 +8,10 @@ const usersControllers = require("./controllers/usersControllers");
 const userCommentControllers = require("./controllers/userCommentControllers");
 const beerAvailableControllers = require("./controllers/beerAvailableControllers");
 const commentImageControllers = require("./controllers/commentImageControllers");
+const beerTypeControllers = require("./controllers/beerTypeControllers");
 const cityControllers = require("./controllers/cityControllers");
 const favoriteBarControllers = require("./controllers/favoriteBarControllers");
+
 
 // GET
 
@@ -20,7 +22,7 @@ router.get("/api/bars/city/:city/:region", cityControllers.findAssociateBars);
 router.get("/api/bars", barControllers.browse);
 
 router.get("/api/beers/:id", beerControllers.read);
-router.get("/api/beers/:type", beerControllers.browse); // A FAIRE ALEX
+router.get("/api/beers/type/:type", beerTypeControllers.findAssociateBeerType); // A FAIRE ALEX
 router.get("/api/beers", beerControllers.browse);
 
 router.get("/api/users/:id/comments/", usersControllers.findAssociateComments);
