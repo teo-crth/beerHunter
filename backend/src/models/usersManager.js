@@ -22,14 +22,14 @@ class UsersManager extends AbstractManager {
 
   insert(users) {
     return this.database.query(
-        `INSERT INTO ${this.table} (email, birth_date, password, address, city, name, theme) values (?, ?, ?, ?, ?, ?, ?)`,
-        [users.email, users.birth_date, users.password, users.address, users.city, users.name, users.theme]);
+        `INSERT INTO ${this.table} (email, birth_date, password, address, city, name, theme) values (?, ?, ?, ?, ?, ?, ?, ?)`,
+        [users.email, users.birth_date, users.password, users.address, users.city, users.name, users.theme, users.profil_picture]);
   }
 
   update(users) {
     return this.database.query(
-      `UPDATE ${this.table} SET email = ?, birth_date = ?, password = ?, address = ?, city = ?, name = ?, theme = ?  WHERE id = ?`,
-      [users.email, users.birth_date, users.password, users.address, users.city, users.name, users.theme, users.id]
+      `UPDATE ${this.table} SET email = ?, birth_date = ?, password = ?, address = ?, city = ?, name = ?, theme = ?, profil_picture = ? WHERE id = ?`,
+      [users.email, users.birth_date, users.password, users.address, users.city, users.name, users.theme, users.profil_picture, users.id]
     );
   }
 }
