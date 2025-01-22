@@ -1,4 +1,5 @@
 const express = require("express");
+const upload = require("./services/middleware/upload");
 
 const router = express.Router();
 
@@ -35,7 +36,7 @@ router.get("/api/cities/:id", cityControllers.read);
 // PUT
 router.put("/api/bars/:id", barControllers.edit);
 router.put("/api/beers/:id", beerControllers.edit);
-router.put("/api/users/:id", usersControllers.edit);
+router.put("/api/users/:id", upload.single("profilePicture"), usersControllers.edit);
 router.put("/api/comments/:id", userCommentControllers.edit);
 router.put("/api/cities/:id", cityControllers.edit);
 
