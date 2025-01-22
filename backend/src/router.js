@@ -18,7 +18,7 @@ router.get("/api/bars/:city", barControllers.browse); // A FAIRE PAUL
 router.get("/api/bars", barControllers.browse);
 
 router.get("/api/beers/:id", beerControllers.read);
-router.get("/api/beers/:type", beerTypeControllers.findAssociateBeerType); // A FAIRE ALEX
+router.get("/api/beers/type/:type", beerTypeControllers.findAssociateBeerType); // A FAIRE ALEX
 router.get("/api/beers", beerControllers.browse);
 
 router.get("/api/users/:id/comments/", usersControllers.findAssociateComments);

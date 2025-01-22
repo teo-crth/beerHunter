@@ -62,8 +62,8 @@ models.favoriteBar = new FavoriteBarManager();
 models.favoriteBar.setDatabase(pool);
 
 const BeerTypeManager = require("./beerTypeManager");
-models.beerType = new BeerTypeManager();
-models.beerType.setDatabase(pool);
+models.beer_type = new BeerTypeManager();
+models.beer_type.setDatabase(pool);
 
 
 // bonus: use a proxy to personalize error message,
