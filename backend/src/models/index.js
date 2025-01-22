@@ -54,12 +54,12 @@ models.beerAvailable = new BeerAvailableManager();
 models.beerAvailable.setDatabase(pool);
 
 const CommentImageManager = require("./commentImageManager");
-models.commentImage = new CommentImageManager();
-models.commentImage.setDatabase(pool);
+models.comment_image = new CommentImageManager();
+models.comment_image.setDatabase(pool);
 
 const FavoriteBarManager = require("./favoriteBarManager");
-models.favoriteBar = new FavoriteBarManager();
-models.favoriteBar.setDatabase(pool);
+models.favorite_bar = new FavoriteBarManager();
+models.favorite_bar.setDatabase(pool);
 
 const BeerTypeManager = require("./beerTypeManager");
 models.beer_type = new BeerTypeManager();
