@@ -5,6 +5,13 @@ class UserCommentManager extends AbstractManager {
         super({table: "user_comment"});
     }
 
+    findCommentImages(id) {
+        return this.database.query(`
+          SELECT * FROM comment_image WHERE user_comment_id = ?`,
+          [id]
+        );
+    }
+
     insert(user_comment){
         return this.database.query(
             `INSERT INTO ${this.table} (text , date, rate, comment_image_id, user_id, bar_id) VALUES (?, ?, ?, ?, ?, ?)`,
