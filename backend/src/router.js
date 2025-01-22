@@ -14,7 +14,7 @@ const cityControllers = require("./controllers/cityControllers");
 router.get("/api/bars/:id/beers", beerAvailableControllers.browse);
 router.get("/api/bars/:id/comments", barControllers.findAssociateComments);
 router.get("/api/bars/:id", barControllers.read);
-router.get("/api/bars/city/:id", cityControllers.findAssociateBars);
+router.get("/api/bars/city/:city/:region", cityControllers.findAssociateBars);
 router.get("/api/bars", barControllers.browse);
 
 router.get("/api/beers/:id", beerControllers.read);

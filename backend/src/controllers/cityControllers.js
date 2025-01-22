@@ -14,7 +14,7 @@ const browse = (req, res) => {
 
 const findAssociateBars = (req, res) => {
   models.city
-    .findBarsOfOneCity(req.params.id)
+    .findBarsOfOneCity(req.params.city, req.params.region)
     .then(([rows]) => {
       res.send(rows);
     })

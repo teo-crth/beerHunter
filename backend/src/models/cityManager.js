@@ -5,9 +5,13 @@ class CityManager extends AbstractManager {
     super({ table: "city" });
   }
 
-  findBarsOfOneCity(id) {
-    return this.database.query(`SELECT * FROM  bar WHERE city_id = ?`, 
-      [id]);
+  findBarsOfOneCity(city, region) {
+
+    return this.database.query(`SELECT bar.* 
+     FROM bar
+     JOIN city ON bar.city_id = city.id 
+     WHERE city.name= ? AND city.region = ? `,
+    [city, region] );
   }
 
   insert(city) {
