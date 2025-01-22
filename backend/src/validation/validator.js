@@ -10,4 +10,5 @@ function validate(schema, source) {
       next();
     };
   }
-  export default validate;
+  
+module.exports = validate;
