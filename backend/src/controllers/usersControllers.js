@@ -24,7 +24,7 @@ const findAssociateComments = (req, res) => {
     });
 };
 
-const findAssociateFavorite = (req, res) => {
+const findAssociateFavorites = (req, res) => {
   models.users
     .findFavoriteBarsOfOneUser(req.params.id)
     .then(([rows]) => {
@@ -118,5 +118,5 @@ module.exports = {
   add,
   destroy,
   findAssociateComments,
-  findAssociateFavorite,
+  findAssociateFavorites,
 };

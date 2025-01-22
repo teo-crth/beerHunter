@@ -12,7 +12,7 @@ const browse = (req, res) => {
     });
 };
 
-const findAssociateImage = (req, res) => {
+const findAssociateImages = (req, res) => {
   models.user_comment
     .findCommentImages(req.params.id)
     .then(([rows]) => {
@@ -100,5 +100,5 @@ module.exports = {
   edit,
   add,
   destroy,
-  findAssociateImage,
+  findAssociateImages,
 };
