@@ -10,7 +10,6 @@ const beerTypeControllers = require("./controllers/beerTypeControllers");
 const cityControllers = require("./controllers/cityControllers");
 
 // GET
-
 router.get("/api/bars/:id/beers", barControllers.findAssociateBeers);
 router.get("/api/bars/:id/comments", barControllers.findAssociateComments);
 router.get("/api/bars/:id", barControllers.read);
