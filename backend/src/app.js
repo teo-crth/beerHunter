@@ -2,6 +2,7 @@
 
 const fs = require("node:fs");
 const path = require("node:path");
+const bodyParser = require('body-parser');
 const bodySanitizer = require("./services/middleware/bodySanitizer");
 
 // create express app
@@ -23,6 +24,7 @@ app.use(
   })
 );
 
+app.use(bodyParser.json());
 app.use(bodySanitizer);
 
 // import and mount the API routes
