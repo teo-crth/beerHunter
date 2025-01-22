@@ -39,3 +39,5 @@ const commentImageSchema = Joi.object({
     image_alt: Joi.string().min(3).max(50).required(),
     user_comment_id: Joi.number().required()
 });
+
+module.exports = { userSchema, userCommentSchema, commentImageSchema, favoriteBarSchema };
