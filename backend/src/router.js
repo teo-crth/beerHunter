@@ -6,12 +6,8 @@ const barControllers = require("./controllers/barControllers");
 const beerControllers = require("./controllers/beerControllers");
 const usersControllers = require("./controllers/usersControllers");
 const userCommentControllers = require("./controllers/userCommentControllers");
-const beerAvailableControllers = require("./controllers/beerAvailableControllers");
-const commentImageControllers = require("./controllers/commentImageControllers");
 const beerTypeControllers = require("./controllers/beerTypeControllers");
 const cityControllers = require("./controllers/cityControllers");
-const favoriteBarControllers = require("./controllers/favoriteBarControllers");
-
 
 // GET
 
