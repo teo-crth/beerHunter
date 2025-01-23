@@ -16,10 +16,10 @@ const Header = () => {
     };
 
     return (
-        <header className="flex justify-between items-center w-full bg-black px-2.5 shadow-md">
+        <header className="flex justify-between items-center w-full bg-black-color px-2.5 shadow-md">
             <NavLink to="/" className={({ isActive }) => isActive ? 'active' : ''}><img src={logo} alt="Logo table avec des livres" className='w-50' /></NavLink>
             <div className="container-nav flex justify-around items-center gap-10">
-                <nav className="nav-desktop hidden lg:flex xl:flex gap-10 items-center text-yellow-400 fontFamily-title">
+                <nav className="nav-desktop hidden lg:flex xl:flex gap-10 items-center text-primary-color fontFamily-title">
                     <NavLink to="/" className={({ isActive }) => isActive ? 'active fontFamily-title' : 'fontFamily-title'}>Accueil</NavLink>
                     <NavLink to="/contact" className={({ isActive }) => isActive ? 'active' : ''}>Contact</NavLink>
                     <div className="container-theme-mode-icon w-10 h-10 p-3 flex items-center justify-center rounded-full border border-solid cursor-pointer box-border">
