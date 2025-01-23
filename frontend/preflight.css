@@ -1,0 +1,37 @@
+/* Exemple de preflight.css */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif; /* Définit une police de base */
+  line-height: 1.5; /* Assure une bonne lisibilité */
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0; /* Enlève les marges par défaut des titres */
+}
+
+ul, ol {
+  list-style: none; /* Enlève les puces ou les numéros des listes */
+}
+
+a {
+  text-decoration: none; /* Enlève le soulignement des liens */
+}
+
+img {
+  max-width: 100%; /* Empêche les images de dépasser leur conteneur */
+  height: auto; /* Garde les proportions de l'image */
+}
+
+input, button, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  border: none; /* Pour ne pas avoir de bordures par défaut */
+}
