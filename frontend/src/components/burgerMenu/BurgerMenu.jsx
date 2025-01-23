@@ -17,14 +17,16 @@ const BurgerMenu = () => {
     };
 
     return (
-        <div className='container-burgerMenu'>
-            <div className="container-close-icon" onClick={toggleMenu}>
+        <div className={`container-burgerMenu ${isDarkMode ? 'bg-black text-white shadow-lg' : 'bg-white shadow-md'} flex flex-col justify-start w-[70%] absolute left-0 bottom-0 h-full`}>
+            <div className="container-close-icon flex justify-end items-center p-5 cursor-pointer" onClick={toggleMenu}>
                 <FontAwesomeIcon icon={faXmark} />
             </div>
-            <nav className='nav-mobile'>
-                <NavLink to="/beerhunter" className={({ isActive }) => isActive ? 'active' : ''}>Accueil</NavLink>
-                <NavLink to="/beerhunter/contact" className={({ isActive }) => isActive ? 'active' : ''}>Contact</NavLink>
-                <FontAwesomeIcon className="dark-mode-icon" icon={faMoon} onClick={toggleTheme} />
+            <nav className="nav-mobile flex flex-col items-center gap-5 p-5 mt-8 text-xm">
+                <NavLink to="/" className={({ isActive }) => isActive ? 'active' : ''}>Accueil</NavLink>
+                <NavLink to="/contact" className={({ isActive }) => isActive ? 'active' : ''}>Contact</NavLink>
+                <div className="container-theme-mode-icon w-10 h-10 p-3 flex items-center justify-center rounded-full border border-solid cursor-pointer box-border">
+                    <FontAwesomeIcon className="dark-mode-icon text-lg cursor-pointer" icon={faMoon} onClick={toggleTheme} />
+                </div>
 
             </nav>
         </div>

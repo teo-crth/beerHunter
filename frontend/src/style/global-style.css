@@ -1,28 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Electrolize&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap');
 @import "tailwindcss";
 
-/* @import url('https://fonts.googleapis.com/css2?family=Electrolize&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap'); */
-
 /* CES VARIABLES SONT DISPONIBLE EN TAILWIND, VOIR LE FICHIER tailwind.config.js */
-
 :root {
     --mobile-screen: 480px;
     --tablet-screen: 768px;
     --desktop-screen: 1024px;
-
+    
     --primary-color: #FEC514;
     --secondary-color: #CFA11A;
     --tertiary-color: #A37E1B;
     --middle-color: #503F15;
     --dark-color: #2B220F;
     --black-color: rgb(0, 0, 0);
-
+    
     --title-font: "Electrolize", serif;
     --text-font: "Mulish", serif;
 }
 
 * {
     box-sizing: border-box;
-    margin: 0;
-    padding: 0;
 }
+
+@tailwind utilities;

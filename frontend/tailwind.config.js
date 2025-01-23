@@ -13,8 +13,8 @@ export default {
         black: 'var(--black-color)',
       },
       fontFamily: {
-        title: ['var(--title-font)', 'sans-serif'],
-        text: ['var(--text-font)', 'sans-serif'],
+        title: ['var(--title-font)', 'serif'],
+        text: ['var(--text-font)', 'serif'],
       },
       screens: {
         mobile: 'var(--mobile-screen)',
