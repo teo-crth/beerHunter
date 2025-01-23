@@ -12,7 +12,7 @@ const Footer = () => {
                         href="/about"
                         className="text-gray-400 hover:text-yellow-500 transition duration-300"
                     >
-                        About Us
+                        À propos de nous
                     </a>
                 </li>
                 <li>
@@ -28,7 +28,7 @@ const Footer = () => {
                         href="/privacy"
                         className="text-gray-400 hover:text-yellow-500 transition duration-300"
                     >
-                        Privacy Policy
+                        Politique de confidentialité
                     </a>
                 </li>
             </ul>
