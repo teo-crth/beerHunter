@@ -1,6 +1,7 @@
 import Home from "./pages/Home";
 
 import "./App.css";
+import './style/global-style.css';
 
 function App() {
   return (
