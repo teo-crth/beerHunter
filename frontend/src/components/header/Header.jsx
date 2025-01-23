@@ -16,15 +16,19 @@ const Header = () => {
     };
 
     return (
-        <header>
-            <NavLink to="/beerhunter" className={({ isActive }) => isActive ? 'active' : ''}><img src={logo} alt="Logo table avec des livres" /></NavLink>
-                <nav className="nav-desktop">
+        <header className="flex justify-between items-center w-full bg-dark shadow-md px-2.5">
+            <NavLink to="/beerhunter" className={({ isActive }) => isActive ? 'active' : ''}><img src={logo} alt="Logo table avec des livres" className='w-50' /></NavLink>
+            <div className="container-nav flex justify-around items-center gap-10">
+                <nav className="nav-desktop hidden lg:flex xl:flex gap-10 items-center">
                     <NavLink to="/beerhunter" className={({ isActive }) => isActive ? 'active' : ''}>Accueil</NavLink>
                     <NavLink to="/beerhunter/contact" className={({ isActive }) => isActive ? 'active' : ''}>Contact</NavLink>
-                    <FontAwesomeIcon className="dark-mode-icon" icon={faMoon} onClick={toggleTheme}/>
+                    <div className="container-theme-mode-icon w-10 h-10 p-3 flex items-center justify-center rounded-full border border-solid cursor-pointer box-border">
+                        <FontAwesomeIcon className="dark-mode-icon text-2xl w-6 h-6" icon={faMoon} onClick={toggleTheme}/>
+                    </div>
                 </nav>
-            <div className='container-burgerMenu-icon' onClick={toggleMenu}>
-                <FontAwesomeIcon icon={faBars} />
+                <div className='container-burgerMenu-icon sm:block md:block lg:hidden xl:hidden' onClick={toggleMenu}>
+                    <FontAwesomeIcon icon={faBars} />
+                </div>
             </div>
             {menuOpen && (
                 <BurgerMenu />

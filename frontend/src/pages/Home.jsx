@@ -10,7 +10,7 @@ export default function Home() {
       <Counter />
 
       <p>
-        Edit <code>App.jsx</code> and save to test HMR updates.
+        Edit <code className="bg-red-700">App.jsx</code> and save to test HMR updates.
       </p>
       <p>
         <a
