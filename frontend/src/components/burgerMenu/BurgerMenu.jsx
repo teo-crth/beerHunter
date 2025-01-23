@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
-import { AppContext } from '../../../context/context';
+import { AppContext } from '../../context/context';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faMoon } from '@fortawesome/free-solid-svg-icons';
 
