@@ -16,10 +16,10 @@ export const AppProvider = ({ children }) => {
     });
 
     useEffect(() => {
-        if (isDarkMode) {
-          document.body.classList.add('dark-mode');
+        if (!isDarkMode) {
+          document.body.classList.add('light-mode');
         } else {
-            document.body.classList.remove('dark-mode');
+            document.body.classList.remove('light-mode');
         }
     
         localStorage.setItem('darkMode', JSON.stringify(isDarkMode));

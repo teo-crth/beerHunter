@@ -19,64 +19,25 @@
     --text-font: "Mulish", serif;
 }
 
+@theme {
+    --mobile-screen: 480px;
+    --tablet-screen: 768px;
+    --desktop-screen: 1024px;
+    
+    --color-primary: #FEC514;
+    --color-secondary: #CFA11A;
+    --color-tertiary: #A37E1B;
+    --color-middle: #503F15;
+    --color-dark: #2B220F;
+    --color-dark-black: rgb(0, 0, 0);
+    --color-light: white;
+    
+    --font-title: "Electrolize", serif;
+    --font-text: "Mulish", serif;
+}
+
 * {
     box-sizing: border-box;
-}
-
-.bg-primary-color {
-    background-color: var(--primary-color);
-}
-
-.bg-secondary-color {
-    background-color: var(--secondary-color);
-}
-
-.bg-tertiary-color {
-    background-color: var(--tertiary-color);
-}
-
-.bg-middle-color {
-    background-color: var(--middle-color);
-}
-
-.bg-dark-color {
-    background-color: var(--dark-color);
-}
-
-.bg-black-color {
-    background-color: var(--black-color);
-}
-
-.text-primary-color {
-    color: var(--primary-color);
-}
-
-.text-secondary-color {
-    color: var(--secondary-color);
-}
-
-.text-tertiary-color {
-    color: var(--tertiary-color);
-}
-
-.text-middle-color {
-    color: var(--middle-color);
-}
-
-.text-dark-color {
-    color: var(--dark-color);
-}
-
-.text-black-color {
-    color: var(--black-color);
-}
-
-.fontFamily-title {
-    font-family: var(--title-font);
-}
-
-.fontFamily-text {
-    font-family: var(--text-font);
 }
 
 @tailwind utilities;
