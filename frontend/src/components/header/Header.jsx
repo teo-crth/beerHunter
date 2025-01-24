@@ -27,7 +27,7 @@ const Header = () => {
                         <FontAwesomeIcon className="dark-mode-icon text-2xl w-6 h-6 light-mode:text-dark-black text-light" icon={faMoon} onClick={toggleTheme}/>
                     </div>
                 </nav>
-                <div className='container-burgerMenu-icon sm:block md:block lg:hidden xl:hidden text-light' onClick={toggleMenu}>
+                <div className='container-burgerMenu-icon sm:block md:block lg:hidden xl:hidden text-light light-mode:text-dark-black' onClick={toggleMenu}>
                     <FontAwesomeIcon icon={faBars} />
                 </div>
             </div>

@@ -13,6 +13,7 @@ const userSchema = Joi.object({
         .pattern(/(?=.*\d)/, 'at least one digit')
         .pattern(/(?=.*[!@#$%^&*(),.?":{}|<>])/ , 'at least one special character')
         .required(),
+    confirmPassword: Joi.ref('password'),
     profile_picture: Joi.string().allow(null),
     city: Joi.string().min(3).max(50).allow(null),
     theme: Joi.string().valid('light', 'dark').allow(null),

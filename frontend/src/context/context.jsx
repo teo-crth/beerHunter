@@ -7,7 +7,14 @@ export const AppContext = createContext();
 // Fournisseur du contexte
 export const AppProvider = ({ children }) => {
 
-    const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [user, setUser] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // MANAGE MODALS
+  const toggleModal = () => {
+    setIsModalOpen(prevMode => !prevMode);
+  };
 
   // DARK MODE
     const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -29,8 +36,9 @@ export const AppProvider = ({ children }) => {
         setIsDarkMode(prevMode => !prevMode);
     };
 
+
     return (
-        <AppContext.Provider value={{ menuOpen, setMenuOpen, isDarkMode, toggleTheme}}>
+        <AppContext.Provider value={{ menuOpen, setMenuOpen, isDarkMode, toggleTheme, user, setUser, isModalOpen, setIsModalOpen, toggleModal }}>
           {children}
         </AppContext.Provider>
       );

@@ -16,12 +16,13 @@ export const fetchOneUser = async (userId) => {
   }
 };
 
-export const createOneUser = async (email, password, name) => {
+export const createOneUser = async (email, password, confirmPassword, name) => {
   try {
     // Requête avec axios
     const response = await axios.post(BASE_URL/api/users, {
       email: email,
       password: password,
+      confirmPassword: confirmPassword,
       name: name,
       theme: 'dark'
     });
@@ -62,6 +63,21 @@ export const deleteOneUser = async (userId) => {
     return response.data;
   } catch (error) {
     console.error('Erreur lors de la récupération du profil:', error);
+    throw error;
+  }
+};
+
+export const connexionUser = async (email, password) => {
+  try {
+    // Requête avec axios
+    const response = await axios.post(BASE_URL/api/connexion, {
+      email: email,
+      password: password,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('Erreur lors de la connexion:', error);
     throw error;
   }
 };
