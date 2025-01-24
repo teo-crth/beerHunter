@@ -5,6 +5,10 @@ class UsersManager extends AbstractManager {
     super({ table: "users" });
   }
 
+  findUserByEmail(email) {
+    return this.database.query(`SELECT * FROM ${this.table} WHERE email = ?`, [email]);
+  }
+
   findCommentsOfOneUser(id) {
     return this.database.query(`SELECT * FROM  user_comment WHERE user_id = ?`, 
       [id]);
@@ -20,10 +24,10 @@ class UsersManager extends AbstractManager {
     );
 }
 
-  insert(users) {
+  insert(name, birth_date, email, city, hashPassword) {
     return this.database.query(
         `INSERT INTO ${this.table} (email, birth_date, password, city, name, theme) values (?, ?, ?, ?, ?, ?)`,
-        [users.email, users.birth_date, users.password, users.city, users.name, users.theme]);
+        [email, birth_date, hashPassword, city, name, theme]);
   }
 
   update(users) {

@@ -7,7 +7,7 @@ import BeerTypes from '../components/beer/BeerType';
 import Beer from '../components/beer/Beer';
 import Bar from '../components/bar/Bar';
 import ContactForm from '../components/contact/ContactForm';
-import Profil from '../components/profil/Profil';
+import Profil from '../pages/Profil';
 
 const router = createBrowserRouter([
   {

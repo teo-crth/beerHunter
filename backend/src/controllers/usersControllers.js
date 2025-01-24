@@ -1,4 +1,8 @@
+const argon2 = require("argon2");
+
 const models = require("../models");
+const { compare } = require("../utils/cryptoPassword");
+const { hash } = require("../utils/cryptoPassword");
 
 const browse = (req, res) => {
   models.users
@@ -79,13 +83,20 @@ const edit = (req, res) => {
     });
 };
 
-const add = (req, res) => {
-  const users = req.body;
+const add = async (req, res) => {
+  const { name, birth_date, email, password, confirmPassword, theme, city } = req.body;
+
+  if (password !== confirmPassword) {
+    res.status(400).send("Les mots de passe ne correspondent pas");
+    return;
+  }
+
+  const hashPassword = await hash(password);
 
   // TODO validations (length, format...)
 
   models.users
-    .insert(users)
+    .insert(name, birth_date, email, hashPassword, theme, city)
     .then(([result]) => {
       res.location(`/users/${result.insertId}`).sendStatus(201);
     })
@@ -111,6 +122,41 @@ const destroy = (req, res) => {
     });
 };
 
+const login = async (req, res) => {
+  if (!req.body.email || !req.body.password) {
+    res.status(400).send("ID, Email and password are required");
+    return;
+  }
+
+  const { email, password } = req.body;
+
+  try {
+    const [rows] = await models.users.findUserByEmail(email);
+
+    if (!rows[0]) {
+      res.status(401).send("L'email ou le mot de passe est incorrect");
+      return;
+    }
+
+    const account = rows[0];
+    const passwordIsCorrect = await compare(password, account.password);
+
+    if (!passwordIsCorrect) {
+      res.status(401).send("L'email ou le mot de passe est incorrect");
+      return;
+    }
+
+    res.status(200).send("Vous êtes connecté");
+
+    // Tu peux renvoyer l'account ou un token si tu veux ici (ex: pour l'authentification par token)
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Une erreur est survenue, veuillez réessayer.");
+  }
+};
+
+
 module.exports = {
   browse,
   read,
@@ -119,4 +165,5 @@ module.exports = {
   destroy,
   findAssociateComments,
   findAssociateFavorites,
+  login,
 };
