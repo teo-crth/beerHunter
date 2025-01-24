@@ -1,6 +1,7 @@
 const argon2 = require("argon2");
 
 const models = require("../models");
+const { compare } = require("../utils/cryptoPassword");
 
 const browse = (req, res) => {
   models.users
@@ -115,42 +116,38 @@ const destroy = (req, res) => {
 
 const login = async (req, res) => {
   if (!req.body.email || !req.body.password) {
-    res.sendStatus(400);
-    res.send("ID, Email and password are required");
+    res.status(400).send("ID, Email and password are required");
     return;
   }
 
-  const {email, password} = req.body;
-  const account = await models.users
-    .findUserByEmail(email)
-    .then(([rows]) => {
-      if (rows[0] == null) {
-        res.sendStatus(401);
-      } else {
-        res.send(rows[0]);
-      }
-    })
-    .catch((err) => {
-      console.error(err);
-      res.sendStatus(500);
-    });
+  const { email, password } = req.body;
 
-  if (!account) {
-    res.sendStatus(401);
-    res.send('L\'email ou le mot de passe est incorrect');
-    return;
+  try {
+    const [rows] = await models.users.findUserByEmail(email);
+
+    if (!rows[0]) {
+      res.status(401).send("L'email ou le mot de passe est incorrect");
+      return;
+    }
+
+    const account = rows[0];
+    const passwordIsCorrect = await compare(password, account.password);
+
+    if (!passwordIsCorrect) {
+      res.status(401).send("L'email ou le mot de passe est incorrect");
+      return;
+    }
+
+    res.status(200).send("Vous êtes connecté");
+
+    // Tu peux renvoyer l'account ou un token si tu veux ici (ex: pour l'authentification par token)
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Une erreur est survenue, veuillez réessayer.");
   }
+};
 
-  const passwordIsCorrect = await argon2.verify(account.password, password);
-
-  if (!passwordIsCorrect) {
-    res.sendStatus(401);
-    res.send('L\'email ou le mot de passe est incorrect');
-    return;
-  }
-
-
-}
 
 module.exports = {
   browse,
