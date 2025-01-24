@@ -17,6 +17,9 @@ const commentImageControllers = require("./controllers/commentImageControllers")
 const validate = require("./validation/validator");
 const { userSchema, userCommentSchema, commentImageSchema, favoriteBarSchema, barSchema } = require("./validation/schemas/joi.schemas");
 
+// CONNEXION
+router.post("/api/login", usersControllers.login);
+
 // GET
 router.get("/api/bars/city/:city/:region", cityControllers.findAssociateBars);
 router.get("/api/bars/:id/beers", barControllers.findAssociateBeers);

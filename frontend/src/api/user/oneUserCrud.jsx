@@ -70,7 +70,7 @@ export const deleteOneUser = async (userId) => {
 export const connexionUser = async (email, password) => {
   try {
     // Requête avec axios
-    const response = await axios.post(BASE_URL/api/connexion, {
+    const response = await axios.post(BASE_URL/api/login, {
       email: email,
       password: password,
     });

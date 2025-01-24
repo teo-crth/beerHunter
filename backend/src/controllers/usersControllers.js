@@ -111,6 +111,27 @@ const destroy = (req, res) => {
     });
 };
 
+const login = (req, res) => {
+  if (!req.body.email || !req.body.password) {
+    res.sendStatus(400);
+    res.send("ID, Email and password are required");
+    return;
+  }
+  models.users
+    .checkLogin(req.body)
+    .then(([rows]) => {
+      if (rows[0] == null) {
+        res.sendStatus(401);
+      } else {
+        res.send(rows[0]);
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.sendStatus(500);
+    });
+}
+
 module.exports = {
   browse,
   read,
@@ -119,4 +140,5 @@ module.exports = {
   destroy,
   findAssociateComments,
   findAssociateFavorites,
+  login,
 };

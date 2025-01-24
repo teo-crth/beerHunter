@@ -5,6 +5,10 @@ class UsersManager extends AbstractManager {
     super({ table: "users" });
   }
 
+  checkLogin(email, password) {
+    return this.database.query(`SELECT * FROM ${this.table} WHERE email = ? AND password = ?`, [email, password]);
+  }
+
   findCommentsOfOneUser(id) {
     return this.database.query(`SELECT * FROM  user_comment WHERE user_id = ?`, 
       [id]);
