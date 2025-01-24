@@ -31,6 +31,16 @@ export const AppProvider = ({ children }) => {
     
         localStorage.setItem('darkMode', JSON.stringify(isDarkMode));
     }, [isDarkMode]);
+
+    useEffect(() => {
+      if (user) {
+        if (user.theme === 'dark') {
+          setIsDarkMode(true);
+        } else {
+          setIsDarkMode(false);
+        }
+      }
+    }, [user]);
     
     const toggleTheme = () => {
         setIsDarkMode(prevMode => !prevMode);
