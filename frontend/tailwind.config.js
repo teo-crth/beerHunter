@@ -10,7 +10,8 @@ export default {
         tertiary: 'var(--tertiary-color)',
         middle: 'var(--middle-color)',
         dark: 'var(--dark-color)',
-        black: 'var(--black-color)',
+        darkBlack: 'var(--color-dark-black)',
+        light: 'var(--color-light)',
       },
       fontFamily: {
         title: ['var(--title-font)', 'serif'],
