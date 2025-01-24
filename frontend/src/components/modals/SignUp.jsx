@@ -1,12 +1,25 @@
-import React, { useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { AppContext } from '../../context/context';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import createOneUser from '../../api/user/createOneUser';
+import { city } from '../../api/city/cityCrud';
 
 const SignUp = () => {
 
     const { isModalOpen, setIsModalOpen, toggleModal } = useContext(AppContext);
+
+    useEffect(() => {
+        fetchAllCities()
+            .then((data) => {
+                console.log(data);
+                const city = data;
+                return city
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }, []);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -16,6 +29,7 @@ const SignUp = () => {
             name: values.name,
             email: values.email,
             birth_date: values.birth_date,
+            city: values.city,
             password: values.password,
             confirmPassword: values.confirmPassword
         })
@@ -31,7 +45,7 @@ const SignUp = () => {
 
     return (
         <Formik
-            initialValues={{ name: '', email: '', birth_date: '', password: '', confirmPassword: '' }}
+            initialValues={{ name: '', email: '', birth_date: '', city: '', password: '', confirmPassword: '' }}
             validationSchema={Yup.object({
                 name: Yup.string()
                     .max(50, 'Ne doit pas dépasser 50 caractères')
@@ -58,6 +72,7 @@ const SignUp = () => {
                         return age >= 18;
                     })
                     .required('Champ obligatoire'),
+                city: Yup.string().required('Champ obligatoire'),
                 password: Yup.string().required('Champ obligatoire')
                     .min(12, 'Mot de passe trop court - 12 caractères minimum.')
                     .matches(/[a-zA-Z]/, 'Le mot de passe doit contenir au moins une lettre majuscule et une lettre minuscule.')
@@ -95,6 +110,14 @@ const SignUp = () => {
                     {formik.touched.birth_date && formik.errors.birth_date ? (
                         <div className='text-error'>{formik.errors.birth_date}</div>
                     ) : null}
+
+                    <label htmlFor="city">Ville</label>
+                    <select id="city" {...formik.getFieldProps('city')}>
+                        <option value="">Choisir une ville</option>
+                        {city.map((city) => (
+                            <option key={city} value={city}>{city}</option>
+                        ))}
+                    </select>
 
                     <label htmlFor="password">Mot de passe</label>
                     <input id="password" type="password" {...formik.getFieldProps('password')} />

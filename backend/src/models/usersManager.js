@@ -24,10 +24,10 @@ class UsersManager extends AbstractManager {
     );
 }
 
-  insert(users) {
+  insert(name, birth_date, email, city, hashPassword) {
     return this.database.query(
         `INSERT INTO ${this.table} (email, birth_date, password, city, name, theme) values (?, ?, ?, ?, ?, ?)`,
-        [users.email, users.birth_date, users.password, users.city, users.name, users.theme]);
+        [email, birth_date, hashPassword, city, name, theme]);
   }
 
   update(users) {

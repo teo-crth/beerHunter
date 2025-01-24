@@ -2,6 +2,7 @@ const argon2 = require("argon2");
 
 const models = require("../models");
 const { compare } = require("../utils/cryptoPassword");
+const { hash } = require("../utils/cryptoPassword");
 
 const browse = (req, res) => {
   models.users
@@ -82,13 +83,20 @@ const edit = (req, res) => {
     });
 };
 
-const add = (req, res) => {
-  const users = req.body;
+const add = async (req, res) => {
+  const { name, birth_date, email, password, confirmPassword, theme, city } = req.body;
+
+  if (password !== confirmPassword) {
+    res.status(400).send("Les mots de passe ne correspondent pas");
+    return;
+  }
+
+  const hashPassword = await hash(password);
 
   // TODO validations (length, format...)
 
   models.users
-    .insert(users)
+    .insert(name, birth_date, email, hashPassword, theme, city)
     .then(([result]) => {
       res.location(`/users/${result.insertId}`).sendStatus(201);
     })
