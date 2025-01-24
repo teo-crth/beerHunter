@@ -1,3 +1,5 @@
+const argon2 = require("argon2");
+
 const models = require("../models");
 
 const browse = (req, res) => {
@@ -111,14 +113,16 @@ const destroy = (req, res) => {
     });
 };
 
-const login = (req, res) => {
+const login = async (req, res) => {
   if (!req.body.email || !req.body.password) {
     res.sendStatus(400);
     res.send("ID, Email and password are required");
     return;
   }
-  models.users
-    .checkLogin(req.body)
+
+  const {email, password} = req.body;
+  const account = await models.users
+    .findUserByEmail(email)
     .then(([rows]) => {
       if (rows[0] == null) {
         res.sendStatus(401);
@@ -130,6 +134,22 @@ const login = (req, res) => {
       console.error(err);
       res.sendStatus(500);
     });
+
+  if (!account) {
+    res.sendStatus(401);
+    res.send('L\'email ou le mot de passe est incorrect');
+    return;
+  }
+
+  const passwordIsCorrect = await argon2.verify(account.password, password);
+
+  if (!passwordIsCorrect) {
+    res.sendStatus(401);
+    res.send('L\'email ou le mot de passe est incorrect');
+    return;
+  }
+
+
 }
 
 module.exports = {

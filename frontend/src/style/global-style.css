@@ -1,11 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Electrolize&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap');
+
 @import "tailwindcss";
 
 @custom-variant light-mode (&:where(.light-mode, .light-mode *));
 
 /* CES VARIABLES SONT DISPONIBLE EN TAILWIND, VOIR LE FICHIER tailwind.config.js */
-:root {
+/* :root {
     --mobile-screen: 480px;
     --tablet-screen: 768px;
     --desktop-screen: 1024px;
@@ -19,7 +20,7 @@
     
     --title-font: "Electrolize", serif;
     --text-font: "Mulish", serif;
-}
+} */
 
 @theme {
     --mobile-screen: 480px;

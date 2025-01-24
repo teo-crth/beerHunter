@@ -17,14 +17,14 @@ const Header = () => {
     };
 
     return (
-        <header className="flex justify-between items-center w-full bg-dark-black px-2.5 shadow-md light-mode:bg-light">
+        <header className="flex justify-between items-center w-full px-2.5 shadow-md bg-dark-black light-mode:bg-light">
             <NavLink to="/" className={({ isActive }) => isActive ? 'active' : ''}><img src={ isDarkMode ? logo : logoLight} alt="Logo table avec des livres" className='w-50' /></NavLink>
             <div className="container-nav flex justify-around items-center gap-10">
                 <nav className="nav-desktop hidden lg:flex xl:flex gap-10 items-center text-primary fontFamily-title">
                     <NavLink to="/" className={({ isActive }) => isActive ? 'active font-title' : 'font-title'}>Accueil</NavLink>
                     <NavLink to="/contact" className={({ isActive }) => isActive ? 'active' : ''}>Contact</NavLink>
                     <div className="container-theme-mode-icon w-10 h-10 p-3 flex items-center justify-center rounded-full border border-solid cursor-pointer box-border">
-                        <FontAwesomeIcon className="dark-mode-icon text-2xl w-6 h-6 light-mode:text-dark-black text-light" icon={faMoon} onClick={toggleTheme}/>
+                        <FontAwesomeIcon className="dark-mode-icon text-2xl w-6 h-6 light-mode:text-dark-black text-light shadow-primary" icon={faMoon} onClick={toggleTheme}/>
                     </div>
                 </nav>
                 <div className='container-burgerMenu-icon sm:block md:block lg:hidden xl:hidden text-light light-mode:text-dark-black' onClick={toggleMenu}>
