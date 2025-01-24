@@ -1,26 +1,25 @@
 import React, { useEffect, useContext } from "react";
-import Profil from "../components/profil/Profil";
 import { AppContext } from "../context/context";
+import ProfilCard from "../components/profil/ProfilCard";
 
-import fetchOneUser from "../api/user/oneUserCrud";
+import { fetchOneUser } from "../api/user/oneUserCrud";
 
 
 export default function Profil() {
     const { user, setUser } = useContext(AppContext);
-    console.log(user);
 
 useEffect(() => {
-    fetchOneUser(user.id)
+    fetchOneUser(3)
     .then((data) => {
         setUser(data);
     })
-}, [user.id])
+}, []);
 
   return (
     <>
-    <div className="container-profil">
-        <h1>Mon profil</h1>
-        <Profil user={user}/>
+    <div className="container-profil w-full h-full flex flex-col items-center bg-secondary">
+      <h1>Mon profil</h1>
+      <ProfilCard user={user} />
     </div>
     </>
   );

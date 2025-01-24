@@ -34,7 +34,7 @@
     --color-dark: #2B220F;
     --color-dark-black: rgb(0, 0, 0);
     --color-light: white;
-    
+    --color-radial-gradient: radial-gradient(circle at 1% 100%, rgba(133, 107, 24, 1) 1%, rgba(0, 0, 0, 1) 100%);
     --font-title: "Electrolize", serif;
     --font-text: "Mulish", serif;
 }

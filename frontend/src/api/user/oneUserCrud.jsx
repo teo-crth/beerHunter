@@ -7,7 +7,7 @@ const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 export const fetchOneUser = async (userId) => {
   try {
     // Requête avec axios
-    const response = await axios.get(BASE_URL/api/users/{userId});
+    const response = await axios.get(`${BASE_URL}/api/users/${userId}`);
 
     return response.data;
   } catch (error) {
@@ -19,7 +19,7 @@ export const fetchOneUser = async (userId) => {
 export const createOneUser = async (email, password, confirmPassword, name, city) => {
   try {
     // Requête avec axios
-    const response = await axios.post(BASE_URL/api/users, {
+    const response = await axios.post(`${BASE_URL}/api/users`, {
       email: email,
       password: password,
       confirmPassword: confirmPassword,
@@ -38,7 +38,7 @@ export const createOneUser = async (email, password, confirmPassword, name, city
 export const changeOneUser = async (email, password, name, theme, birth_date, city, address, base64Image) => {
   try {
     // Requête avec axios
-    const response = await axios.put(BASE_URL/api/users, {
+    const response = await axios.put(`${BASE_URL}/api/users`, {
       email: email,
       password: password,
       name: name,
@@ -59,7 +59,7 @@ export const changeOneUser = async (email, password, name, theme, birth_date, ci
 export const deleteOneUser = async (userId) => {
   try {
     // Requête avec axios
-    const response = await axios.delete(BASE_URL/api/users/{userId});
+    const response = await axios.delete(`${BASE_URL}/api/users/${userId}`);
 
     return response.data;
   } catch (error) {
@@ -71,7 +71,7 @@ export const deleteOneUser = async (userId) => {
 export const connexionUser = async (email, password) => {
   try {
     // Requête avec axios
-    const response = await axios.post(BASE_URL/api/login, {
+    const response = await axios.post(`${BASE_URL}/api/login`, {
       email: email,
       password: password,
     });
