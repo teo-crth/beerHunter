@@ -1,7 +1,5 @@
 import React, { useContext, useState } from 'react';
 import { AppContext } from '../../context/context';
-import EditForm from './EditForm';
-import DeleteProfil from './DeleteProfil';
 
 const EditProfil = () => {
 
