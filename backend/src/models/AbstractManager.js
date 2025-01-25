@@ -9,7 +9,7 @@ class AbstractManager {
   }
 
   findAll() {
-    return this.database.query(`SELECT * FROM  ${this.table}`);
+    return this.database.query(`SELECT * FROM  ${this.table} ORDER BY name ASC`);
   }
 
   delete(id) {

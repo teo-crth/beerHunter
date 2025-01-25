@@ -2,6 +2,8 @@ import React, { useEffect, useContext, useState } from 'react';
 import { AppContext } from '../../context/context';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import dayjs from 'dayjs';
+
 import { changeOneUser } from '../../api/user/oneUserCrud';
 import { fetchAllCities } from '../../api/city/cityCrud';
 
@@ -47,15 +49,25 @@ const EditForm = () => {
             });
     };
 
+    const formatDate = dayjs(user?.birth_date).format('DD/MM/YYYY');
+
     return (
         <div className="container-modal bg-gray-700/50 absolute flex justify-center items-center w-full h-full top-0 left-0">
             <Formik
-                initialValues={{ name: '', email: '', birth_date: '', city: '', password: '', confirmPassword: '' }}
+                initialValues={{
+                    name: user.name,
+                    email: user.email,
+                    birth_date: formatDate,
+                    theme: user.theme === "dark" ? "Sombre" : "Clair",
+                    city: user.city ? user.city.id : '',
+                    password: '',
+                    confirmPassword: ''
+                }}
                 validationSchema={Yup.object({
                     name: Yup.string()
                         .max(50, 'Ne doit pas dépasser 50 caractères')
                         .required('Champ obligatoire'),
-                    email: Yup.string().email('email invalide').required('Champ obligatoire'),
+                    email: Yup.string().email('Email invalide').required('Champ obligatoire'),
                     birth_date: Yup.string()
                         .matches(
                             /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d\d$/,
@@ -65,7 +77,7 @@ const EditForm = () => {
                             if (!value) return false;
 
                             const [day, month, year] = value.split('/').map((item) => parseInt(item, 10));
-                            const birthDate = new Date(year, month - 1, day); // Mois est 0-indexé
+                            const birthDate = new Date(year, month - 1, day);
                             const age = new Date().getFullYear() - birthDate.getFullYear();
                             const m = new Date().getMonth() - birthDate.getMonth();
                             return age > 18 || (age === 18 && m >= 0);
@@ -108,11 +120,41 @@ const EditForm = () => {
                         ) : null}
 
                         <label className="mt-[5px]" htmlFor="city">Ville</label>
-                        <select id="city" className='border border-light light-mode:border-dark-black text-light rounded-md' {...formik.getFieldProps('city')}>
-                            <option className="bg-dark-black light-mode:bg-light font-text text-light light-mode:text-dark-black" value="">Choisir une ville</option>
+                        <select
+                            id="city"
+                            className='border border-light light-mode:border-dark-black text-light light-mode:text-dark-black rounded-md'
+                            value={formik.values.city}
+                            onChange={formik.handleChange}
+                            name="city"  
+                        >
+                            <option className="bg-dark-black light-mode:bg-light font-text text-light light-mode:text-dark-black" value="">
+                                Choisir une ville
+                            </option>
                             {cities.map((city) => (
-                                <option className="bg-dark-black light-mode:bg-light font-text text-light light-mode:text-dark-black" key={city.id} value={city.id}>{city.name}</option>
+                                <option
+                                    className="bg-dark-black light-mode:bg-light font-text text-light light-mode:text-dark-black"
+                                    key={city.id}
+                                    value={city.id}
+                                >
+                                    {city.name}
+                                </option>
                             ))}
+                        </select>
+                        {formik.touched.city && formik.errors.city && (
+                            <div className="text-error text-xs text-red-400">{formik.errors.city}</div>
+                        )}
+
+                        <label className="mt-[5px]" htmlFor="theme">Thème</label>
+                        <select
+                            id="theme"
+                            className='border border-light light-mode:border-dark-black text-light light-mode:text-dark-black rounded-md'
+                            value={formik.values.theme}
+                            onChange={formik.handleChange}
+                            name="theme"
+                        >
+                            <option className="bg-dark-black light-mode:bg-light font-text text-light light-mode:text-dark-black" value="">Choisir un thème</option>
+                            <option className="bg-dark-black light-mode:bg-light font-text text-light light-mode:text-dark-black" value="dark">Sombre</option>
+                            <option className="bg-dark-black light-mode:bg-light font-text text-light light-mode:text-dark-black" value="light">Clair</option>
                         </select>
 
                         <label className="mt-[5px]" htmlFor="password">Mot de passe</label>
