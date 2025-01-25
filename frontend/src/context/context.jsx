@@ -12,6 +12,7 @@ export const AppProvider = ({ children }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalChangeProfilOpen, setIsModalChangeProfilOpen] = useState(false);
   const [isModalDeleteProfilOpen, setIsModalDeleteProfilOpen] = useState(false);
+  const [isModalEditPasswordProfilOpen, setIsModalEditPasswordProfilOpen] = useState(false);
 
   // MANAGE MODALS
   const toggleModal = () => {
@@ -64,7 +65,9 @@ export const AppProvider = ({ children }) => {
             isModalChangeProfilOpen,
             setIsModalChangeProfilOpen,
             isModalDeleteProfilOpen,
-            setIsModalDeleteProfilOpen 
+            setIsModalDeleteProfilOpen,
+            isModalEditPasswordProfilOpen,
+            setIsModalEditPasswordProfilOpen
           }}>
           {children}
         </AppContext.Provider>

@@ -30,12 +30,35 @@ class UsersManager extends AbstractManager {
         [email, birth_date, hashPassword, city, name, theme]);
   }
 
+  // update(users) {
+  //   return this.database.query(
+  //     `UPDATE ${this.table} SET email = ?, birth_date = ?, password = ?, address = ?, city = ?, name = ?, theme = ?, profil_picture = ? WHERE id = ?`,
+  //     [users.email, users.birth_date, users.password, users.address, users.city, users.name, users.theme, users.profil_picture, users.id]
+  //   );
+  // }
+
   update(users) {
-    return this.database.query(
-      `UPDATE ${this.table} SET email = ?, birth_date = ?, password = ?, address = ?, city = ?, name = ?, theme = ?, profil_picture = ? WHERE id = ?`,
-      [users.email, users.birth_date, users.password, users.address, users.city, users.name, users.theme, users.profil_picture, users.id]
-    );
+    const fieldsToUpdate = [];
+    const values = [];
+
+    Object.keys(users).forEach(key => {
+      if (users[key] && key !== 'id') {
+        fieldsToUpdate.push(`${key} = ?`);
+        values.push(users[key]);
+      }
+    });
+
+    values.push(users.id);
+
+    const sqlQuery = `
+      UPDATE ${this.table} 
+      SET ${fieldsToUpdate.join(', ')} 
+      WHERE id = ?
+    `;
+
+    return this.database.query(sqlQuery, values);
   }
+
 }
 
 module.exports = UsersManager;

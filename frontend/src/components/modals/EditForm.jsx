@@ -10,7 +10,13 @@ import { fetchAllCities } from '../../api/city/cityCrud';
 import Button from '../ui/Button';
 
 const EditForm = () => {
-    const { isModalOpen, setIsModalOpen, isModalChangeProfilOpen, setIsModalChangeProfilOpen, user, setUser } = useContext(AppContext);
+    const {
+        isModalChangeProfilOpen,
+        setIsModalChangeProfilOpen,
+        user,
+        setUser
+    } = useContext(AppContext);
+    
     const [cities, setCities] = useState([]);
 
     const handleCancelClick = () => {
@@ -31,14 +37,21 @@ const EditForm = () => {
     const handleSubmit = (values) => {
         console.log('Submitting:', values);
 
-        changeOneUser({
-            name: values.name,
-            email: values.email,
-            birth_date: values.birth_date,
-            city: values.city,
-            password: values.password,
-            confirmPassword: values.confirmPassword
-        })
+        const formData = new FormData();
+        formData.append('id', user.id);
+        formData.append('name', values.name);
+        formData.append('email', values.email);
+        formData.append('birth_date', values.birth_date);
+        formData.append('city', values.city);
+        // formData.append('password', values.password);
+        // formData.append('confirmPassword', values.confirmPassword);
+
+        // Ajouter l'image de profil, si présente
+        if (values.profilePicture) {
+            formData.append('profilePicture', values.profilePicture);
+        }
+
+        changeOneUser(formData)
             .then((data) => {
                 console.log(data);
                 setUser(data);
@@ -60,8 +73,7 @@ const EditForm = () => {
                     birth_date: formatDate,
                     theme: user.theme === "dark" ? "Sombre" : "Clair",
                     city: user.city ? user.city.id : '',
-                    password: '',
-                    confirmPassword: ''
+                    profilePicture: null, // Valeur initiale de l'image
                 }}
                 validationSchema={Yup.object({
                     name: Yup.string()
@@ -84,18 +96,29 @@ const EditForm = () => {
                         })
                         .required('Champ obligatoire'),
                     city: Yup.string().required('Champ obligatoire'),
-                    password: Yup.string().required('Champ obligatoire')
-                        .min(12, 'Mot de passe trop court - 12 caractères minimum.')
-                        .matches(/[a-zA-Z]/, 'Le mot de passe doit contenir au moins une lettre majuscule et une lettre minuscule.')
-                        .matches(/[0-9]/, 'Le mot de passe doit contenir au moins un chiffre.')
-                        .matches(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/, 'Le mot de passe doit contenir au moins un caractère spécial.'),
-                    confirmPassword: Yup.string().oneOf([Yup.ref('password'), null], 'Le mot de passe de confirmation doit correspondre au mot de passe.')
                 })}
                 onSubmit={handleSubmit}
             >
                 {formik => (
                     <form onSubmit={formik.handleSubmit} className='container-form w-120 flex flex-col items-center justify-center text-center gap-0.5 shadow-md bg-dark-black light-mode:bg-light text-light light-mode:text-dark rounded-lg p-5'>
                         <h3 className='font-text font-bold text-xl'>Modifier votre profil</h3>
+
+                        {/* Champ image de profil */}
+                        <label className="mt-[5px]" htmlFor="profilePicture">Image de profil</label>
+                        <input
+                            id="profilePicture"
+                            name="profilePicture"
+                            type="file"
+                            className='border border-light light-mode:border-dark-black rounded-md'
+                            onChange={(event) => {
+                                formik.setFieldValue("profilePicture", event.currentTarget.files[0]);
+                            }}
+                        />
+                        {formik.touched.profilePicture && formik.errors.profilePicture ? (
+                            <div className='text-error text-xs text-red-400'>{formik.errors.profilePicture}</div>
+                        ) : null}
+
+                        {/* Autres champs existants */}
                         <label className="mt-[5px]" htmlFor="name">Nom</label>
                         <input
                             id="name"
@@ -125,7 +148,7 @@ const EditForm = () => {
                             className='border border-light light-mode:border-dark-black text-light light-mode:text-dark-black rounded-md'
                             value={formik.values.city}
                             onChange={formik.handleChange}
-                            name="city"  
+                            name="city"
                         >
                             <option className="bg-dark-black light-mode:bg-light font-text text-light light-mode:text-dark-black" value="">
                                 Choisir une ville
@@ -156,18 +179,6 @@ const EditForm = () => {
                             <option className="bg-dark-black light-mode:bg-light font-text text-light light-mode:text-dark-black" value="dark">Sombre</option>
                             <option className="bg-dark-black light-mode:bg-light font-text text-light light-mode:text-dark-black" value="light">Clair</option>
                         </select>
-
-                        <label className="mt-[5px]" htmlFor="password">Mot de passe</label>
-                        <input id="password" type="password" className='border border-light light-mode:border-dark-black rounded-md' {...formik.getFieldProps('password')} />
-                        {formik.touched.password && formik.errors.password ? (
-                            <div className='text-error text-xs text-red-400'>{formik.errors.password}</div>
-                        ) : null}
-
-                        <label className="mt-[5px]" htmlFor="confirmPassword">Confirmer le mot de passe</label>
-                        <input id="confirmPassword" type="password" className='border border-light light-mode:border-dark-black rounded-md' {...formik.getFieldProps('confirmPassword')} />
-                        {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
-                            <div className='text-error text-xs text-red-400'>{formik.errors.confirmPassword}</div>
-                        ) : null}
 
                         <div className="container-buttons flex gap-3 justify-center items-center mt-[15px]">
                             <Button type='submit' className='bg-primary hover:bg-secondary' text="Modifier" />

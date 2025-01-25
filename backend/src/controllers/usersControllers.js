@@ -56,20 +56,64 @@ const read = (req, res) => {
     });
 };
 
-const edit = (req, res) => {
-  const userData = req.body;
+// const edit = (req, res) => {
+//   const userData = req.body;
 
-  // TODO validations (length, format...)
+//   // TODO validations (length, format...)
+
+//   userData.id = parseInt(req.params.id, 10);
+
+//   if (req.file) {
+//     const profilePicturePath = path.join("assets", "profil-pictures", req.file.filename);
+//     userData.profilePicture = profilePicturePath; // Ajoute le chemin de l'image au corps de la requête
+//   }
+
+//   models.users
+//     .update(userData)
+//     .then(([result]) => {
+//       if (result.affectedRows === 0) {
+//         res.sendStatus(404);
+//       } else {
+//         res.sendStatus(204);
+//       }
+//     })
+//     .catch((err) => {
+//       console.error(err);
+//       res.sendStatus(500);
+//     });
+// };
+
+const edit = (req, res) => {
+  let userData = req.body;
+
 
   userData.id = parseInt(req.params.id, 10);
 
+  const updatedFields = {};
+
+  if (userData.name) updatedFields.name = userData.name;
+
+  if (userData.email) updatedFields.email = userData.email;
+
+  if (userData.birth_date) updatedFields.birth_date = userData.birth_date;
+
+  if (userData.city) updatedFields.city = userData.city;
+
+  if (userData.theme) updatedFields.theme = userData.theme;
+
+  if (userData.password) updatedFields.password = userData.password;
+
   if (req.file) {
     const profilePicturePath = path.join("assets", "profil-pictures", req.file.filename);
-    userData.profilePicture = profilePicturePath; // Ajoute le chemin de l'image au corps de la requête
+    updatedFields.profilePicture = profilePicturePath;
+  }
+
+  if (Object.keys(updatedFields).length === 0) {
+    return res.status(400).send('Aucun champ n\'a été modifié');
   }
 
   models.users
-    .update(userData)
+    .update(updatedFields)
     .then(([result]) => {
       if (result.affectedRows === 0) {
         res.sendStatus(404);
