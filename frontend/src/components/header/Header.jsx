@@ -17,10 +17,6 @@ const Header = () => {
         setMenuOpen(!menuOpen);
     };
 
-    const handleProfilClick = () => {
-        link('/profil');
-    }
-
     return (
         <header className="flex justify-between items-center w-full px-2.5 shadow-md bg-dark-black light-mode:bg-light">
             <NavLink to="/" className={({ isActive }) => isActive ? 'active' : ''}><img src={isDarkMode ? logo : logoLight} alt="Logo table avec des livres" className='w-50' /></NavLink>
