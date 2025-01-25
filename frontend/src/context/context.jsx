@@ -10,6 +10,8 @@ export const AppProvider = ({ children }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalChangeProfilOpen, setIsModalChangeProfilOpen] = useState(false);
+  const [isModalDeleteProfilOpen, setIsModalDeleteProfilOpen] = useState(false);
 
   // MANAGE MODALS
   const toggleModal = () => {
@@ -48,7 +50,22 @@ export const AppProvider = ({ children }) => {
 
 
     return (
-        <AppContext.Provider value={{ menuOpen, setMenuOpen, isDarkMode, toggleTheme, user, setUser, isModalOpen, setIsModalOpen, toggleModal }}>
+        <AppContext.Provider 
+          value={{ 
+            menuOpen, 
+            setMenuOpen,
+            isDarkMode,
+            toggleTheme,
+            user,
+            setUser,
+            isModalOpen,
+            setIsModalOpen,
+            toggleModal,    
+            isModalChangeProfilOpen,
+            setIsModalChangeProfilOpen,
+            isModalDeleteProfilOpen,
+            setIsModalDeleteProfilOpen 
+          }}>
           {children}
         </AppContext.Provider>
       );
