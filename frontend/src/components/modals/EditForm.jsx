@@ -16,7 +16,7 @@ const EditForm = () => {
         user,
         setUser
     } = useContext(AppContext);
-    
+
     const [cities, setCities] = useState([]);
 
     const handleCancelClick = () => {
@@ -39,12 +39,12 @@ const EditForm = () => {
 
         const formData = new FormData();
         formData.append('id', user.id);
-        formData.append('name', values.name);
         formData.append('email', values.email);
+        formData.append('name', values.name);
+        formData.append('theme', values.theme === "Sombre" ? "dark" : "light");
         formData.append('birth_date', values.birth_date);
         formData.append('city', values.city);
-        // formData.append('password', values.password);
-        // formData.append('confirmPassword', values.confirmPassword);
+        formData.append('address', values.address);
 
         // Ajouter l'image de profil, si présente
         if (values.profilePicture) {
@@ -73,6 +73,7 @@ const EditForm = () => {
                     birth_date: formatDate,
                     theme: user.theme === "dark" ? "Sombre" : "Clair",
                     city: user.city ? user.city.id : '',
+                    address: user.address,
                     profilePicture: null, // Valeur initiale de l'image
                 }}
                 validationSchema={Yup.object({
@@ -80,6 +81,7 @@ const EditForm = () => {
                         .max(50, 'Ne doit pas dépasser 50 caractères')
                         .required('Champ obligatoire'),
                     email: Yup.string().email('Email invalide').required('Champ obligatoire'),
+                    address: Yup.string().max(255, 'Ne doit pas dépasser 255 caractères'),
                     birth_date: Yup.string()
                         .matches(
                             /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d\d$/,
@@ -166,6 +168,9 @@ const EditForm = () => {
                         {formik.touched.city && formik.errors.city && (
                             <div className="text-error text-xs text-red-400">{formik.errors.city}</div>
                         )}
+
+                        <label className="mt-[5px]" htmlFor="address">Adresse</label>
+                        <input id="address" type="text" className='border border-light light-mode:border-dark-black rounded-md' {...formik.getFieldProps('address')} />
 
                         <label className="mt-[5px]" htmlFor="theme">Thème</label>
                         <select

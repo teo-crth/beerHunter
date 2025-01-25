@@ -35,18 +35,32 @@ export const createOneUser = async (email, password, confirmPassword, name, city
   }
 };
 
-export const changeOneUser = async (email, password, name, theme, birth_date, city, address, base64Image) => {
+export const changeOneUser = async (id, email, name, theme, birth_date, city, address, profilPicture) => {
   try {
     // Requête avec axios
-    const response = await axios.put(`${BASE_URL}/api/users`, {
+    const response = await axios.put(`${BASE_URL}/api/users/${id}`, {
       email: email,
-      password: password,
       name: name,
       theme: theme,
       birth_date,
       city: city, 
       address: address, 
-      profil_picture: base64Image
+      profil_picture: profilPicture
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('Erreur lors de la récupération du profil:', error);
+    throw error;
+  }
+};
+
+export const changeUserPassword = async (id, password, confirmPassword) => {
+  try {
+    // Requête avec axios
+    const response = await axios.put(`${BASE_URL}/api/users/${id}`, {
+      password: password,
+      confirmPassword: confirmPassword
     });
 
     return response.data;
