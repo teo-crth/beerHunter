@@ -24,7 +24,7 @@ class UsersManager extends AbstractManager {
     );
 }
 
-  insert(name, birth_date, email, city, hashPassword) {
+  insert(name, birth_date, email, city, hashPassword, theme) {
     return this.database.query(
         `INSERT INTO ${this.table} (email, birth_date, password, city, name, theme) values (?, ?, ?, ?, ?, ?)`,
         [email, birth_date, hashPassword, city, name, theme]);
@@ -57,6 +57,13 @@ class UsersManager extends AbstractManager {
     `;
 
     return this.database.query(sqlQuery, values);
+  }
+
+  editPassword(id, hashPassword) {
+    return this.database.query(
+      `UPDATE ${this.table} SET password = ? WHERE id = ?`,
+      [hashPassword, id]
+    );
   }
 
 }

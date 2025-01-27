@@ -127,6 +127,33 @@ const edit = (req, res) => {
     });
 };
 
+const editPassword = async (req, res) => {
+  const { password, confirmPassword } = req.body;
+  const id = parseInt(req.params.id, 10);
+
+  if (password !== confirmPassword) {
+    res.status(400).send("Les mots de passe ne correspondent pas");
+    return;
+  }
+
+  const hashPassword = await hash(password);
+  
+  models.users
+    .updatePassword(id, hashPassword)
+    .then(([result]) => {
+      if (result.affectedRows === 0) {
+        res.sendStatus(404);
+      } else {
+        res.sendStatus(204);
+      }
+    }
+    )
+    .catch((err) => {
+      console.error(err);
+      res.sendStatus(500);
+    });
+};
+
 const add = async (req, res) => {
   const { name, birth_date, email, password, confirmPassword, theme, city } = req.body;
 
@@ -210,4 +237,5 @@ module.exports = {
   findAssociateComments,
   findAssociateFavorites,
   login,
+  editPassword,
 };
