@@ -15,6 +15,7 @@
     "@tailwindcss/postcss": "^4.0.0",
     "@tailwindcss/vite": "^4.0.0",
     "autoprefixer": "^10.4.20",
+    "dayjs": "^1.11.13",
     "fontawesome": "^5.6.3",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
