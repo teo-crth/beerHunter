@@ -11,54 +11,51 @@ import Button from '../ui/Button';
 
 const EditForm = () => {
     const {
-        isModalChangeProfilOpen,
-        setIsModalChangeProfilOpen,
         user,
-        setUser
+        setUser,
+        closeModal,
+        openModal,
     } = useContext(AppContext);
 
     const [cities, setCities] = useState([]);
 
-    const handleCancelClick = () => {
-        setIsModalChangeProfilOpen(!isModalChangeProfilOpen);
-    };
-
     useEffect(() => {
-        fetchAllCities()
-            .then((data) => {
-                setCities(data);
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    }, []);
+        if (cities.length === 0) {
+            fetchAllCities()
+                .then(data => setCities(data))
+                .catch(error => console.error(error));
+        }
+    }, [cities]);
 
     // Form submission handler
     const handleSubmit = (values) => {
         console.log('Submitting:', values);
 
-        const formData = new FormData();
-        formData.append('id', user.id);
-        formData.append('email', values.email);
-        formData.append('name', values.name);
-        formData.append('theme', values.theme === "Sombre" ? "dark" : "light");
-        formData.append('birth_date', values.birth_date);
-        formData.append('city', values.city);
-        formData.append('address', values.address);
-
+        const id =  user.id;
+        const email = values.email;
+        const name = values.name;
+        const theme = values.theme === "Sombre" ? "dark" : "light";
+        const birth_date = values.birth_date;
+        const city = values.city;
+        const address = values.address;
+        
         // Ajouter l'image de profil, si présente
+        const formDataPicture = new FormData();
         if (values.profilePicture) {
-            formData.append('profilePicture', values.profilePicture);
+            formDataPicture.append('profilePicture', values.profilePicture);
         }
 
-        changeOneUser(formData)
+        changeOneUser(id, email, name, theme, birth_date, city, address, formDataPicture)
             .then((data) => {
                 console.log(data);
                 setUser(data);
-                toggleModal();
+                closeModal();
+                openModal({ type: 'successMessage', text: 'Profil modifié !' });
             })
             .catch((error) => {
                 console.error(error);
+                closeModal();
+                openModal({ type: 'errorMessage', text: 'Un problème est survenu, veuillez rééssayer' });
             });
     };
 
@@ -74,7 +71,7 @@ const EditForm = () => {
                     theme: user.theme === "dark" ? "Sombre" : "Clair",
                     city: user.city ? user.city.id : '',
                     address: user.address,
-                    profilePicture: null, // Valeur initiale de l'image
+                    profilePicture: null,
                 }}
                 validationSchema={Yup.object({
                     name: Yup.string()
@@ -98,14 +95,25 @@ const EditForm = () => {
                         })
                         .required('Champ obligatoire'),
                     city: Yup.string().required('Champ obligatoire'),
+                    address: Yup.string().max(255, 'Ne doit pas dépasser 255 caractères'),
+                    profilePicture: Yup.mixed()
+                        .test('fileSize', 'Le fichier est trop grand, 5 MO maximum', value => value && value.size <= 5 * 1024 * 1024) // 5 MB limit
                 })}
                 onSubmit={handleSubmit}
             >
                 {formik => (
-                    <form onSubmit={formik.handleSubmit} className='container-form w-120 flex flex-col items-center justify-center text-center gap-0.5 shadow-md bg-dark-black light-mode:bg-light text-light light-mode:text-dark rounded-lg p-5'>
+                    <form onSubmit={formik.handleSubmit} className='container-form w-120  z-50 flex flex-col items-center justify-center text-center gap-0.5 shadow-xs shadow-primary bg-dark-black light-mode:bg-light text-light light-mode:text-dark rounded-lg p-5'>
                         <h3 className='font-text font-bold text-xl'>Modifier votre profil</h3>
 
                         {/* Champ image de profil */}
+                        {formik.values.profilePicture && (
+                            <img
+                                src={URL.createObjectURL(formik.values.profilePicture)}
+                                alt="Profile preview"
+                                className="preview-img w-15 h-15 rounded-full border-2 border-primary"
+                            />
+                        )}
+
                         <label className="mt-[5px]" htmlFor="profilePicture">Image de profil</label>
                         <input
                             id="profilePicture"
@@ -120,7 +128,6 @@ const EditForm = () => {
                             <div className='text-error text-xs text-red-400'>{formik.errors.profilePicture}</div>
                         ) : null}
 
-                        {/* Autres champs existants */}
                         <label className="mt-[5px]" htmlFor="name">Nom</label>
                         <input
                             id="name"
@@ -187,7 +194,7 @@ const EditForm = () => {
 
                         <div className="container-buttons flex gap-3 justify-center items-center mt-[15px]">
                             <Button type='submit' className='bg-primary hover:bg-secondary' text="Modifier" />
-                            <Button onClick={handleCancelClick} className='bg-primary hover:bg-secondary' text="Annuler" />
+                            <Button onClick={closeModal} type="button" className='bg-primary hover:bg-secondary' text="Annuler" />
                         </div>
                     </form>
                 )}

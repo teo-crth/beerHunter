@@ -5,17 +5,16 @@ import EditProfil from '../modals/EditProfil';
 
 const Profil = ({ user }) => {
 
-    const { toggleModal, isModalOpen } = useContext(AppContext);
+    const { isModalEditOpen, setIsModalEditOpen } = useContext(AppContext);
 
     const formatDate = dayjs(user?.birth_date).format('DD/MM/YYYY');
 
     const handleClick = () => {
-        toggleModal();
+        setIsModalEditOpen(!isModalEditOpen);
     };
 
     useEffect(() => {
-        console.log(isModalOpen);
-    }, [isModalOpen]);
+    }, [isModalEditOpen]);
 
     return (
         <>
@@ -25,7 +24,7 @@ const Profil = ({ user }) => {
                     <div className='w-2 h-2 bg-light rounded-full'></div>
                     <div className='w-2 h-2 bg-light rounded-full'></div>
                 </div>
-                { isModalOpen ? <EditProfil /> : null}
+                { isModalEditOpen ? <EditProfil /> : null}
                 <div className="container-img">
                     <img src={user?.profil_picture ? user?.profil_picture : '/src/assets/default-profil-picture.webp'} alt='photo de profil' className='w-25 rounded-full shadow-2xs'/>
                 </div>

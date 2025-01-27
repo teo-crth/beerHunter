@@ -3,17 +3,20 @@ import { AppContext } from '../../context/context';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
-import { changeOneUser } from '../../api/user/oneUserCrud';
+import { changeUserPassword } from '../../api/user/oneUserCrud';
 
 import Button from '../ui/Button';
+import Modal from '../ui/Modal';
 
-const EditForm = () => {
+const EditForm = ({isOpen, onClose, type }) => {
     const {
         isModalEditPasswordProfilOpen,
         setIsModalEditPasswordProfilOpen,
         user,
-        setUser
+        setUser,
+        closeModal,
     } = useContext(AppContext);
+
 
     const handleCancelClick = () => {
         setIsModalEditPasswordProfilOpen(!isModalEditPasswordProfilOpen);
@@ -23,24 +26,22 @@ const EditForm = () => {
     const handleSubmit = (values) => {
         console.log('Submitting:', values);
 
-        const formData = new FormData();
-        formData.append('id', user.id);
-        formData.append('password', values.password);
-        formData.append('confirmPassword', values.confirmPassword);
+        const password = values.password.trim();        
+        const confirmPassword = values.confirmPassword.trim();
 
-        changeOneUser(formData)
+        changeUserPassword(password, confirmPassword, user.id)
             .then((data) => {
                 console.log(data);
                 setUser(data);
-                toggleModal();
             })
             .catch((error) => {
-                console.error(error);
+                console.error("Erreur Objet", error);
             });
     };
 
+
+
     return (
-        <div className="container-modal bg-gray-700/50 absolute flex justify-center items-center w-full h-full top-0 left-0">
             <Formik
                 initialValues={{
                     password: '',
@@ -51,6 +52,7 @@ const EditForm = () => {
                         .min(12, 'Mot de passe trop court - 12 caractères minimum.')
                         .matches(/[a-zA-Z]/, 'Le mot de passe doit contenir au moins une lettre majuscule et une lettre minuscule.')
                         .matches(/[0-9]/, 'Le mot de passe doit contenir au moins un chiffre.')
+                        .matches(/^\S*$/, 'Le mot de passe ne doit pas contenir d\'espaces.')
                         .matches(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/, 'Le mot de passe doit contenir au moins un caractère spécial.'),
                     confirmPassword: Yup.string().oneOf([Yup.ref('password'), null], 'Le mot de passe de confirmation doit correspondre au mot de passe.')
                 })}
@@ -73,12 +75,11 @@ const EditForm = () => {
 
                         <div className="container-buttons flex gap-3 justify-center items-center mt-[15px]">
                             <Button type='submit' className='bg-primary hover:bg-secondary' text="Modifier" />
-                            <Button onClick={handleCancelClick} className='bg-primary hover:bg-secondary' text="Annuler" />
+                            <Button onClick={closeModal} type="button" className='bg-primary hover:bg-secondary' text="Annuler" />
                         </div>
                     </form>
                 )}
             </Formik>
-        </div>
     );
 };
 

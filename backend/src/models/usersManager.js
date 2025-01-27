@@ -59,7 +59,7 @@ class UsersManager extends AbstractManager {
     return this.database.query(sqlQuery, values);
   }
 
-  editPassword(id, hashPassword) {
+  updatePassword(id, hashPassword) {
     return this.database.query(
       `UPDATE ${this.table} SET password = ? WHERE id = ?`,
       [hashPassword, id]

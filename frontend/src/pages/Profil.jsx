@@ -1,9 +1,8 @@
 import React, { useEffect, useContext } from "react";
 import { AppContext } from "../context/context";
 import ProfilCard from "../components/profil/ProfilCard";
-import EditForm from "../components/modals/EditForm";
-import DeleteProfil from "../components/modals/DeleteProfil";
-import EditPassword from "../components/modals/EditPassword";
+import Modal from "../components/ui/Modal";
+
 
 import { fetchOneUser } from "../api/user/oneUserCrud";
 
@@ -13,9 +12,7 @@ export default function Profil() {
   const {
     user,
     setUser,
-    isModalChangeProfilOpen,
-    isModalDeleteProfilOpen,
-    isModalEditPasswordProfilOpen
+    openModal
   } = useContext(AppContext);
 
   useEffect(() => {
@@ -30,9 +27,8 @@ export default function Profil() {
       <div className="container-profil w-full min-h-full flex flex-col items-center bg-secondary p-2">
         <h1 className="text-light light-mode:text-dark text-3xl font-title m-2">Mon profil</h1>
         <ProfilCard user={user} />
-        {isModalChangeProfilOpen ? <EditForm /> : null}
-        {isModalEditPasswordProfilOpen ? <EditPassword /> : null}
-        {isModalDeleteProfilOpen ? <DeleteProfil /> : null}
+        <Modal />
+
       </div>
     </>
   );

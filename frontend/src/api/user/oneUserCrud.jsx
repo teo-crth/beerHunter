@@ -55,10 +55,10 @@ export const changeOneUser = async (id, email, name, theme, birth_date, city, ad
   }
 };
 
-export const changeUserPassword = async (id, password, confirmPassword) => {
+export const changeUserPassword = async (password, confirmPassword, id) => {
   try {
     // Requête avec axios
-    const response = await axios.put(`${BASE_URL}/api/users/${id}`, {
+    const response = await axios.put(`${BASE_URL}/api/passwordUsers/${id}`, {
       password: password,
       confirmPassword: confirmPassword
     });

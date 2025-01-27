@@ -9,15 +9,7 @@ export const AppProvider = ({ children }) => {
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [user, setUser] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isModalChangeProfilOpen, setIsModalChangeProfilOpen] = useState(false);
-  const [isModalDeleteProfilOpen, setIsModalDeleteProfilOpen] = useState(false);
-  const [isModalEditPasswordProfilOpen, setIsModalEditPasswordProfilOpen] = useState(false);
-
-  // MANAGE MODALS
-  const toggleModal = () => {
-    setIsModalOpen(prevMode => !prevMode);
-  };
+  const [isModalEditOpen, setIsModalEditOpen] = useState(false);
 
   // DARK MODE
     const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -49,6 +41,19 @@ export const AppProvider = ({ children }) => {
         setIsDarkMode(prevMode => !prevMode);
     };
 
+    // Modals
+
+    const [modalState, setModalState] = useState({
+      isOpen: false,
+      type: '',
+      text: '',
+    });
+  
+    const openModal = (type) => setModalState({ isOpen: true, type });
+    const closeModal = () => setModalState({ isOpen: false, type: '' });
+
+
+
 
     return (
         <AppContext.Provider 
@@ -59,15 +64,11 @@ export const AppProvider = ({ children }) => {
             toggleTheme,
             user,
             setUser,
-            isModalOpen,
-            setIsModalOpen,
-            toggleModal,    
-            isModalChangeProfilOpen,
-            setIsModalChangeProfilOpen,
-            isModalDeleteProfilOpen,
-            setIsModalDeleteProfilOpen,
-            isModalEditPasswordProfilOpen,
-            setIsModalEditPasswordProfilOpen
+            isModalEditOpen, 
+            setIsModalEditOpen,
+            openModal, 
+            closeModal,
+            modalState
           }}>
           {children}
         </AppContext.Provider>
