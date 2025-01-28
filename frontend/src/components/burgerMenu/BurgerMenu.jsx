@@ -12,12 +12,8 @@ const BurgerMenu = () => {
         setMenuOpen(!menuOpen);
     };
 
-    const handleLink = () => {
-        setMenuOpen(false);
-    };
-
     return (
-        <div className={`container-burgerMenu ${isDarkMode ? 'bg-black text-white shadow-lg' : 'bg-white shadow-md'} flex flex-col justify-start w-[70%] absolute left-0 bottom-0 h-full`}>
+        <div className={`container-burgerMenu bg-dark-black light-mode:bg-light text-white light-mode:text-dark-black z-50 shadow-lg' : 'bg-white shadow-md'} flex flex-col justify-start w-[70%] absolute left-0 bottom-0 h-full`}>
             <div className="container-close-icon flex justify-end items-center p-5 cursor-pointer" onClick={toggleMenu}>
                 <FontAwesomeIcon icon={faXmark} />
             </div>
@@ -27,7 +23,6 @@ const BurgerMenu = () => {
                 <div className="container-theme-mode-icon w-10 h-10 p-3 flex items-center justify-center rounded-full border border-solid cursor-pointer box-border">
                     <FontAwesomeIcon className="dark-mode-icon text-lg cursor-pointer" icon={faMoon} onClick={toggleTheme} />
                 </div>
-
             </nav>
         </div>
     );

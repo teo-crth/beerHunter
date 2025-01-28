@@ -3,7 +3,7 @@ const models = require("../models");
 const browse = (req, res) => {
     models.comment_image
         .findAll()
-        .then(([rows]) => {
+        .then((rows) => {
             res.send(rows);
         })
         .catch((err) => {
@@ -15,7 +15,7 @@ const browse = (req, res) => {
 const read = (req, res) => {
     models.comment_image
         .find(req.params.id)
-        .then(([rows]) => {
+        .then((rows) => {
             if (rows[0] == null) {
                 res.sendStatus(404);
             } else {
@@ -37,7 +37,7 @@ const edit = (req, res) => {
 
     models.comment
         .update(comment_image)
-        .then(([result]) => {
+        .then((result) => {
             if (result.affectedRows === 0) {
                 res.sendStatus(404);
             } else {
@@ -57,7 +57,7 @@ const add = (req, res) => {
 
     models.comment_image
         .insert(comment_image)
-        .then(([result]) => {
+        .then((result) => {
             res.location(`/comment_image/${result.insertId}`).sendStatus(201);
         })
         .catch((err) => {
@@ -69,7 +69,7 @@ const add = (req, res) => {
 const destroy = (req, res) => {
     models.comments_image
         .delete(req.params.id)
-        .then(([result]) => {
+        .then((result) => {
             if (result.affectedRows === 0) {
                 res.sendStatus(404);
             } else {

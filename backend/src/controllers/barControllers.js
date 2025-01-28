@@ -3,7 +3,9 @@ const models = require("../models");
 const browse = (req, res) => {
     models.bar
         .findAll()
-        .then(([rows]) => {
+        .then((rows) => {
+            console.log('rows', rows);
+            
             res.send(rows);
         })
         .catch((err) => {
@@ -15,7 +17,7 @@ const browse = (req, res) => {
 const findAssociateComments = (req, res) => {
     models.bar
         .findCommentsOfOneBar(req.params.id)
-        .then(([rows]) => {
+        .then((rows) => {
             res.send(rows);
         })
         .catch((err) => {
@@ -27,7 +29,7 @@ const findAssociateComments = (req, res) => {
 const findAssociateBeers = (req, res) => {
     models.bar
         .findBeersOfOneBar(req.params.id)
-        .then(([rows]) => {
+        .then((rows) => {
             res.send(rows);
         })
         .catch((err) => {
@@ -39,7 +41,7 @@ const findAssociateBeers = (req, res) => {
 const read = (req, res) => {
     models.bar
         .find(req.params.id)
-        .then(([rows]) => {
+        .then((rows) => {
             if (rows[0] == null) {
                 res.sendStatus(404);
             } else {
@@ -61,7 +63,7 @@ const edit = (req, res) => {
 
     models.bar
         .update(bar)
-        .then(([result]) => {
+        .then((result) => {
             if (result.affectedRows === 0) {
                 res.sendStatus(404);
             } else {
@@ -81,7 +83,7 @@ const add = (req, res) => {
 
     models.bar
         .insert(bar)
-        .then(([result]) => {
+        .then((result) => {
             res.location(`api/bars/${result.insertId}`).sendStatus(201);
         })
         .catch((err) => {
@@ -93,7 +95,7 @@ const add = (req, res) => {
 const destroy = (req, res) => {
     models.bar
         .delete(req.params.id)
-        .then(([result]) => {
+        .then((result) => {
             if (result.affectedRows === 0) {
                 res.sendStatus(404);
             } else {

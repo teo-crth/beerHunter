@@ -3,7 +3,7 @@ const models = require("../models");
 const browse = (req, res) => {
   models.user_comment
     .findAll()
-    .then(([rows]) => {
+    .then((rows) => {
       res.send(rows);
     })
     .catch((err) => {
@@ -15,7 +15,7 @@ const browse = (req, res) => {
 const findAssociateImages = (req, res) => {
   models.user_comment
     .findCommentImages(req.params.id)
-    .then(([rows]) => {
+    .then((rows) => {
       res.send(rows);
     })
     .catch((err) => {
@@ -27,7 +27,7 @@ const findAssociateImages = (req, res) => {
 const read = (req, res) => {
   models.user_comment
     .find(req.params.id)
-    .then(([rows]) => {
+    .then((rows) => {
       if (rows[0] == null) {
         res.sendStatus(404);
       } else {
@@ -49,7 +49,7 @@ const edit = (req, res) => {
 
   models.user_comment
     .update(user_comment)
-    .then(([result]) => {
+    .then((result) => {
       if (result.affectedRows === 0) {
         res.sendStatus(404);
       } else {
@@ -69,7 +69,7 @@ const add = (req, res) => {
 
   models.user_comment
     .insert(user_comment)
-    .then(([result]) => {
+    .then((result) => {
       res.location(`/user_comments/${result.insertId}`).sendStatus(201);
     })
     .catch((err) => {
@@ -81,7 +81,7 @@ const add = (req, res) => {
 const destroy = (req, res) => {
   models.user_comment
     .delete(req.params.id)
-    .then(([result]) => {
+    .then((result) => {
       if (result.affectedRows === 0) {
         res.sendStatus(404);
       } else {
