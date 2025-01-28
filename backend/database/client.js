@@ -14,7 +14,14 @@ const pg = require("pg");
 // });
 
 const client = new pg.Pool({
-  connectionString: DB_HOST,
+  host: DB_HOST,
+  port: DB_PORT,
+  user: DB_USER,
+  password: DB_PASSWORD,
+  database: DB_NAME,
+  ssl: {
+    rejectUnauthorized: false, // Important si tu utilises SSL
+  },
 });
 
 // RENDER 
