@@ -95,7 +95,6 @@ const EditForm = () => {
                         })
                         .required('Champ obligatoire'),
                     city: Yup.string().required('Champ obligatoire'),
-                    address: Yup.string().max(255, 'Ne doit pas dépasser 255 caractères'),
                     profilePicture: Yup.mixed()
                         .test('fileSize', 'Le fichier est trop grand, 5 MO maximum', value => value && value.size <= 5 * 1024 * 1024) // 5 MB limit
                 })}

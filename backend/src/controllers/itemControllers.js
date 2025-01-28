@@ -3,7 +3,8 @@ const models = require("../models");
 const browse = (req, res) => {
   models.item
     .findAll()
-    .then((rows) => {
+    .then((result) => {
+      const rows = result.rows;
       res.send(rows);
     })
     .catch((err) => {
@@ -15,7 +16,8 @@ const browse = (req, res) => {
 const read = (req, res) => {
   models.item
     .find(req.params.id)
-    .then((rows) => {
+    .then((result) => {
+      const rows = result.rows;
       if (rows[0] == null) {
         res.sendStatus(404);
       } else {
@@ -38,7 +40,7 @@ const edit = (req, res) => {
   models.item
     .update(item)
     .then((result) => {
-      if (result.affectedRows === 0) {
+      if (result.rowCount === 0) {
         res.sendStatus(404);
       } else {
         res.sendStatus(204);
@@ -70,7 +72,7 @@ const destroy = (req, res) => {
   models.item
     .delete(req.params.id)
     .then((result) => {
-      if (result.affectedRows === 0) {
+      if (result.rowCount === 0) {
         res.sendStatus(404);
       } else {
         res.sendStatus(204);
