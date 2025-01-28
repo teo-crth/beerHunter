@@ -3,9 +3,8 @@ const models = require("../models");
 const browse = (req, res) => {
     models.bar
         .findAll()
-        .then((rows) => {
-            console.log('rows', rows);
-            
+        .then((result) => {
+            const rows = result.rows;           
             res.send(rows);
         })
         .catch((err) => {
@@ -15,9 +14,11 @@ const browse = (req, res) => {
 };
 
 const findAssociateComments = (req, res) => {
+    const id = parseInt(req.params.id, 10);
     models.bar
-        .findCommentsOfOneBar(req.params.id)
-        .then((rows) => {
+        .findCommentsOfOneBar(id)
+        .then((result) => {
+            const rows = result.rows
             res.send(rows);
         })
         .catch((err) => {
@@ -27,9 +28,11 @@ const findAssociateComments = (req, res) => {
 };
 
 const findAssociateBeers = (req, res) => {
+    const id = parseInt(req.params.id, 10);
     models.bar
-        .findBeersOfOneBar(req.params.id)
-        .then((rows) => {
+        .findBeersOfOneBar(id)
+        .then((result) => {
+            const rows = result.rows;
             res.send(rows);
         })
         .catch((err) => {
@@ -39,9 +42,11 @@ const findAssociateBeers = (req, res) => {
 };
 
 const read = (req, res) => {
+    const id = parseInt(req.params.id, 10);
     models.bar
-        .find(req.params.id)
-        .then((rows) => {
+        .find(id)
+        .then((result) => {
+            const rows = result.rows;
             if (rows[0] == null) {
                 res.sendStatus(404);
             } else {
@@ -64,7 +69,7 @@ const edit = (req, res) => {
     models.bar
         .update(bar)
         .then((result) => {
-            if (result.affectedRows === 0) {
+            if (result.rowCount === 0) {
                 res.sendStatus(404);
             } else {
                 res.sendStatus(204);
@@ -96,7 +101,7 @@ const destroy = (req, res) => {
     models.bar
         .delete(req.params.id)
         .then((result) => {
-            if (result.affectedRows === 0) {
+            if (result.rowCount === 0) {
                 res.sendStatus(404);
             } else {
                 res.sendStatus(204);
