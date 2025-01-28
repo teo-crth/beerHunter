@@ -12,23 +12,13 @@ const Modal = () => {
   
   if (!isOpen) return null;
 
-  // const [isEditFormOpen, setIsEditFormOpen] = useState(false);
-  // const [isEditPasswordOpen, setIsEditPasswordOpen] = useState(false);
-  // const [isDeleteProfilOpen, setIsDeleteProfilOpen] = useState(false);
-  // const [isModalOpen, setIsModalOpen] = useState(false);
-
-  // const handleCloseEditForm = () => setIsEditFormOpen(false);
-  // const handleCloseEditPassword = () => setIsEditPasswordOpen(false);
-  // const handleCloseDeleteProfil = () => setIsDeleteProfilOpen(false);
-
   return (
     <div className="modal-overlay bg-gray-700/50 absolute flex justify-center items-center w-full h-full top-0 left-0" onClick={closeModal}>
       <div className={`modal ${type}`} onClick={(e) => e.stopPropagation()}>
           { type === 'editUser' && <EditForm />}
           { type === 'editPassword' && <EditPassword />}
           { type === 'deleteProfil' && <DeleteProfil />}
-          { type === 'errorMessage' && <MessageModal text={text} type="error" />}
-          { type === 'successMessage' && <MessageModal text={text} type="success" />}
+          { type === 'errorMessage' || 'successMessage' && <MessageModal text={text} type={type} />}
       </div>
     </div>
   );
