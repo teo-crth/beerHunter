@@ -7,7 +7,7 @@ const { hash } = require("../utils/cryptoPassword");
 const browse = (req, res) => {
   models.users
     .findAll()
-    .then(([rows]) => {
+    .then((rows) => {
       res.send(rows);
     })
     .catch((err) => {
@@ -19,7 +19,7 @@ const browse = (req, res) => {
 const findAssociateComments = (req, res) => {
   models.users
     .findCommentsOfOneUser(req.params.id)
-    .then(([rows]) => {
+    .then((rows) => {
       res.send(rows);
     })
     .catch((err) => {
@@ -31,7 +31,7 @@ const findAssociateComments = (req, res) => {
 const findAssociateFavorites = (req, res) => {
   models.users
     .findFavoriteBarsOfOneUser(req.params.id)
-    .then(([rows]) => {
+    .then((rows) => {
       res.send(rows);
     })
     .catch((err) => {
@@ -43,7 +43,7 @@ const findAssociateFavorites = (req, res) => {
 const read = (req, res) => {
   models.users
     .find(req.params.id)
-    .then(([rows]) => {
+    .then((rows) => {
       if (rows[0] == null) {
         res.sendStatus(404);
       } else {
@@ -70,7 +70,7 @@ const read = (req, res) => {
 
 //   models.users
 //     .update(userData)
-//     .then(([result]) => {
+//     .then((result) => {
 //       if (result.affectedRows === 0) {
 //         res.sendStatus(404);
 //       } else {
@@ -114,7 +114,7 @@ const edit = (req, res) => {
 
   models.users
     .update(updatedFields)
-    .then(([result]) => {
+    .then((result) => {
       if (result.affectedRows === 0) {
         res.sendStatus(404);
       } else {
@@ -140,7 +140,7 @@ const editPassword = async (req, res) => {
   
   models.users
     .updatePassword(id, hashPassword)
-    .then(([result]) => {
+    .then((result) => {
       if (result.affectedRows === 0) {
         res.sendStatus(404);
       } else {
@@ -168,7 +168,7 @@ const add = async (req, res) => {
 
   models.users
     .insert(name, birth_date, email, hashPassword, theme, city)
-    .then(([result]) => {
+    .then((result) => {
       res.location(`/users/${result.insertId}`).sendStatus(201);
     })
     .catch((err) => {
@@ -180,7 +180,7 @@ const add = async (req, res) => {
 const destroy = (req, res) => {
   models.users
     .delete(req.params.id)
-    .then(([result]) => {
+    .then((result) => {
       if (result.affectedRows === 0) {
         res.sendStatus(404);
       } else {
@@ -202,7 +202,7 @@ const login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const [rows] = await models.users.findUserByEmail(email);
+    const rows = await models.users.findUserByEmail(email);
 
     if (!rows[0]) {
       res.status(401).send("L'email ou le mot de passe est incorrect");

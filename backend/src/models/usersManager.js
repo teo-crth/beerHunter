@@ -6,11 +6,11 @@ class UsersManager extends AbstractManager {
   }
 
   findUserByEmail(email) {
-    return this.database.query(`SELECT * FROM ${this.table} WHERE email = ?`, [email]);
+    return this.database.query(`SELECT * FROM ${this.table} WHERE email = $1`, [email]);
   }
 
   findCommentsOfOneUser(id) {
-    return this.database.query(`SELECT * FROM  user_comment WHERE user_id = ?`, 
+    return this.database.query(`SELECT * FROM  user_comment WHERE user_id = $1`, 
       [id]);
   }
 
@@ -19,14 +19,14 @@ class UsersManager extends AbstractManager {
         SELECT bar.* 
         FROM favorite_bar
         JOIN bar ON favorite_bar.bar_id = bar.id
-        WHERE favorite_bar.user_id = ?`, 
+        WHERE favorite_bar.user_id = $1`, 
         [id]
     );
 }
 
   insert(name, birth_date, email, city, hashPassword, theme) {
     return this.database.query(
-        `INSERT INTO ${this.table} (email, birth_date, password, city, name, theme) values (?, ?, ?, ?, ?, ?)`,
+        `INSERT INTO ${this.table} (email, birth_date, password, city, name, theme) values ($1, $2, $3, $4, $5, $6)`,
         [email, birth_date, hashPassword, city, name, theme]);
   }
 
@@ -43,7 +43,7 @@ class UsersManager extends AbstractManager {
 
     Object.keys(users).forEach(key => {
       if (users[key] && key !== 'id') {
-        fieldsToUpdate.push(`${key} = ?`);
+        fieldsToUpdate.push(`${key} = $1`);
         values.push(users[key]);
       }
     });
@@ -53,7 +53,7 @@ class UsersManager extends AbstractManager {
     const sqlQuery = `
       UPDATE ${this.table} 
       SET ${fieldsToUpdate.join(', ')} 
-      WHERE id = ?
+      WHERE id = $1
     `;
 
     return this.database.query(sqlQuery, values);
@@ -61,7 +61,7 @@ class UsersManager extends AbstractManager {
 
   updatePassword(id, hashPassword) {
     return this.database.query(
-      `UPDATE ${this.table} SET password = ? WHERE id = ?`,
+      `UPDATE ${this.table} SET password = $1 WHERE id = $2`,
       [hashPassword, id]
     );
   }
