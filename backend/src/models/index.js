@@ -1,22 +1,43 @@
 require("dotenv").config();
 
-const mysql = require("mysql2/promise");
+// const mysql = require("mysql2/promise");
+const pg = require("pg");
 
 // create a connection pool to the database
 
 const { DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME } = process.env;
 
-const pool = mysql.createPool({
+// const pool = mysql.createPool({
+//   host: DB_HOST,
+//   port: DB_PORT,
+//   user: DB_USER,
+//   password: DB_PASSWORD,
+//   database: DB_NAME,
+// });
+
+const pool = new pg.Pool({
   host: DB_HOST,
   port: DB_PORT,
   user: DB_USER,
   password: DB_PASSWORD,
   database: DB_NAME,
+  ssl: {
+    rejectUnauthorized: false, // Important si tu utilises SSL
+  },
 });
 
 // try a connection
 
-pool.getConnection().catch(() => {
+// pool.getConnection().catch(() => {
+//   console.warn(
+//     "Warning:",
+//     "Failed to get a DB connection.",
+//     "Did you create a .env file with valid credentials?",
+//     "Routes using models won't work as intended"
+//   );
+// });
+
+pool.connect().catch(() => {
   console.warn(
     "Warning:",
     "Failed to get a DB connection.",
@@ -24,7 +45,6 @@ pool.getConnection().catch(() => {
     "Routes using models won't work as intended"
   );
 });
-
 // declare and fill models: that's where you should register your own managers
 
 const models = {};

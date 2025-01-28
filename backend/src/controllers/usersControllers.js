@@ -7,7 +7,7 @@ const { hash } = require("../utils/cryptoPassword");
 const browse = (req, res) => {
   models.users
     .findAll()
-    .then(([rows]) => {
+    .then((rows) => {
       res.send(rows);
     })
     .catch((err) => {
@@ -19,7 +19,7 @@ const browse = (req, res) => {
 const findAssociateComments = (req, res) => {
   models.users
     .findCommentsOfOneUser(req.params.id)
-    .then(([rows]) => {
+    .then((rows) => {
       res.send(rows);
     })
     .catch((err) => {
@@ -31,7 +31,7 @@ const findAssociateComments = (req, res) => {
 const findAssociateFavorites = (req, res) => {
   models.users
     .findFavoriteBarsOfOneUser(req.params.id)
-    .then(([rows]) => {
+    .then((rows) => {
       res.send(rows);
     })
     .catch((err) => {
@@ -43,7 +43,7 @@ const findAssociateFavorites = (req, res) => {
 const read = (req, res) => {
   models.users
     .find(req.params.id)
-    .then(([rows]) => {
+    .then((rows) => {
       if (rows[0] == null) {
         res.sendStatus(404);
       } else {
@@ -56,27 +56,98 @@ const read = (req, res) => {
     });
 };
 
-const edit = (req, res) => {
-  const userData = req.body;
+// const edit = (req, res) => {
+//   const userData = req.body;
 
-  // TODO validations (length, format...)
+//   // TODO validations (length, format...)
+
+//   userData.id = parseInt(req.params.id, 10);
+
+//   if (req.file) {
+//     const profilePicturePath = path.join("assets", "profil-pictures", req.file.filename);
+//     userData.profilePicture = profilePicturePath; // Ajoute le chemin de l'image au corps de la requête
+//   }
+
+//   models.users
+//     .update(userData)
+//     .then((result) => {
+//       if (result.affectedRows === 0) {
+//         res.sendStatus(404);
+//       } else {
+//         res.sendStatus(204);
+//       }
+//     })
+//     .catch((err) => {
+//       console.error(err);
+//       res.sendStatus(500);
+//     });
+// };
+
+const edit = (req, res) => {
+  let userData = req.body;
+
 
   userData.id = parseInt(req.params.id, 10);
 
+  const updatedFields = {};
+
+  if (userData.name) updatedFields.name = userData.name;
+
+  if (userData.email) updatedFields.email = userData.email;
+
+  if (userData.birth_date) updatedFields.birth_date = userData.birth_date;
+
+  if (userData.city) updatedFields.city = userData.city;
+
+  if (userData.theme) updatedFields.theme = userData.theme;
+
+  if (userData.password) updatedFields.password = userData.password;
+
   if (req.file) {
     const profilePicturePath = path.join("assets", "profil-pictures", req.file.filename);
-    userData.profilePicture = profilePicturePath; // Ajoute le chemin de l'image au corps de la requête
+    updatedFields.profilePicture = profilePicturePath;
+  }
+
+  if (Object.keys(updatedFields).length === 0) {
+    return res.status(400).send('Aucun champ n\'a été modifié');
   }
 
   models.users
-    .update(userData)
-    .then(([result]) => {
+    .update(updatedFields)
+    .then((result) => {
       if (result.affectedRows === 0) {
         res.sendStatus(404);
       } else {
         res.sendStatus(204);
       }
     })
+    .catch((err) => {
+      console.error(err);
+      res.sendStatus(500);
+    });
+};
+
+const editPassword = async (req, res) => {
+  const { password, confirmPassword } = req.body;
+  const id = parseInt(req.params.id, 10);
+
+  if (password !== confirmPassword) {
+    res.status(400).send("Les mots de passe ne correspondent pas");
+    return;
+  }
+
+  const hashPassword = await hash(password);
+  
+  models.users
+    .updatePassword(id, hashPassword)
+    .then((result) => {
+      if (result.affectedRows === 0) {
+        res.sendStatus(404);
+      } else {
+        res.sendStatus(204);
+      }
+    }
+    )
     .catch((err) => {
       console.error(err);
       res.sendStatus(500);
@@ -97,7 +168,7 @@ const add = async (req, res) => {
 
   models.users
     .insert(name, birth_date, email, hashPassword, theme, city)
-    .then(([result]) => {
+    .then((result) => {
       res.location(`/users/${result.insertId}`).sendStatus(201);
     })
     .catch((err) => {
@@ -109,7 +180,7 @@ const add = async (req, res) => {
 const destroy = (req, res) => {
   models.users
     .delete(req.params.id)
-    .then(([result]) => {
+    .then((result) => {
       if (result.affectedRows === 0) {
         res.sendStatus(404);
       } else {
@@ -131,7 +202,7 @@ const login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const [rows] = await models.users.findUserByEmail(email);
+    const rows = await models.users.findUserByEmail(email);
 
     if (!rows[0]) {
       res.status(401).send("L'email ou le mot de passe est incorrect");
@@ -166,4 +237,5 @@ module.exports = {
   findAssociateComments,
   findAssociateFavorites,
   login,
+  editPassword,
 };

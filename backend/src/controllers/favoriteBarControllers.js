@@ -3,7 +3,7 @@ const models = require("../models");
 const browse = (req, res) => {
   models.favorite_bar
     .findAll()
-    .then(([rows]) => {
+    .then((rows) => {
       res.send(rows);
     })
     .catch((err) => {
@@ -15,7 +15,7 @@ const browse = (req, res) => {
 const read = (req, res) => {
   models.favorite_bar
     .find(req.params.id)
-    .then(([rows]) => {
+    .then((rows) => {
       if (rows[0] == null) {
         res.sendStatus(404);
       } else {
@@ -37,7 +37,7 @@ const edit = (req, res) => {
 
   models.favorite_bar
     .update(favorite_bar)
-    .then(([result]) => {
+    .then((result) => {
       if (result.affectedRows === 0) {
         res.sendStatus(404);
       } else {
@@ -57,7 +57,7 @@ const add = (req, res) => {
 
   models.favorite_bar
     .insert(favorite_bar)
-    .then(([result]) => {
+    .then((result) => {
       res.location(`/favorite_bars/${result.insertId}`).sendStatus(201);
     })
     .catch((err) => {
@@ -69,7 +69,7 @@ const add = (req, res) => {
 const destroy = (req, res) => {
   models.favorite_bar
     .delete(req.params.id)
-    .then(([result]) => {
+    .then((result) => {
       if (result.affectedRows === 0) {
         res.sendStatus(404);
       } else {

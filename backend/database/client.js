@@ -2,32 +2,61 @@
 const { DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME } = process.env;
 
 // Create a connection pool to the database
-const mysql = require("mysql2/promise");
+// const mysql = require("mysql2/promise");
+const pg = require("pg");
 
-const client = mysql.createPool({
+// const client = mysql.createPool({
+//   host: DB_HOST,
+//   port: DB_PORT,
+//   user: DB_USER,
+//   password: DB_PASSWORD,
+//   database: DB_NAME,
+// });
+
+const client = new pg.Pool({
   host: DB_HOST,
   port: DB_PORT,
   user: DB_USER,
   password: DB_PASSWORD,
   database: DB_NAME,
+  ssl: {
+    rejectUnauthorized: false, // Important si tu utilises SSL
+  },
 });
 
-// Try to get a connection to the database
+// RENDER 
 client
-  .getConnection()
-  .then((connection) => {
+  .connect()
+  .then(() => {
     console.info(`Using database ${DB_NAME}`);
-
-    connection.release();
   })
   .catch((error) => {
+    console.log('error', error);
+    
+    console.error("Error message:", error.message);
     console.warn(
       "Warning:",
       "Failed to establish a database connection.",
       "Please check your database credentials in the .env file if you need a database access."
     );
-    console.error("Error message:", error.message);
   });
+
+// Try to get a connection to the database
+// client
+//   .getConnection()
+//   .then((connection) => {
+//     console.info(`Using database ${DB_NAME}`);
+
+//     connection.release();
+//   })
+//   .catch((error) => {
+//     console.warn(
+//       "Warning:",
+//       "Failed to establish a database connection.",
+//       "Please check your database credentials in the .env file if you need a database access."
+//     );
+//     console.error("Error message:", error.message);
+//   });
 
 // Store database name into client for further uses
 client.databaseName = DB_NAME;
