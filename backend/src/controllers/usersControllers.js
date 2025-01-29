@@ -107,6 +107,8 @@ const edit = (req, res) => {
 
   if (userData.theme) updatedFields.theme = userData.theme;
 
+  if (userData.address) updatedFields.address = userData.address;
+
   if (userData.password) updatedFields.password = userData.password;
 
   if (req.file) {
