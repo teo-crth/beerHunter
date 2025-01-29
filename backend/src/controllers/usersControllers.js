@@ -48,7 +48,7 @@ const findAssociateFavorites = (req, res) => {
 const read = (req, res) => {
   const id = parseInt(req.params.id, 10);
   models.users
-    .find(id)
+    .findUser(id)
     .then((rows) => {
       const result = rows.rows[0];
       if (result == null) {
@@ -93,9 +93,7 @@ const read = (req, res) => {
 const edit = (req, res) => {
   let userData = req.body;
 
-
   const id = parseInt(req.params.id, 10);
-  console.log('dateeeeeee', userData.birth_date);
   
   const updatedFields = {};
 

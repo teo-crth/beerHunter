@@ -3,8 +3,10 @@ const path = require("path");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    // Le dossier où l'image sera enregistrée
-    cb(null, path.join(__dirname, "..", "public", "assets", "images", "profil-pictures"));
+    const uploadPath = path.join(__dirname, '..', 'public', 'assets', 'images', 'profil-pictures');
+    console.log(uploadPath);  // Pour vérifier dans la console si c'est le bon chemin
+
+    cb(null, uploadPath);
   },
   filename: (req, file, cb) => {
     // Le nom de l'image avec un timestamp pour éviter les conflits
@@ -26,7 +28,7 @@ const fileFilter = (req, file, cb) => {
 };
 
 // File size 2MO max)
-const limits = { fileSize: 2 * 1024 * 1024 };
+const limits = { fileSize: 5 * 1024 * 1024 };
 
 const upload = multer({ storage, fileFilter, limits });
 
