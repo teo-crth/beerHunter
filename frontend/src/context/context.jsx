@@ -49,7 +49,7 @@ export const AppProvider = ({ children }) => {
       text: '',
     });
   
-    const openModal = (type) => setModalState({ isOpen: true, type });
+    const openModal = (type, text) => setModalState({ isOpen: true, type, text });
     const closeModal = () => setModalState({ isOpen: false, type: '' });
 
 

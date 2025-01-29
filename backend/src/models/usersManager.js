@@ -24,10 +24,10 @@ class UsersManager extends AbstractManager {
     );
 }
 
-  insert(name, birth_date, email, city, hashPassword, theme) {
+  insert(name, birth_date, email, cityId, hashPassword, theme) {
     return this.database.query(
-        `INSERT INTO ${this.table} (email, birth_date, password, city, name, theme) values ($1, $2, $3, $4, $5, $6)`,
-        [email, birth_date, hashPassword, city, name, theme]);
+        `INSERT INTO ${this.table} (email, birth_date, password, city_id, name, theme) values ($1, $2, $3, $4, $5, $6)`,
+        [email, birth_date, hashPassword, cityId, name, theme]);
   }
 
   // update(users) {
@@ -37,25 +37,27 @@ class UsersManager extends AbstractManager {
   //   );
   // }
 
-  update(users) {
+  update(id, users) {
     const fieldsToUpdate = [];
     const values = [];
 
-    Object.keys(users).forEach(key => {
+    Object.keys(users).forEach((key, index) => {
       if (users[key] && key !== 'id') {
-        fieldsToUpdate.push(`${key} = $1`);
+        fieldsToUpdate.push(`${key} = $${index + 1}`);
         values.push(users[key]);
       }
     });
 
-    values.push(users.id);
+    values.push(id);
 
     const sqlQuery = `
       UPDATE ${this.table} 
       SET ${fieldsToUpdate.join(', ')} 
-      WHERE id = $1
+      WHERE id = $${values.length}
     `;
-
+    console.log('sqlQuery', sqlQuery);
+    console.log('values', values);
+    
     return this.database.query(sqlQuery, values);
   }
 

@@ -94,8 +94,9 @@ const edit = (req, res) => {
   let userData = req.body;
 
 
-  userData.id = parseInt(req.params.id, 10);
-
+  const id = parseInt(req.params.id, 10);
+  console.log('dateeeeeee', userData.birth_date);
+  
   const updatedFields = {};
 
   if (userData.name) updatedFields.name = userData.name;
@@ -104,7 +105,7 @@ const edit = (req, res) => {
 
   if (userData.birth_date) updatedFields.birth_date = userData.birth_date;
 
-  if (userData.city) updatedFields.city = userData.city;
+  if (userData.cityId) updatedFields.city_id = userData.cityId;
 
   if (userData.theme) updatedFields.theme = userData.theme;
 
@@ -120,7 +121,7 @@ const edit = (req, res) => {
   }
 
   models.users
-    .update(updatedFields)
+    .update(id, updatedFields)
     .then((result) => {
       if (result.rowCount === 0) {
         res.sendStatus(404);
@@ -162,7 +163,7 @@ const editPassword = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  const { name, birth_date, email, password, confirmPassword, theme, city } = req.body;
+  const { name, birth_date, email, password, confirmPassword, theme, cityId } = req.body;
 
   if (password !== confirmPassword) {
     res.status(400).send("Les mots de passe ne correspondent pas");
@@ -174,7 +175,7 @@ const add = async (req, res) => {
   // TODO validations (length, format...)
 
   models.users
-    .insert(name, birth_date, email, hashPassword, theme, city)
+    .insert(name, birth_date, email, hashPassword, theme, cityId)
     .then((result) => {
       res.location(`/users/${result.insertId}`).sendStatus(201);
     })

@@ -6,9 +6,8 @@ import * as Yup from 'yup';
 import { changeUserPassword } from '../../api/user/oneUserCrud';
 
 import Button from '../ui/Button';
-import Modal from '../ui/Modal';
 
-const EditForm = ({isOpen, onClose, type }) => {
+const EditForm = () => {
     const {
         isModalEditPasswordProfilOpen,
         setIsModalEditPasswordProfilOpen,
