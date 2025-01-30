@@ -7,6 +7,7 @@ import Modal from "../components/ui/Modal";
 
 
 import { fetchOneUser } from "../api/user/oneUserCrud";
+import { fetchCommentsOfOneUser } from "../api/user_comments/commentsCrud";
 
 
 export default function Profil() {
@@ -18,11 +19,25 @@ export default function Profil() {
   } = useContext(AppContext);
 
   useEffect(() => {
-    fetchOneUser(4)
-      .then((data) => {
-        setUser(data);
-      })
+    const fetchUserData = async () => {
+      try {
+        const userData = await fetchOneUser(4);
+        setUser(userData);
+  
+        const commentsData = await fetchCommentsOfOneUser(userData.id);
+        setUser((prev) => ({ ...prev, comments: commentsData }));
+  
+      } catch (error) {
+        console.error("Erreur lors de la récupération des données :", error);
+      }
+    };
+  
+    fetchUserData();
   }, []);
+
+
+ console.log('user', user);
+  
 
   return (
     <>
