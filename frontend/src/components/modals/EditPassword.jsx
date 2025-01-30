@@ -6,15 +6,15 @@ import * as Yup from 'yup';
 import { changeUserPassword } from '../../api/user/oneUserCrud';
 
 import Button from '../ui/Button';
-import Modal from '../ui/Modal';
 
-const EditForm = ({isOpen, onClose, type }) => {
+const EditForm = () => {
     const {
         isModalEditPasswordProfilOpen,
         setIsModalEditPasswordProfilOpen,
         user,
         setUser,
         closeModal,
+        openModal
     } = useContext(AppContext);
 
 
@@ -24,18 +24,21 @@ const EditForm = ({isOpen, onClose, type }) => {
 
     // Form submission handler
     const handleSubmit = (values) => {
-        console.log('Submitting:', values);
-
         const password = values.password.trim();        
-        const confirmPassword = values.confirmPassword.trim();
+        const confirmPassword = values.confirmPassword.trim();        
 
         changeUserPassword(password, confirmPassword, user.id)
             .then((data) => {
-                console.log(data);
                 setUser(data);
+                closeModal();
+                setIsModalEditOpen(false);
+                openModal('successMessage', 'Mot de passe modifié avec succès');
+
             })
             .catch((error) => {
                 console.error("Erreur Objet", error);
+                closeModal();
+                openModal('errorMessage', 'Erreur lors de la modification du mot de passe');
             });
     };
 

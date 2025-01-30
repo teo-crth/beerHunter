@@ -5,12 +5,21 @@ class UsersManager extends AbstractManager {
     super({ table: "users" });
   }
 
+  findUser(id) {
+    return this.database.query(`
+      SELECT u.id, u.name, u.email, u.city_id, u.address, u.birth_date, u.theme, u.profil_picture, c.name AS city_name, c.region AS city_region 
+      FROM ${this.table} AS u
+      JOIN city AS c ON u.city_id = c.id 
+      WHERE u.id = $1`, [id]
+    );
+  }
+
   findUserByEmail(email) {
     return this.database.query(`SELECT * FROM ${this.table} WHERE email = $1`, [email]);
   }
 
   findCommentsOfOneUser(id) {
-    return this.database.query(`SELECT * FROM  user_comment WHERE user_id = $1`, 
+    return this.database.query(`SELECT * FROM  user_comment WHERE user_id = $1`,
       [id]);
   }
 
@@ -19,15 +28,15 @@ class UsersManager extends AbstractManager {
         SELECT bar.* 
         FROM favorite_bar
         JOIN bar ON favorite_bar.bar_id = bar.id
-        WHERE favorite_bar.user_id = $1`, 
-        [id]
+        WHERE favorite_bar.user_id = $1`,
+      [id]
     );
-}
+  }
 
-  insert(name, birth_date, email, city, hashPassword, theme) {
+  insert(name, birth_date, email, cityId, hashPassword, theme) {
     return this.database.query(
-        `INSERT INTO ${this.table} (email, birth_date, password, city, name, theme) values ($1, $2, $3, $4, $5, $6)`,
-        [email, birth_date, hashPassword, city, name, theme]);
+      `INSERT INTO ${this.table} (email, birth_date, password, city_id, name, theme) values ($1, $2, $3, $4, $5, $6)`,
+      [email, birth_date, hashPassword, cityId, name, theme]);
   }
 
   // update(users) {
@@ -37,23 +46,23 @@ class UsersManager extends AbstractManager {
   //   );
   // }
 
-  update(users) {
+  update(id, users) {
     const fieldsToUpdate = [];
     const values = [];
 
-    Object.keys(users).forEach(key => {
+    Object.keys(users).forEach((key, index) => {
       if (users[key] && key !== 'id') {
-        fieldsToUpdate.push(`${key} = $1`);
+        fieldsToUpdate.push(`${key} = $${index + 1}`);
         values.push(users[key]);
       }
     });
 
-    values.push(users.id);
+    values.push(id);
 
     const sqlQuery = `
       UPDATE ${this.table} 
       SET ${fieldsToUpdate.join(', ')} 
-      WHERE id = $1
+      WHERE id = $${values.length}
     `;
 
     return this.database.query(sqlQuery, values);

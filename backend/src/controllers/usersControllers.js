@@ -1,8 +1,10 @@
-const argon2 = require("argon2");
+const path = require('path');
+require('dotenv').config();
 
 const models = require("../models");
 const { compare } = require("../utils/cryptoPassword");
 const { hash } = require("../utils/cryptoPassword");
+const APP_PORT = process.env.APP_PORT;
 
 const browse = (req, res) => {
   models.users
@@ -48,7 +50,7 @@ const findAssociateFavorites = (req, res) => {
 const read = (req, res) => {
   const id = parseInt(req.params.id, 10);
   models.users
-    .find(id)
+    .findUser(id)
     .then((rows) => {
       const result = rows.rows[0];
       if (result == null) {
@@ -63,39 +65,12 @@ const read = (req, res) => {
     });
 };
 
-// const edit = (req, res) => {
-//   const userData = req.body;
-
-//   // TODO validations (length, format...)
-
-//   userData.id = parseInt(req.params.id, 10);
-
-//   if (req.file) {
-//     const profilePicturePath = path.join("assets", "profil-pictures", req.file.filename);
-//     userData.profilePicture = profilePicturePath; // Ajoute le chemin de l'image au corps de la requête
-//   }
-
-//   models.users
-//     .update(userData)
-//     .then((result) => {
-//       if (result.rowCount === 0) {
-//         res.sendStatus(404);
-//       } else {
-//         res.sendStatus(204);
-//       }
-//     })
-//     .catch((err) => {
-//       console.error(err);
-//       res.sendStatus(500);
-//     });
-// };
-
 const edit = (req, res) => {
   let userData = req.body;
-
-
-  userData.id = parseInt(req.params.id, 10);
-
+  console.log('req.file', req.file);
+  
+  const id = parseInt(req.params.id, 10);
+  
   const updatedFields = {};
 
   if (userData.name) updatedFields.name = userData.name;
@@ -104,15 +79,21 @@ const edit = (req, res) => {
 
   if (userData.birth_date) updatedFields.birth_date = userData.birth_date;
 
-  if (userData.city) updatedFields.city = userData.city;
+  if (userData.cityId) updatedFields.city_id = userData.cityId;
 
   if (userData.theme) updatedFields.theme = userData.theme;
+
+  if (userData.address) updatedFields.address = userData.address;
 
   if (userData.password) updatedFields.password = userData.password;
 
   if (req.file) {
-    const profilePicturePath = path.join("assets", "profil-pictures", req.file.filename);
-    updatedFields.profilePicture = profilePicturePath;
+    console.log('req.file image', req.file);
+    
+    const profilePicturePath = path.join("public", "assets", "images", "profil-pictures", req.file.filename);
+
+    const imageUrl = `http://localhost:${APP_PORT}/assets/images/profil-pictures/${req.file.filename}`;
+    updatedFields.profil_picture = imageUrl;
   }
 
   if (Object.keys(updatedFields).length === 0) {
@@ -120,7 +101,7 @@ const edit = (req, res) => {
   }
 
   models.users
-    .update(updatedFields)
+    .update(id, updatedFields)
     .then((result) => {
       if (result.rowCount === 0) {
         res.sendStatus(404);
@@ -162,7 +143,7 @@ const editPassword = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  const { name, birth_date, email, password, confirmPassword, theme, city } = req.body;
+  const { name, birth_date, email, password, confirmPassword, theme, cityId } = req.body;
 
   if (password !== confirmPassword) {
     res.status(400).send("Les mots de passe ne correspondent pas");
@@ -174,7 +155,7 @@ const add = async (req, res) => {
   // TODO validations (length, format...)
 
   models.users
-    .insert(name, birth_date, email, hashPassword, theme, city)
+    .insert(name, birth_date, email, hashPassword, theme, cityId)
     .then((result) => {
       res.location(`/users/${result.insertId}`).sendStatus(201);
     })

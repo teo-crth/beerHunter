@@ -3,12 +3,13 @@ import axios from 'axios';
 // Base URL de l'API Google Books
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
+
 // Fonction pour rechercher des livres
-export const fetchOneUser = async (userId) => {
+export const fetchOneUser = async (userId, setUser) => {
   try {
     // Requête avec axios
     const response = await axios.get(`${BASE_URL}/api/users/${userId}`);
-
+    
     return response.data;
   } catch (error) {
     console.error('Erreur lors de la récupération du profil:', error);
@@ -16,7 +17,7 @@ export const fetchOneUser = async (userId) => {
   }
 };
 
-export const createOneUser = async (email, password, confirmPassword, name, city) => {
+export const createOneUser = async (email, password, confirmPassword, name, cityId) => {
   try {
     // Requête avec axios
     const response = await axios.post(`${BASE_URL}/api/users`, {
@@ -24,7 +25,7 @@ export const createOneUser = async (email, password, confirmPassword, name, city
       password: password,
       confirmPassword: confirmPassword,
       name: name,
-      city: city,
+      cityId: cityId,
       theme: 'dark'
     });
 
@@ -35,19 +36,33 @@ export const createOneUser = async (email, password, confirmPassword, name, city
   }
 };
 
-export const changeOneUser = async (id, email, name, theme, birth_date, city, address, profilPicture) => {
+export const changeOneUser = async (id, email, name, theme, birth_date, cityId, address, profil_picture) => {
+
+const formData = new FormData();
+
+// Ajouter les autres champs dans le FormData
+formData.append('email', email);
+formData.append('name', name);
+formData.append('theme', theme);
+formData.append('birth_date', birth_date);
+formData.append('cityId', cityId);
+formData.append('address', address);
+
+// Si un fichier de profil est présent, l'ajouter à formData
+if (profil_picture) {
+  formData.append('profil_picture', profil_picture);
+}
+
+  
   try {
     // Requête avec axios
-    const response = await axios.put(`${BASE_URL}/api/users/${id}`, {
-      email: email,
-      name: name,
-      theme: theme,
-      birth_date,
-      city: city, 
-      address: address, 
-      profil_picture: profilPicture
+    const response = await axios.put(`${BASE_URL}/api/users/${id}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data', // Important de spécifier multipart/form-data
+      }
     });
-
+    console.log('response serveur', response);
+    
     return response.data;
   } catch (error) {
     console.error('Erreur lors de la récupération du profil:', error);

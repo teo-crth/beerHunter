@@ -3,8 +3,9 @@ import { AppContext } from '../../context/context';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import dayjs from 'dayjs';
+import customParseFormat from "dayjs/plugin/customParseFormat";
 
-import { changeOneUser } from '../../api/user/oneUserCrud';
+import { changeOneUser, fetchOneUser } from '../../api/user/oneUserCrud';
 import { fetchAllCities } from '../../api/city/cityCrud';
 
 import Button from '../ui/Button';
@@ -15,6 +16,7 @@ const EditForm = () => {
         setUser,
         closeModal,
         openModal,
+        setIsModalEditOpen
     } = useContext(AppContext);
 
     const [cities, setCities] = useState([]);
@@ -29,49 +31,58 @@ const EditForm = () => {
 
     // Form submission handler
     const handleSubmit = (values) => {
-        console.log('Submitting:', values);
-
+        
+        dayjs.extend(customParseFormat);
+        const dateFormated = dayjs(values.birth_date, "DD/MM/YYYY").format("YYYY-MM-DD");
         const id =  user.id;
         const email = values.email;
         const name = values.name;
         const theme = values.theme === "Sombre" ? "dark" : "light";
-        const birth_date = values.birth_date;
-        const city = values.city;
+        const birth_date = dateFormated;
+        const cityId = values.city;
         const address = values.address;
+        const profil_picture = values.profil_picture;        
         
         // Ajouter l'image de profil, si présente
-        const formDataPicture = new FormData();
-        if (values.profilePicture) {
-            formDataPicture.append('profilePicture', values.profilePicture);
-        }
+        // const formDataPicture = new FormData();
+        
+        // if (values.profil_picture) {
+        //     formDataPicture.append('profil_picture', values.profil_picture);
+        // } else {
+        //     formDataPicture.append('profil_picture', null);
+        //     console.log('image null');
+        // }        
 
-        changeOneUser(id, email, name, theme, birth_date, city, address, formDataPicture)
-            .then((data) => {
-                console.log(data);
-                setUser(data);
+
+        changeOneUser(id, email, name, theme, birth_date, cityId, address, profil_picture)
+            .then(() => {
+                return fetchOneUser(id);
+            })
+            .then((updatedUser) => {
+                setUser(updatedUser);
+                setIsModalEditOpen(false);
                 closeModal();
-                openModal({ type: 'successMessage', text: 'Profil modifié !' });
+                openModal('successMessage', 'Profil modifié !');
             })
             .catch((error) => {
                 console.error(error);
                 closeModal();
-                openModal({ type: 'errorMessage', text: 'Un problème est survenu, veuillez rééssayer' });
+                openModal('errorMessage', 'Un problème est survenu, veuillez rééssayer');
             });
     };
 
-    const formatDate = dayjs(user?.birth_date).format('DD/MM/YYYY');
+    const userTheme = user.theme === "dark" ? "Sombre" : "Clair";
 
     return (
-        <div className="container-modal bg-gray-700/50 absolute flex justify-center items-center w-full h-full top-0 left-0">
             <Formik
                 initialValues={{
                     name: user.name,
                     email: user.email,
-                    birth_date: formatDate,
-                    theme: user.theme === "dark" ? "Sombre" : "Clair",
-                    city: user.city ? user.city.id : '',
+                    birth_date: dayjs(user?.birth_date).format('DD/MM/YYYY'),
+                    theme: userTheme,
+                    city: user.city_id,
                     address: user.address,
-                    profilePicture: null,
+                    profil_picture: user.profil_picture ? user.profil_picture : null,
                 }}
                 validationSchema={Yup.object({
                     name: Yup.string()
@@ -95,36 +106,46 @@ const EditForm = () => {
                         })
                         .required('Champ obligatoire'),
                     city: Yup.string().required('Champ obligatoire'),
-                    profilePicture: Yup.mixed()
-                        .test('fileSize', 'Le fichier est trop grand, 5 MO maximum', value => value && value.size <= 5 * 1024 * 1024) // 5 MB limit
-                })}
+                    profil_picture: Yup.mixed()
+                        .nullable()
+                        .test('fileSize', 'Le fichier est trop grand, 5 MO maximum', value => {                
+                            if (!value.size) return true;
+                            if (value.size >= 5242880) {       
+                                return false;
+                            } else {
+                                return true;
+                            }
+                        })
+                        .optional(),
+                    })}
                 onSubmit={handleSubmit}
             >
                 {formik => (
-                    <form onSubmit={formik.handleSubmit} className='container-form w-120  z-50 flex flex-col items-center justify-center text-center gap-0.5 shadow-xs shadow-primary bg-dark-black light-mode:bg-light text-light light-mode:text-dark rounded-lg p-5'>
+                    <form onSubmit={formik.handleSubmit} enctype="multipart/form-data" className='container-form w-120  z-50 flex flex-col items-center justify-center text-center gap-0.5 text-light light-mode:text-dark p-5'>
                         <h3 className='font-text font-bold text-xl'>Modifier votre profil</h3>
 
                         {/* Champ image de profil */}
-                        {formik.values.profilePicture && (
+                        {formik.values.profil_picture && formik.values.profil_picture instanceof File && (
                             <img
-                                src={URL.createObjectURL(formik.values.profilePicture)}
-                                alt="Profile preview"
+                                src={URL.createObjectURL(formik.values.profil_picture)}
+                                alt="photo de Profile"
                                 className="preview-img w-15 h-15 rounded-full border-2 border-primary"
                             />
                         )}
 
-                        <label className="mt-[5px]" htmlFor="profilePicture">Image de profil</label>
+                        <label className="mt-[5px]" htmlFor="profil_picture">Image de profil</label>
                         <input
-                            id="profilePicture"
-                            name="profilePicture"
+                            id="profil_picture"
+                            name="profil_picture"
                             type="file"
+                            accept="image/*"
                             className='border border-light light-mode:border-dark-black rounded-md'
                             onChange={(event) => {
-                                formik.setFieldValue("profilePicture", event.currentTarget.files[0]);
+                                formik.setFieldValue("profil_picture", event.currentTarget.files[0]);
                             }}
                         />
-                        {formik.touched.profilePicture && formik.errors.profilePicture ? (
-                            <div className='text-error text-xs text-red-400'>{formik.errors.profilePicture}</div>
+                        {formik.touched.profil_picture && formik.errors.profil_picture ? (
+                            <div className='text-error text-xs text-red-400'>{formik.errors.profil_picture}</div>
                         ) : null}
 
                         <label className="mt-[5px]" htmlFor="name">Nom</label>
@@ -154,7 +175,7 @@ const EditForm = () => {
                         <select
                             id="city"
                             className='border border-light light-mode:border-dark-black text-light light-mode:text-dark-black rounded-md'
-                            value={formik.values.city}
+                            value={formik.values.city || ''}
                             onChange={formik.handleChange}
                             name="city"
                         >
@@ -182,7 +203,7 @@ const EditForm = () => {
                         <select
                             id="theme"
                             className='border border-light light-mode:border-dark-black text-light light-mode:text-dark-black rounded-md'
-                            value={formik.values.theme}
+                            value={formik.values.theme || ''}
                             onChange={formik.handleChange}
                             name="theme"
                         >
@@ -198,7 +219,6 @@ const EditForm = () => {
                     </form>
                 )}
             </Formik>
-        </div>
     );
 };
 
