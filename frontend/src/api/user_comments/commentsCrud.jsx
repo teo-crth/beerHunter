@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { createCommentImage } from './imagesCommentCrud';
+import { createCommentImage, fetchImagesOfOneComment } from './imagesCommentCrud';
 
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -11,18 +11,6 @@ export const fetchCommentsOfOneUser = async (userId) => {
         return response.data;
     } catch (error) {
         console.error('Erreur lors de la récupération des commentaires:', error);
-        throw error;
-    }
-}
-
-export const fetchImagesOfOneComment = async (commentId) => {
-    try {
-        // Requête avec axios
-        const response = await axios.get(`${BASE_URL}/api/comments/${commentId}/images`);
-    
-        return response.data;
-    } catch (error) {
-        console.error('Erreur lors de la récupération des images:', error);
         throw error;
     }
 }

@@ -26,6 +26,9 @@ export default function Profil() {
   
         const commentsData = await fetchCommentsOfOneUser(userData.id);
         setUser((prev) => ({ ...prev, comments: commentsData }));
+
+        // const favoriteBarsData = await fetchFavoriteBarsOfOneUser(userData.id);
+        // setUser((prev) => ({ ...prev, favoriteBars: favoriteBarsData }));
   
       } catch (error) {
         console.error("Erreur lors de la récupération des données :", error);
