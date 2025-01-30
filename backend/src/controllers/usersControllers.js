@@ -1,8 +1,10 @@
-const argon2 = require("argon2");
+const path = require('path');
+require('dotenv').config();
 
 const models = require("../models");
 const { compare } = require("../utils/cryptoPassword");
 const { hash } = require("../utils/cryptoPassword");
+const APP_PORT = process.env.APP_PORT;
 
 const browse = (req, res) => {
   models.users
@@ -63,36 +65,10 @@ const read = (req, res) => {
     });
 };
 
-// const edit = (req, res) => {
-//   const userData = req.body;
-
-//   // TODO validations (length, format...)
-
-//   userData.id = parseInt(req.params.id, 10);
-
-//   if (req.file) {
-//     const profilePicturePath = path.join("assets", "profil-pictures", req.file.filename);
-//     userData.profilePicture = profilePicturePath; // Ajoute le chemin de l'image au corps de la requête
-//   }
-
-//   models.users
-//     .update(userData)
-//     .then((result) => {
-//       if (result.rowCount === 0) {
-//         res.sendStatus(404);
-//       } else {
-//         res.sendStatus(204);
-//       }
-//     })
-//     .catch((err) => {
-//       console.error(err);
-//       res.sendStatus(500);
-//     });
-// };
-
 const edit = (req, res) => {
   let userData = req.body;
-
+  console.log('req.file', req.file);
+  
   const id = parseInt(req.params.id, 10);
   
   const updatedFields = {};
@@ -112,8 +88,12 @@ const edit = (req, res) => {
   if (userData.password) updatedFields.password = userData.password;
 
   if (req.file) {
-    const profilePicturePath = path.join("assets", "profil-pictures", req.file.filename);
-    updatedFields.profilePicture = profilePicturePath;
+    console.log('req.file image', req.file);
+    
+    const profilePicturePath = path.join("public", "assets", "images", "profil-pictures", req.file.filename);
+
+    const imageUrl = `http://localhost:${APP_PORT}/assets/images/profil-pictures/${req.file.filename}`;
+    updatedFields.profil_picture = imageUrl;
   }
 
   if (Object.keys(updatedFields).length === 0) {

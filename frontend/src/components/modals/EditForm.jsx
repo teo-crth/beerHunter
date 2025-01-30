@@ -3,6 +3,7 @@ import { AppContext } from '../../context/context';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import dayjs from 'dayjs';
+import customParseFormat from "dayjs/plugin/customParseFormat";
 
 import { changeOneUser, fetchOneUser } from '../../api/user/oneUserCrud';
 import { fetchAllCities } from '../../api/city/cityCrud';
@@ -30,7 +31,9 @@ const EditForm = () => {
 
     // Form submission handler
     const handleSubmit = (values) => {
-        const dateFormated = dayjs(values.birth_date).format("YYYY-MM-DD");
+        
+        dayjs.extend(customParseFormat);
+        const dateFormated = dayjs(values.birth_date, "DD/MM/YYYY").format("YYYY-MM-DD");
         const id =  user.id;
         const email = values.email;
         const name = values.name;
@@ -38,18 +41,20 @@ const EditForm = () => {
         const birth_date = dateFormated;
         const cityId = values.city;
         const address = values.address;
+        const profil_picture = values.profil_picture;        
         
         // Ajouter l'image de profil, si présente
-        const formDataPicture = new FormData();
-        if (values.profilePicture) {
-            formDataPicture.append('profile_picture', values.profilePicture);
-        }
+        // const formDataPicture = new FormData();
         
-        console.log('anniv', birth_date);
-        console.log('type de date', typeof birth_date);
-        
+        // if (values.profil_picture) {
+        //     formDataPicture.append('profil_picture', values.profil_picture);
+        // } else {
+        //     formDataPicture.append('profil_picture', null);
+        //     console.log('image null');
+        // }        
 
-        changeOneUser(id, email, name, theme, birth_date, cityId, address, formDataPicture)
+
+        changeOneUser(id, email, name, theme, birth_date, cityId, address, profil_picture)
             .then(() => {
                 return fetchOneUser(id);
             })
@@ -66,18 +71,18 @@ const EditForm = () => {
             });
     };
 
-    const formatDate = dayjs(user?.birth_date).format('DD/MM/YYYY');
+    const userTheme = user.theme === "dark" ? "Sombre" : "Clair";
 
     return (
             <Formik
                 initialValues={{
                     name: user.name,
                     email: user.email,
-                    birth_date: formatDate,
-                    theme: user.theme === "dark" ? "Sombre" : "Clair",
-                    city: user.city ? user.city.id : '',
+                    birth_date: dayjs(user?.birth_date).format('DD/MM/YYYY'),
+                    theme: userTheme,
+                    city: user.city_id,
                     address: user.address,
-                    profilePicture: null,
+                    profil_picture: user.profil_picture ? user.profil_picture : null,
                 }}
                 validationSchema={Yup.object({
                     name: Yup.string()
@@ -101,39 +106,46 @@ const EditForm = () => {
                         })
                         .required('Champ obligatoire'),
                     city: Yup.string().required('Champ obligatoire'),
-                    profilePicture: Yup.mixed()
+                    profil_picture: Yup.mixed()
                         .nullable()
-                        .test('fileType', 'Seuls les fichiers de type image sont autorisés', value => !value || value.type.includes('image'))  // Autorise 'null' ou une image
-                        .test('fileSize', 'Le fichier est trop grand, 5 MO maximum', value => !value || (value && value.size <= 5 * 1024 * 1024)) // Vérifie la taille seulement si un fichier est sélectionné
+                        .test('fileSize', 'Le fichier est trop grand, 5 MO maximum', value => {                
+                            if (!value.size) return true;
+                            if (value.size >= 5242880) {       
+                                return false;
+                            } else {
+                                return true;
+                            }
+                        })
                         .optional(),
                     })}
                 onSubmit={handleSubmit}
             >
                 {formik => (
-                    <form onSubmit={formik.handleSubmit} className='container-form w-120  z-50 flex flex-col items-center justify-center text-center gap-0.5 text-light light-mode:text-dark p-5'>
+                    <form onSubmit={formik.handleSubmit} enctype="multipart/form-data" className='container-form w-120  z-50 flex flex-col items-center justify-center text-center gap-0.5 text-light light-mode:text-dark p-5'>
                         <h3 className='font-text font-bold text-xl'>Modifier votre profil</h3>
 
                         {/* Champ image de profil */}
-                        {formik.values.profilePicture && (
+                        {formik.values.profil_picture && formik.values.profil_picture instanceof File && (
                             <img
-                                src={URL.createObjectURL(formik.values.profilePicture)}
+                                src={URL.createObjectURL(formik.values.profil_picture)}
                                 alt="photo de Profile"
                                 className="preview-img w-15 h-15 rounded-full border-2 border-primary"
                             />
                         )}
 
-                        <label className="mt-[5px]" htmlFor="profile_picture">Image de profil</label>
+                        <label className="mt-[5px]" htmlFor="profil_picture">Image de profil</label>
                         <input
-                            id="profile_picture"
-                            name="profile_picture"
+                            id="profil_picture"
+                            name="profil_picture"
                             type="file"
+                            accept="image/*"
                             className='border border-light light-mode:border-dark-black rounded-md'
                             onChange={(event) => {
-                                formik.setFieldValue("profile_picture", event.currentTarget.files[0]);
+                                formik.setFieldValue("profil_picture", event.currentTarget.files[0]);
                             }}
                         />
-                        {formik.touched.profilePicture && formik.errors.profilePicture ? (
-                            <div className='text-error text-xs text-red-400'>{formik.errors.profilePicture}</div>
+                        {formik.touched.profil_picture && formik.errors.profil_picture ? (
+                            <div className='text-error text-xs text-red-400'>{formik.errors.profil_picture}</div>
                         ) : null}
 
                         <label className="mt-[5px]" htmlFor="name">Nom</label>
@@ -163,7 +175,7 @@ const EditForm = () => {
                         <select
                             id="city"
                             className='border border-light light-mode:border-dark-black text-light light-mode:text-dark-black rounded-md'
-                            value={formik.values.city}
+                            value={formik.values.city || ''}
                             onChange={formik.handleChange}
                             name="city"
                         >
@@ -191,7 +203,7 @@ const EditForm = () => {
                         <select
                             id="theme"
                             className='border border-light light-mode:border-dark-black text-light light-mode:text-dark-black rounded-md'
-                            value={formik.values.theme}
+                            value={formik.values.theme || ''}
                             onChange={formik.handleChange}
                             name="theme"
                         >

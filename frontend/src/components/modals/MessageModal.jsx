@@ -8,8 +8,8 @@ const MessageModal = ({text, onClose, isOpen, type}) => {
         <div className="modal-content">
           {type === "successMessage" ? 
             <h2 className='font-title font-bold text-green-700 m-3 text-xl'>{text}</h2>
-             : <h2 className='font-title font-bold text-red-500'>{text}</h2>}
-          <Button onClick={onClose} text="Fermer" className='bg-green-700 hover:bg-green-900' />
+             : <h2 className='font-title font-bold text-red-500 m-3 text-xl'>{text}</h2>}
+          <Button onClick={onClose} text="Fermer" className='bg-primary hover:bg-secondary' />
         </div>
     );
 };

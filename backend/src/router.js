@@ -45,7 +45,7 @@ router.get("/api/cities", cityControllers.browse);
 
 // PUT
 router.put("/api/passwordUsers/:id", validate(updatePasswordUserSchema, 'body'), usersControllers.editPassword);
-router.put("/api/users/:id",  upload.single("profile_picture"), validate(updateUserSchema, 'body'), usersControllers.edit);
+router.put("/api/users/:id",  upload.single("profil_picture"), validate(updateUserSchema, 'body'), usersControllers.edit);
 router.put("/api/comments/:id", validate(userCommentSchema, 'body'), userCommentControllers.edit);
 router.put("/api/favorite-bars/:id", validate(favoriteBarSchema, 'body'), favoriteBarControllers.edit);
 

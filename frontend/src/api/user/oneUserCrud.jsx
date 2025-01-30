@@ -36,17 +36,30 @@ export const createOneUser = async (email, password, confirmPassword, name, city
   }
 };
 
-export const changeOneUser = async (id, email, name, theme, birth_date, cityId, address, profilPicture) => {
+export const changeOneUser = async (id, email, name, theme, birth_date, cityId, address, profil_picture) => {
+
+const formData = new FormData();
+
+// Ajouter les autres champs dans le FormData
+formData.append('email', email);
+formData.append('name', name);
+formData.append('theme', theme);
+formData.append('birth_date', birth_date);
+formData.append('cityId', cityId);
+formData.append('address', address);
+
+// Si un fichier de profil est présent, l'ajouter à formData
+if (profil_picture) {
+  formData.append('profil_picture', profil_picture);
+}
+
+  
   try {
     // Requête avec axios
-    const response = await axios.put(`${BASE_URL}/api/users/${id}`, {
-      email: email,
-      name: name,
-      theme: theme,
-      birth_date: birth_date,
-      cityId: cityId, 
-      address: address, 
-      profil_picture: profilPicture
+    const response = await axios.put(`${BASE_URL}/api/users/${id}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data', // Important de spécifier multipart/form-data
+      }
     });
     console.log('response serveur', response);
     

@@ -14,15 +14,15 @@ const Profil = ({ user }) => {
     };
 
     useEffect(() => {
-    }, [isModalEditOpen]);
+    }, [isModalEditOpen]);   
 
     return (
         <>
-            <section className='container-profilCard flex flex-col w-80 bg-dark-black rounded-lg items-center justify-start relative text-light gap-2'>
+            <section className='container-profilCard flex flex-col w-80 bg-dark-black light-mode:bg-light light-mode:opacity-90 rounded-lg items-center shadow-md justify-start relative text-light light-mode:text-dark-black gap-2'>
                 <div className="container-modify-icons cursor-pointer flex gap-1.5 justify-start w-full p-2" onClick={handleClick}>
-                    <div className='w-2 h-2 bg-light rounded-full'></div>
-                    <div className='w-2 h-2 bg-light rounded-full'></div>
-                    <div className='w-2 h-2 bg-light rounded-full'></div>
+                    <div className='w-2 h-2 bg-light light-mode:bg-dark-black rounded-full'></div>
+                    <div className='w-2 h-2 bg-light light-mode:bg-dark-black rounded-full'></div>
+                    <div className='w-2 h-2 bg-light light-mode:bg-dark-black rounded-full'></div>
                 </div>
                 { isModalEditOpen ? <EditProfil /> : null}
                 <div className="container-img">
@@ -42,13 +42,13 @@ const Profil = ({ user }) => {
                     </div>
                     <div className="container-city flex flex-col items-center">
                         <h4 className='text-sm text-gray-400'>Ville</h4>
-                        <h3>{user?.city}</h3>
+                        <h3>{user?.city_name}</h3>
                     </div>
                     <div className="container-adresse flex flex-col items-center">
                         <h4 className='text-sm text-gray-400'>Adresse</h4>
                         <h3>{user?.address}</h3>
                     </div>
-                    <div className="container-theme flex flex-col items-center">
+                    <div className="container-theme flex flex-col items-center mb-1">
                         <h4 className='text-sm text-gray-400'>Thème</h4>
                         <h3>{user?.theme === 'dark' ? "Sombre" : "Clair"}</h3>
                     </div>

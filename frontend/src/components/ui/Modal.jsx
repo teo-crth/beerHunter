@@ -12,11 +12,6 @@ const Modal = () => {
   const isOpen = modalState.isOpen;
   const text = modalState.text;
 
-  console.log('modalState', modalState);
-  console.log('modal ouverte ?', isOpen);
-  
-  
-  
   if (!isOpen) return null;
 
   return (
