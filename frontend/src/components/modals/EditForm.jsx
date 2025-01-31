@@ -139,7 +139,7 @@ const EditForm = () => {
                             name="profil_picture"
                             type="file"
                             accept="image/*"
-                            className='border border-light light-mode:border-dark-black rounded-md'
+                            className='border border-light light-mode:border-dark-black rounded-md pl-1'
                             onChange={(event) => {
                                 formik.setFieldValue("profil_picture", event.currentTarget.files[0]);
                             }}
@@ -152,7 +152,7 @@ const EditForm = () => {
                         <input
                             id="name"
                             type="text"
-                            className='border border-light light-mode:border-dark-black rounded-md'
+                            className='border border-light light-mode:border-dark-black rounded-md pl-1'
                             {...formik.getFieldProps('name')}
                         />
                         {formik.touched.name && formik.errors.name ? (
@@ -160,13 +160,13 @@ const EditForm = () => {
                         ) : null}
 
                         <label className="mt-[5px]" htmlFor="email">Email</label>
-                        <input id="email" type="email" className='border border-light light-mode:border-dark-black rounded-md' {...formik.getFieldProps('email')} />
+                        <input id="email" type="email" className='border border-light light-mode:border-dark-black rounded-md pl-1' {...formik.getFieldProps('email')} />
                         {formik.touched.email && formik.errors.email ? (
                             <div className='text-error text-xs text-red-400'>{formik.errors.email}</div>
                         ) : null}
 
                         <label className="mt-[5px]" htmlFor="birth_date">Date de naissance</label>
-                        <input id="birth_date" type="text" className='border border-light light-mode:border-dark-black rounded-md' {...formik.getFieldProps('birth_date')} />
+                        <input id="birth_date" type="text" className='border border-light light-mode:border-dark-black rounded-md pl-1' {...formik.getFieldProps('birth_date')} />
                         {formik.touched.birth_date && formik.errors.birth_date ? (
                             <div className='text-error text-xs text-red-400'>{formik.errors.birth_date}</div>
                         ) : null}
@@ -174,7 +174,7 @@ const EditForm = () => {
                         <label className="mt-[5px]" htmlFor="city">Ville</label>
                         <select
                             id="city"
-                            className='border border-light light-mode:border-dark-black text-light light-mode:text-dark-black rounded-md'
+                            className='border border-light light-mode:border-dark-black text-light light-mode:text-dark-black rounded-md pl-1'
                             value={formik.values.city || ''}
                             onChange={formik.handleChange}
                             name="city"
@@ -188,7 +188,7 @@ const EditForm = () => {
                                     key={city.id}
                                     value={city.id}
                                 >
-                                    {`${city.name} (${city.region})`}
+                                    {`${city.name} (${city.code})`}
                                 </option>
                             ))}
                         </select>
@@ -197,12 +197,12 @@ const EditForm = () => {
                         )}
 
                         <label className="mt-[5px]" htmlFor="address">Adresse</label>
-                        <input id="address" type="text" className='border border-light light-mode:border-dark-black rounded-md' {...formik.getFieldProps('address')} />
+                        <input id="address" type="text" className='border border-light light-mode:border-dark-black rounded-md pl-1' {...formik.getFieldProps('address')} />
 
                         <label className="mt-[5px]" htmlFor="theme">Thème</label>
                         <select
                             id="theme"
-                            className='border border-light light-mode:border-dark-black text-light light-mode:text-dark-black rounded-md'
+                            className='border border-light light-mode:border-dark-black text-light light-mode:text-dark-black rounded-md pl-1'
                             value={formik.values.theme || ''}
                             onChange={formik.handleChange}
                             name="theme"
