@@ -6,9 +6,8 @@ class CommentImageManager extends AbstractManager {
     }
 
     insert(comment_image) {
-        return this.database.query(`INSERT INTO ${this.table} (image_link, image_alt, user_comment_id) VALUES ($1, $2, $3)`, [
+        return this.database.query(`INSERT INTO ${this.table} (image_link, user_comment_id) VALUES ($1, $2)`, [
             comment_image.image_link,
-            comment_image.image_alt,
             comment_image.user_comment_id
         ]);
     }

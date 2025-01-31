@@ -7,7 +7,7 @@ class UsersManager extends AbstractManager {
 
   findUser(id) {
     return this.database.query(`
-      SELECT u.id, u.name, u.email, u.city_id, u.address, u.birth_date, u.theme, u.profil_picture, c.name AS city_name, c.region AS city_region 
+      SELECT u.id, u.name, u.email, u.city_id, u.address, u.birth_date, u.theme, u.profil_picture, c.name AS city_name, c.code AS city_code 
       FROM ${this.table} AS u
       JOIN city AS c ON u.city_id = c.id 
       WHERE u.id = $1`, [id]

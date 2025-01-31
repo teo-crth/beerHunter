@@ -1,11 +1,13 @@
 const models = require("../models");
+const {replaceSpecialChars} = require("../utils/specialCharacter");
 
 const browse = (req, res) => {
   models.user_comment
     .findAll()
     .then((result) => {
       const rows = result.rows;
-      res.send(rows);
+      const traitedRows = replaceSpecialChars(rows);
+      res.send(traitedRows);
     })
     .catch((err) => {
       console.error(err);
@@ -32,7 +34,8 @@ const read = (req, res) => {
   models.user_comment
     .find(id)
     .then((rows) => {
-      const result = rows.rows[0];
+      const traitedRows = replaceSpecialChars(rows);
+      const result = traitedRows.rows[0];
       
       if (result == null) {
           res.sendStatus(404);
