@@ -44,9 +44,9 @@ CREATE TABLE `bar` (
 -- Dumping data for table `bar`
 --
 
-INSERT INTO `bar` (`id`, `name`, `address`, `latitude`, `longitude`, `rate`, `opening_hours`, `created_at`, `updated_at`, `city_id`) VALUES
-(1, 'O\'Collin\'s Irish Pub', '34 Cr Jean Jaurès, 84000 Avignon', 43.9445, 4.80535, 4.4, '\"Monday: 8:00 AM – 1:00 AM\",\r\n\"Tuesday: 8:00 AM – 1:00 AM\",\r\n\"Wednesday: 8:00 AM – 1:00 AM\",\r\n\"Thursday: 8:00 AM – 1:00 AM\",\r\n\"Friday: 8:00 AM – 1:00 AM\",\r\n\"Saturday: 8:00 AM – 1:00 AM\",\r\n\"Sunday: 3:00 PM – 1:00 AM\"', '2025-01-21 08:38:10', '2025-01-21 13:36:57', 1),
-(2, 'The Pipeline', '34 Cr Jean Jaurès, 84000 Avignon', 43.9451, 4.8054, 4.4, '\"Monday: 9:00 AM – 0:00 AM\",\r\n\"Tuesday: 9:00 AM – 0:00 AM\",\r\n\"Wednesday: 9:00 AM – 0:00 AM\",\r\n\"Thursday: 9:00 AM – 0:00 AM\",\r\n\"Friday: 9:00 AM – 0:00 AM\",\r\n\"Saturday: 9:00 AM – 0:00 AM\",\r\n\"Sunday: 6:30 PM – 11:30 PM\"', '2025-01-21 08:38:10', '2025-01-21 13:37:03', 1);
+INSERT INTO bar (id, name, address, latitude, longitude, rate, opening_hours, city_id) VALUES
+(1, 'O Collins Irish Pub', '34 Cr Jean Jaurès, 84000 Avignon', 43.9445, 4.80535, 4.4, '\"Monday: 8:00 AM – 1:00 AM\",\r\n\"Tuesday: 8:00 AM – 1:00 AM\",\r\n\"Wednesday: 8:00 AM – 1:00 AM\",\r\n\"Thursday: 8:00 AM – 1:00 AM\",\r\n\"Friday: 8:00 AM – 1:00 AM\",\r\n\"Saturday: 8:00 AM – 1:00 AM\",\r\n\"Sunday: 3:00 PM – 1:00 AM\"', 1433),
+(2, 'The Pipeline', '34 Cr Jean Jaurès, 84000 Avignon', 43.9451, 4.8054, 4.4, '\"Monday: 9:00 AM – 0:00 AM\",\r\n\"Tuesday: 9:00 AM – 0:00 AM\",\r\n\"Wednesday: 9:00 AM – 0:00 AM\",\r\n\"Thursday: 9:00 AM – 0:00 AM\",\r\n\"Friday: 9:00 AM – 0:00 AM\",\r\n\"Saturday: 9:00 AM – 0:00 AM\",\r\n\"Sunday: 6:30 PM – 11:30 PM\"', 1433);
 
 -- --------------------------------------------------------
 
@@ -64,9 +64,9 @@ CREATE TABLE `bar_city` (
 -- Dumping data for table `bar_city`
 --
 
-INSERT INTO `bar_city` (`id`, `bar_id`, `city_id`) VALUES
-(2, 1, 1),
-(3, 2, 1);
+INSERT INTO bar_city (bar_id, city_id) VALUES
+(1, 1433),
+(2, 1433);
 
 -- --------------------------------------------------------
 
@@ -86,8 +86,8 @@ CREATE TABLE `bar_image` (
 -- Dumping data for table `bar_image`
 --
 
-INSERT INTO `bar_image` (`id`, `bar_id`, `image_link`, `created_at`, `updated_at`) VALUES
-(1, 1, '\\public\\assets\\images\\bar-images\\ocollins-pub-avignon.png', '2025-01-21 09:06:08', '2025-01-21 09:06:08');
+INSERT INTO bar_image (bar_id, image_link) VALUES
+(1, '\assets\images\bar-images\ocollins-pub-avignon.png');
 
 -- --------------------------------------------------------
 
@@ -111,19 +111,31 @@ CREATE TABLE `beer` (
 -- Dumping data for table `beer`
 --
 
-INSERT INTO `beer` (`id`, `name`, `subtitle`, `alcool_degree`, `description`, `image_link`, `beer_type_id`, `created_at`, `updated_at`) VALUES
-(2, 'Heineken', NULL, 4.5, 'Bière Hollandaise', '', 1, '2025-01-21 08:32:31', '2025-01-21 08:32:31'),
-(3, 'Chimay', 'Chimay blanche', 4.5, 'Bière d\'abbaye belge blanche', '', 5, '2025-01-21 08:33:55', '2025-01-21 08:33:55'),
-(4, 'Pelforth', 'Pelfforth brune', 5, 'Bière brune française', '', 6, '2025-01-21 08:34:55', '2025-01-21 08:34:55'),
-(5, 'Eku Kulminator', 'Eku Kulminator', 28, 'Bière allamande brune ', '', 6, '2025-01-21 08:36:21', '2025-01-21 08:36:21');
+METTRE IMAGE
+
+INSERT INTO beer (name, subtitle, alcool_degree, description, image_link, beer_type_id) VALUES
+('Heineken', 'Bière rafraichissante', 5, 'Bière blonde néerlandaise, légère et rafraîchissante, avec une saveur légèrement fruitée et une amertume modérée.', '/assets/images/beer/heineken-carre.webp', 1),
+('Chimay', 'Chimay blanche', 4.5, 'Bière abbaye belge blanche', '/assets/images/beer/chimay-carre.webp', 3),
+('Pelforth', 'Pelfforth brune', 5, 'Bière brune française', '/assets/images/beer/pelforth-carre.webp', 2),
+('Pelforth', 'Pelfforth française', 5.8, 'Bière Blonde française', '/assets/images/beer/pelforth-carre.webp', 1),
+('Eku Kulminator', 'Eku Kulminator', 28, 'Bière allamande brune ', '/assets/images/beer/eku-carre.webp', 2),
+('1664', 'Bière Blonde désaltérante', 5.5, 'Bière française emblématique, la 1664 est appréciée pour sa fraîcheur et son caractère désaltérant.', '/assets/images/beer/1664-carre.webp', 1),
+('Leffe', 'Bière belge', 6.6, 'Bière d''abbaye belge, la Leffe Blonde est une bière de dégustation, avec des arômes fruités et épicés, et une légère amertume.', '/assets/images/beer/leffe-carre.webp', 1),
+('Kronenbourg', 'Bière française', 5.5, 'Bière blonde française, brassée avec du houblon Strisselspalt, offrant des notes fruitées et une amertume délicate.', '/assets/images/beer/kronenbourg-carre.webp', 1),
+('Desperados', 'Bière aromatisée', 5.9, 'Bière aromatisée à la tequila, avec des notes d''agrumes et une douceur sucrée, offrant une expérience unique.', '/assets/images/beer/desperados-carre.webp', 10),
+('Grimbergen', 'Bière d''abbaye', 6.7, 'Bière d''abbaye belge, la Grimbergen Blonde est légèrement fruitée, offrant un bel équilibre entre douceur et amertume.', '/assets/images/beer/grimbergen-carre.webp', 1),
+('Stella Artois', 'Bière belge', 5, 'Bière blonde belge, avec un goût équilibré, une légère amertume et une finale sèche.', '/assets/images/beer/stella-carre.webp', 1),
+('Affligem', 'Bière d''abbaye belge', 6.7, 'Bière d''abbaye belge, avec des arômes fruités, une saveur douce et maltée, et une légère amertume en finale.', '/assets/images/beer/affligem-carre.webp', 1),
+('Guiness', 'Bière riche, avec des notes de café, de chocolat et de malt grillé', 4.2, 'La Guinness est l''une des stouts les plus reconnues au monde, souvent servie en pression dans les pubs et appréciée pour sa texture et son goût unique. Elle est également la bière la plus consommée en Irlande et est devenue un symbole international de la culture irlandaise. La Guinness est riche, avec des notes de café, de chocolat et de malt grillé, créant une saveur légèrement amère mais bien équilibrée. Elle a un goût rond et doux, avec une finale légèrement sucrée. La bière est également connue pour son crémeux et sa texture veloutée, en grande partie grâce à son procédé de fabrication particulier.', '/assets/images/beer/guiness-carre.webp', 7),
+('Chouffe', 'Bière très appréciée pour sa complexité, son équilibre et son côté aromatique.', 8, 'La Chouffe est une bière fruitée, épicée et légèrement sucrée, avec des arômes de banane, de mangue et de coriandre. Elle possède également des notes maltées qui lui donnent un aspect sucré et un arrière-goût légèrement amer, mais équilibré par sa douceur. Sa carbonatation est généreuse, apportant une texture pétillante et agréable.', '/assets/images/beer/chouffe-carre.webp', 11);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `beer_available`
+-- Table structure for table beer_available
 --
 
-CREATE TABLE `beer_available` (
+CREATE TABLE beer_available (
   `id` int(11) NOT NULL,
   `bar_id` int(11) DEFAULT NULL,
   `beer_id` int(11) DEFAULT NULL
@@ -156,10 +168,14 @@ CREATE TABLE `beer_type` (
 -- Dumping data for table `beer_type`
 --
 
-INSERT INTO `beer_type` (`id`, `name`, `created_at`, `updated_at`) VALUES
-(1, 'Blonde', '2025-01-21 08:28:41', '2025-01-21 08:28:41'),
-(5, 'Blanche', '2025-01-21 08:30:49', '2025-01-21 08:30:49'),
-(6, 'Brune', '2025-01-21 08:31:09', '2025-01-21 08:31:09');
+INSERT INTO beer_type (id, name, description) VALUES (11, 'Belgian Strong Ale', 'Le Belgian Strong Ale est un style de bière originaire de Belgique, réputé pour sa forte teneur en alcool et ses saveurs riches et complexes. Ces bières sont souvent muries pendant un certain temps, ce qui permet aux saveurs de se développer et de s’équilibrer. Elles peuvent être un peu sucrées et assez chaudes en raison de la forte teneur en alcool.');
+(10, 'Lager', 'Les lagers ont généralement un goût léger, net et équilibré, avec des saveurs maltées qui peuvent être légèrement sucrées ou biscuitées. Elles sont souvent moins amères que les bières comme les IPA (India Pale Ale).');
+(6, 'Pilsner', 'Une lager légère et croquante, souvent un peu amère, d''origine tchèque.'),
+(7, 'Stout', 'Une bière noire, riche et crémeuse, souvent avec des arômes de café ou de chocolat.'),
+(8, 'Porter', 'Une bière sombre, similaire à la stout mais avec des arômes plus doux, souvent de caramel.'),
+(9, 'Pale Ale', 'Bière originaire d''Angleterre, qui se caractérise par un goût équilibré entre le malt et le houblon, avec une couleur qui peut varier du doré pâle à l''ambré clair.')
+
+
 
 -- --------------------------------------------------------
 

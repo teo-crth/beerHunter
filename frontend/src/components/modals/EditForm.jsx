@@ -121,7 +121,7 @@ const EditForm = () => {
                 onSubmit={handleSubmit}
             >
                 {formik => (
-                    <form onSubmit={formik.handleSubmit} enctype="multipart/form-data" className='container-form w-120  z-50 flex flex-col items-center justify-center text-center gap-0.5 text-light light-mode:text-dark p-5'>
+                    <form onSubmit={formik.handleSubmit} encType="multipart/form-data" className='container-form w-120  z-50 flex flex-col items-center justify-center text-center gap-0.5 text-light light-mode:text-dark p-5'>
                         <h3 className='font-text font-bold text-xl'>Modifier votre profil</h3>
 
                         {/* Champ image de profil */}
@@ -188,7 +188,7 @@ const EditForm = () => {
                                     key={city.id}
                                     value={city.id}
                                 >
-                                    {city.name}
+                                    {`${city.name} (${city.region})`}
                                 </option>
                             ))}
                         </select>

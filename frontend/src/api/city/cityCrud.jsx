@@ -6,8 +6,13 @@ const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 // Fonction pour rechercher des livres
 export const fetchAllCities = async () => {
   try {
-    const response = await axios.get(`${BASE_URL}/api/cities`);
-
+    const response = await axios.get(`${BASE_URL}/api/cities`, {
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8'
+      },
+    });
+    console.log('Réponse de la recherche de villes:', response.data);
+    
     return response.data;
   } catch (error) {
     console.error('Erreur lors de la récupération du profil:', error);

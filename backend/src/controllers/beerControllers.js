@@ -55,8 +55,7 @@ const edit = (req, res) => {
 
 const add = (req, res) => {
   const beer = req.body;
-
-  // TODO validations (length, format...)
+  console.log('beer req.body', beer);
 
   models.beer
     .insert(beer)
