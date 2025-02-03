@@ -8,6 +8,8 @@ import Beer from '../components/beer/Beer';
 import Bar from '../components/bar/Bar';
 import ContactForm from '../components/contact/ContactForm';
 import Profil from '../pages/Profil';
+import BarPage from '../pages/barPage/BarPage';
+import BeerPage from '../pages/beerPage/BeerPage';
 
 const router = createBrowserRouter([
   {
@@ -40,8 +42,16 @@ const router = createBrowserRouter([
         element: <ContactForm />,
       },
       {
-        path: 'profil', 
+        path: 'profil',
         element: <Profil />,
+      },
+      {
+        path: 'BeerPage',
+        element: <BeerPage />,
+      },
+      {
+        path: 'BarPage',
+        element: <BarPage />,
       },
     ],
   },

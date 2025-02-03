@@ -34,8 +34,7 @@
 //     return recursiveReplace(obj);
 // };
 
-
-export const replaceSpecialChars = (obj) => {
+const replaceSpecialChars = (obj) => {
     const charMap = {
         'Š': 'è',
         '“': 'ô',
@@ -67,3 +66,5 @@ export const replaceSpecialChars = (obj) => {
 
     return recursiveReplace(obj);
 };
+
+module.exports = { replaceSpecialChars };
