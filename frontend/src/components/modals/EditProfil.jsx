@@ -10,15 +10,7 @@ import DeleteProfil from './DeleteProfil';
 const EditProfil = () => {
 
     const { openModal, isModalEditOpen, setIsModalEditOpen } = useContext(AppContext);
-
-    // const [isEditFormOpen, setIsEditFormOpen] = useState(false);
-    // const [isEditPasswordOpen, setIsEditPasswordOpen] = useState(false);
-    // const [isDeleteProfilOpen, setIsDeleteProfilOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
-
-    // const handleCloseEditForm = () => setIsEditFormOpen(false);
-    // const handleCloseEditPassword = () => setIsEditPasswordOpen(false);
-    // const handleCloseDeleteProfil = () => setIsDeleteProfilOpen(false);
 
     const handleCloseClick = () => {
         setIsModalEditOpen(!isModalEditOpen);
