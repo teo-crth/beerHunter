@@ -60,7 +60,7 @@ const EditForm = () => {
         const id =  user.id;
         const email = values.email;
         const name = values.name;
-        const theme = values.theme === "Sombre" ? "dark" : "light";
+        const theme = values.theme;
         const birth_date = dateFormated;
         const cityId = values.city;
         const address = values.address;
@@ -197,11 +197,11 @@ const EditForm = () => {
                                 placeholder="Rechercher une ville"
                             />
                             {isDropdownOpen  && filteredCities.length > 0 && (
-                                <ul className="absolute top-13 bg-dark text-light border border-primary overflow-y-scroll shadow-lg max-h-40 overflow-auto mt-1 rounded-md w-full z-10">
+                                <ul className="absolute top-13 bg-dark text-light border border-primary overflow-y-scroll shadow-lg max-h-40 mt-1 rounded-md w-full z-10">
                                     {filteredCities.map((city) => (
                                         <li
                                             key={city.id}
-                                            className="p-2 cursor-pointer hover:bg-gray-200"
+                                            className="p-2 cursor-pointer hover:bg-dark-black"
                                             onClick={() => handleCityClick(city.name, city.code, city.id, formik)}
                                         >
                                             {`${city.name} (${city.code})`}
@@ -209,26 +209,6 @@ const EditForm = () => {
                                     ))}
                                 </ul>
                             )}
-                            {/* <select
-                                id="city"
-                                className='border border-light light-mode:border-dark-black text-light light-mode:text-dark-black rounded-md pl-1'
-                                value={formik.values.city || ''}
-                                onChange={formik.handleChange}
-                                name="city"
-                            >
-                                <option className="bg-dark-black light-mode:bg-light font-text text-light light-mode:text-dark-black" value="">
-                                    Choisir une ville
-                                </option>
-                                {cities.map((city) => (
-                                    <option
-                                        className="bg-dark-black light-mode:bg-light font-text text-light light-mode:text-dark-black"
-                                        key={city.id}
-                                        value={city.id}
-                                    >
-                                        {`${city.name} (${city.code})`}
-                                    </option>
-                                ))}
-                            </select> */}
                             {formik.touched.city && formik.errors.city && (
                                 <div className="text-error text-xs text-red-400">{formik.errors.city}</div>
                             )}
