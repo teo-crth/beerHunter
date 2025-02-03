@@ -21,9 +21,9 @@ const Contact = () => {
     }
 
     return (
-        <div className='container-contact flex flex-col items-center justify-center w-full light-mode:bg-amber-100 p-5 h-full'>
+        <div className='container-contact min-h-dvh flex flex-col items-center justify-start w-full light-mode:bg-light p-5 h-full'>
             <h1 className='font-title font-bold text-2xl mb-5 text-light light-mode:text-dark-black'>Nous contacter</h1>
-            <form onSubmit={handleSubmit} className='container-form w-120 min-h-100 flex flex-col items-start justify-between text-center gap-0.5 shadow-md bg-dark-black light-mode:bg-light text-light light-mode:text-dark rounded-lg p-5'>
+            <form onSubmit={handleSubmit} className='container-form w-full md:w-1/2 lg:w-1/3 min-h-100 flex flex-col items-start justify-between text-center gap-0.5 shadow-md bg-dark-black light-mode:bg-light text-light light-mode:text-dark rounded-lg p-5'>
                 <h3 className='font-text font-bold text-xl text-center w-full'>Formulaire de contact</h3>
                 
                 <label className="mt-[5px]" htmlFor="email">Email</label>

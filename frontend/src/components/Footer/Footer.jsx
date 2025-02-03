@@ -2,7 +2,7 @@ import React from "react";
 
 const Footer = () => {
     return (
-        <footer className="bg-gray-800 light-mode:bg-light text-light light-mode:text-dark shadow-[0_-2px_6px_rgba(0,0,0,0.1)] text-center py-4">
+        <footer className="bg-gray-800 absolute bottom-0 light-mode:bg-light text-light light-mode:text-dark shadow-[0_-2px_6px_rgba(0,0,0,0.1)] text-center py-4">
             <p className="text-sm">
                 © {new Date().getFullYear()} Beer Hunter. All rights reserved.
             </p>
