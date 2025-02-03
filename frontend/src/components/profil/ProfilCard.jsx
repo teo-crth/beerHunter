@@ -3,6 +3,8 @@ import { AppContext } from '../../context/context';
 import dayjs from 'dayjs';
 import EditProfil from '../modals/EditProfil';
 
+const BASE_URL = import.meta.env.VITE_BACKEND_URL;
+
 const Profil = ({ user }) => {
 
     const { isModalEditOpen, setIsModalEditOpen } = useContext(AppContext);
@@ -26,7 +28,7 @@ const Profil = ({ user }) => {
                 </div>
                 { isModalEditOpen ? <EditProfil /> : null}
                 <div className="container-img">
-                    <img src={user?.profil_picture ? user?.profil_picture : '/src/assets/default-profil-picture.webp'} alt='photo de profil' className='w-25 rounded-full shadow-2xs'/>
+                    <img src={`${BASE_URL}${user?.profil_picture}`} alt='photo de profil' className='w-25 rounded-full shadow-2xs'/>
                 </div>
                 <div className="container-info flex flex-col items-center justify-start gap-2">
                     <div className="container-name flex flex-col items-center">
