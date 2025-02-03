@@ -20,6 +20,9 @@ const EditForm = () => {
     } = useContext(AppContext);
 
     const [cities, setCities] = useState([]);
+    const [searchTerm, setSearchTerm] = useState(`${user.city_name}`);
+    const [filteredCities, setFilteredCities] = useState([]);
+    const [ isDropdownOpen, setIsDropdownOpen ] = useState(false);
 
     useEffect(() => {
         if (cities.length === 0) {
@@ -29,6 +32,26 @@ const EditForm = () => {
         }
     }, [cities]);
 
+    useEffect(() => {
+        setFilteredCities(
+            cities.filter(city => city.name.toLowerCase().startsWith(searchTerm.toLowerCase()))
+        );
+    }, [searchTerm, cities]);
+
+    const handleSearchChange = (e) => {
+        const value = e.target.value;
+        setSearchTerm(value);
+
+        const containsDigit = /\d/.test(value);
+        setIsDropdownOpen(value.length > 0 && !containsDigit);
+    };
+
+    const handleCityClick = (cityName, cityCode, cityId, formik) => {
+        setSearchTerm(`${cityName} (${cityCode})`);
+        formik.setFieldValue('city', cityId);
+        setIsDropdownOpen(false);
+    };
+
     // Form submission handler
     const handleSubmit = (values) => {
         
@@ -37,22 +60,14 @@ const EditForm = () => {
         const id =  user.id;
         const email = values.email;
         const name = values.name;
-        const theme = values.theme === "Sombre" ? "dark" : "light";
+        const theme = values.theme;
         const birth_date = dateFormated;
         const cityId = values.city;
         const address = values.address;
-        const profil_picture = values.profil_picture;        
+        const profil_picture = values.profil_picture;  
         
-        // Ajouter l'image de profil, si présente
-        // const formDataPicture = new FormData();
+        console.log('city valeur champs formik', cityId);
         
-        // if (values.profil_picture) {
-        //     formDataPicture.append('profil_picture', values.profil_picture);
-        // } else {
-        //     formDataPicture.append('profil_picture', null);
-        //     console.log('image null');
-        // }        
-
 
         changeOneUser(id, email, name, theme, birth_date, cityId, address, profil_picture)
             .then(() => {
@@ -170,31 +185,34 @@ const EditForm = () => {
                         {formik.touched.birth_date && formik.errors.birth_date ? (
                             <div className='text-error text-xs text-red-400'>{formik.errors.birth_date}</div>
                         ) : null}
-
-                        <label className="mt-[5px]" htmlFor="city">Ville</label>
-                        <select
-                            id="city"
-                            className='border border-light light-mode:border-dark-black text-light light-mode:text-dark-black rounded-md pl-1'
-                            value={formik.values.city || ''}
-                            onChange={formik.handleChange}
-                            name="city"
-                        >
-                            <option className="bg-dark-black light-mode:bg-light font-text text-light light-mode:text-dark-black" value="">
-                                Choisir une ville
-                            </option>
-                            {cities.map((city) => (
-                                <option
-                                    className="bg-dark-black light-mode:bg-light font-text text-light light-mode:text-dark-black"
-                                    key={city.id}
-                                    value={city.id}
-                                >
-                                    {`${city.name} (${city.code})`}
-                                </option>
-                            ))}
-                        </select>
-                        {formik.touched.city && formik.errors.city && (
-                            <div className="text-error text-xs text-red-400">{formik.errors.city}</div>
-                        )}
+                        <div className="container-input-city relative flex flex-col items-center justify-center">
+                            <label className="mt-[5px]" htmlFor="city">Ville</label>
+                            <input
+                                id="city"
+                                name="city"
+                                type="text"
+                                value={searchTerm}
+                                onChange={handleSearchChange}
+                                className='border border-light light-mode:border-dark-black rounded-md pl-1'
+                                placeholder="Rechercher une ville"
+                            />
+                            {isDropdownOpen  && filteredCities.length > 0 && (
+                                <ul className="absolute top-13 bg-dark text-light border border-primary overflow-y-scroll shadow-lg max-h-40 mt-1 rounded-md w-full z-10">
+                                    {filteredCities.map((city) => (
+                                        <li
+                                            key={city.id}
+                                            className="p-2 cursor-pointer hover:bg-dark-black"
+                                            onClick={() => handleCityClick(city.name, city.code, city.id, formik)}
+                                        >
+                                            {`${city.name} (${city.code})`}
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                            {formik.touched.city && formik.errors.city && (
+                                <div className="text-error text-xs text-red-400">{formik.errors.city}</div>
+                            )}
+                        </div>
 
                         <label className="mt-[5px]" htmlFor="address">Adresse</label>
                         <input id="address" type="text" className='border border-light light-mode:border-dark-black rounded-md pl-1' {...formik.getFieldProps('address')} />

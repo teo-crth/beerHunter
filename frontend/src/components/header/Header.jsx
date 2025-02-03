@@ -18,7 +18,7 @@ const Header = () => {
     };
 
     return (
-        <header className="flex justify-between items-center w-full px-2.5 shadow-md bg-dark-black light-mode:bg-light">
+        <header className="flex justify-between items-center w-full px-2.5  bg-dark-black light-mode:bg-light shadow-md">
             <NavLink to="/" className={({ isActive }) => isActive ? 'active' : ''}><img src={isDarkMode ? logo : logoLight} alt="Logo table avec des livres" className='w-50' /></NavLink>
             <div className="container-nav flex justify-around items-center gap-10">
                 <nav className="nav-desktop hidden lg:flex xl:flex gap-10 items-center text-primary fontFamily-title">
