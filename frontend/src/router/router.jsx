@@ -6,7 +6,7 @@ import Layout from '../components/layout/Layout';
 import BeerTypes from '../components/beer/BeerType';
 import Beer from '../components/beer/Beer';
 import Bar from '../components/bar/Bar';
-import ContactForm from '../components/contact/ContactForm';
+import Contact from '../pages/Contact';
 import Profil from '../pages/Profil';
 import BarPage from '../pages/barPage/BarPage';
 import BeerPage from '../pages/beerPage/BeerPage';
@@ -39,7 +39,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'contact',
-        element: <ContactForm />,
+        element: <Contact />,
       },
       {
         path: 'profil',
