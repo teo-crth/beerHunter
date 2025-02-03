@@ -6,7 +6,7 @@ const Footer = () => {
             <p className="text-sm">
                 © {new Date().getFullYear()} Beer Hunter. All rights reserved.
             </p>
-            <ul className="flex justify-center mt-2 space-x-4">
+            <ul className="flex flex-col md:flex-row lg:flex-row justify-center mt-2 space-x-4 flex-wrap">
                 <li>
                     <a
                         href="/about"

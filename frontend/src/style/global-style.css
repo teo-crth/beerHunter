@@ -42,3 +42,7 @@
 * {
     box-sizing: border-box;
 }
+
+.container-profilPage {
+    background: radial-gradient(circle at center, rgb(218, 176, 38) 50%, rgba(0, 0, 0, 1) 100%);
+}

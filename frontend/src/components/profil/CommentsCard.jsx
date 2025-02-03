@@ -1,5 +1,7 @@
 import React from 'react';
 
+const BASE_URL = import.meta.env.VITE_BACKEND_URL;
+
 const CommentsCard = ({ user }) => {
     if (!user?.comments) return null;
 
@@ -14,7 +16,7 @@ const CommentsCard = ({ user }) => {
                             <div className="flex items-center gap-2">
                                 <p className='text-xs text-light light-mode:text-dark-black'>{user.name}</p>
                                 <div className="container-img w-8 rounded-full border border-primary">
-                                    <img src={user.profil_picture} alt="Photo de profil" className='w-full rounded-full' />
+                                    <img src={`${BASE_URL}${user?.profil_picture}`} alt="Photo de profil" className='w-full rounded-full' />
                                 </div>
                             </div>
                         </header>

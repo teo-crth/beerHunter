@@ -64,10 +64,7 @@ const EditForm = () => {
         const birth_date = dateFormated;
         const cityId = values.city;
         const address = values.address;
-        const profil_picture = values.profil_picture;  
-        
-        console.log('city valeur champs formik', cityId);
-        
+        const profil_picture = values.profil_picture;     
 
         changeOneUser(id, email, name, theme, birth_date, cityId, address, profil_picture)
             .then(() => {
