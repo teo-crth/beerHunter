@@ -3,7 +3,8 @@ const models = require("../models");
 const browse = (req, res) => {
   models.beer
     .findAll()
-    .then(([rows]) => {
+    .then((result) => {
+      const rows = result.rows;
       res.send(rows);
     })
     .catch((err) => {
@@ -13,9 +14,11 @@ const browse = (req, res) => {
 };
 
 const read = (req, res) => {
+  const id = parseInt(req.params.id, 10);
   models.beer
-    .find(req.params.id)
-    .then(([rows]) => {
+    .find(id)
+    .then((result) => {
+      const rows = result.rows;
       if (rows[0] == null) {
         res.sendStatus(404);
       } else {
@@ -37,8 +40,8 @@ const edit = (req, res) => {
 
   models.beer
     .update(beer)
-    .then(([result]) => {
-      if (result.affectedRows === 0) {
+    .then((result) => {
+      if (result.rowCount === 0) {
         res.sendStatus(404);
       } else {
         res.sendStatus(204);
@@ -52,12 +55,11 @@ const edit = (req, res) => {
 
 const add = (req, res) => {
   const beer = req.body;
-
-  // TODO validations (length, format...)
+  console.log('beer req.body', beer);
 
   models.beer
     .insert(beer)
-    .then(([result]) => {
+    .then((result) => {
       res.location(`/beers/${result.insertId}`).sendStatus(201);
     })
     .catch((err) => {
@@ -67,10 +69,11 @@ const add = (req, res) => {
 };
 
 const destroy = (req, res) => {
+  const id = parseInt(req.params.id, 10);  
   models.beer
-    .delete(req.params.id)
-    .then(([result]) => {
-      if (result.affectedRows === 0) {
+    .delete(id)
+    .then((result) => {
+      if (result.rowCount === 0) {
         res.sendStatus(404);
       } else {
         res.sendStatus(204);

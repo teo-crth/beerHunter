@@ -1,10 +1,13 @@
 const models = require("../models");
+const {replaceSpecialChars} = require("../utils/specialCharacter");
 
 const browse = (req, res) => {
   models.user_comment
     .findAll()
-    .then(([rows]) => {
-      res.send(rows);
+    .then((result) => {
+      const rows = result.rows;
+      const traitedRows = replaceSpecialChars(rows);
+      res.send(traitedRows);
     })
     .catch((err) => {
       console.error(err);
@@ -13,9 +16,11 @@ const browse = (req, res) => {
 };
 
 const findAssociateImages = (req, res) => {
+  const id = parseInt(req.params.id, 10);
   models.user_comment
-    .findCommentImages(req.params.id)
-    .then(([rows]) => {
+    .findCommentImages(id)
+    .then((result) => {
+      const rows = result.rows;
       res.send(rows);
     })
     .catch((err) => {
@@ -25,15 +30,19 @@ const findAssociateImages = (req, res) => {
 };
 
 const read = (req, res) => {
+  const id = parseInt(req.params.id, 10);
   models.user_comment
-    .find(req.params.id)
-    .then(([rows]) => {
-      if (rows[0] == null) {
-        res.sendStatus(404);
+    .find(id)
+    .then((rows) => {
+      const traitedRows = replaceSpecialChars(rows);
+      const result = traitedRows.rows[0];
+      
+      if (result == null) {
+          res.sendStatus(404);
       } else {
-        res.send(rows[0]);
+          res.send(result);
       }
-    })
+  })
     .catch((err) => {
       console.error(err);
       res.sendStatus(500);
@@ -49,8 +58,8 @@ const edit = (req, res) => {
 
   models.user_comment
     .update(user_comment)
-    .then(([result]) => {
-      if (result.affectedRows === 0) {
+    .then((result) => {
+      if (result.rowCount === 0) {
         res.sendStatus(404);
       } else {
         res.sendStatus(204);
@@ -69,7 +78,7 @@ const add = (req, res) => {
 
   models.user_comment
     .insert(user_comment)
-    .then(([result]) => {
+    .then((result) => {
       res.location(`/user_comments/${result.insertId}`).sendStatus(201);
     })
     .catch((err) => {
@@ -79,10 +88,11 @@ const add = (req, res) => {
 };
 
 const destroy = (req, res) => {
+  const id = parseInt(req.params.id, 10);
   models.user_comment
-    .delete(req.params.id)
-    .then(([result]) => {
-      if (result.affectedRows === 0) {
+    .delete(id)
+    .then((result) => {
+      if (result.rowCount === 0) {
         res.sendStatus(404);
       } else {
         res.sendStatus(204);

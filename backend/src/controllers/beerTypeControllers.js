@@ -1,10 +1,14 @@
 const models = require("../models");
 
+const {replaceSpecialChars} = require("../utils/specialCharacter");
+
 const browse = (req, res) => {
   models.beer_type
     .findAll()
-    .then(([rows]) => {
-      res.send(rows);
+    .then((result) => {
+      const rows = result.rows;
+      const traitedRows = replaceSpecialChars(rows);
+      res.send(traitedRows);
     })
     .catch((err) => {
       console.error(err);
@@ -15,7 +19,7 @@ const browse = (req, res) => {
 const findAssociateBeerType = (req, res) => {
     models.beer_type
       .findBeerOfOneType(req.params.type)
-      .then(([rows]) => {
+      .then((rows) => {
         res.send(rows);
       })
       .catch((err) => {
@@ -25,13 +29,16 @@ const findAssociateBeerType = (req, res) => {
   };
 
 const read = (req, res) => {
+  const id = parseInt(req.params.id, 10);
   models.beer_type
-    .find(req.params.id)
-    .then(([rows]) => {
+    .find(id)
+    .then((result) => {
+      const rows = result.rows;
       if (rows[0] == null) {
         res.sendStatus(404);
       } else {
-        res.send(rows[0]);
+        const traitedRows = replaceSpecialChars(rows);
+        res.send(traitedRows[0]);
       }
     })
     .catch((err) => {
@@ -49,8 +56,8 @@ const edit = (req, res) => {
 
   models.beer_type
     .update(beer_type)
-    .then(([result]) => {
-      if (result.affectedRows === 0) {
+    .then((result) => {
+      if (result.rowCount === 0) {
         res.sendStatus(404);
       } else {
         res.sendStatus(204);
@@ -69,7 +76,7 @@ const add = (req, res) => {
 
   models.beer_type
     .insert(beer_type)
-    .then(([result]) => {
+    .then((result) => {
       res.location(`api/beer_type/${result.insertId}`).sendStatus(201);
     })
     .catch((err) => {
@@ -79,10 +86,11 @@ const add = (req, res) => {
 };
 
 const destroy = (req, res) => {
+  const id = parseInt(req.params.id, 10);
   models.beer_type
-    .delete(req.params.id)
-    .then(([result]) => {
-      if (result.affectedRows === 0) {
+    .delete(id)
+    .then((result) => {
+      if (result.rowCount === 0) {
         res.sendStatus(404);
       } else {
         res.sendStatus(204);

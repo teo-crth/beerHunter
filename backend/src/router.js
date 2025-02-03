@@ -15,7 +15,10 @@ const commentImageControllers = require("./controllers/commentImageControllers")
 
 // VALIDATION JOI
 const validate = require("./validation/validator");
-const { userSchema, userCommentSchema, commentImageSchema, favoriteBarSchema, barSchema } = require("./validation/schemas/joi.schemas");
+const { createUserSchema, updatePasswordUserSchema, updateUserSchema, userCommentSchema, commentImageSchema, favoriteBarSchema, barSchema } = require("./validation/schemas/joi.schemas");
+
+// CONNEXION
+router.post("/api/login", usersControllers.login);
 
 // GET
 router.get("/api/bars/city/:city/:region", cityControllers.findAssociateBars);
@@ -25,6 +28,8 @@ router.get("/api/bars/:id", barControllers.read);
 router.get("/api/bars", barControllers.browse);
 
 router.get("/api/beers/type/:type", beerTypeControllers.findAssociateBeerType);
+router.get("/api/beertypes/:id", beerTypeControllers.read);
+router.get("/api/beertypes", beerTypeControllers.browse);
 router.get("/api/beers/:id", beerControllers.read);
 router.get("/api/beers", beerControllers.browse);
 
@@ -41,13 +46,16 @@ router.get("/api/cities/:id", cityControllers.read);
 router.get("/api/cities", cityControllers.browse);
 
 // PUT
-router.put("/api/users/:id", validate(userSchema, 'body'), upload.single("profilePicture"), usersControllers.edit);
+router.put("/api/passwordUsers/:id", validate(updatePasswordUserSchema, 'body'), usersControllers.editPassword);
+router.put("/api/users/:id",  upload.single("profil_picture"), validate(updateUserSchema, 'body'), usersControllers.edit);
+router.put("/api/beertype/:id", beerTypeControllers.edit);
 router.put("/api/comments/:id", validate(userCommentSchema, 'body'), userCommentControllers.edit);
 router.put("/api/favorite-bars/:id", validate(favoriteBarSchema, 'body'), favoriteBarControllers.edit);
 
 // POST
 router.post("/api/bars", validate(barSchema, 'body'), barControllers.add);
-router.post("/api/users", validate(userSchema, 'body'), usersControllers.add);
+router.post("/api/beers", beerControllers.add);
+router.post("/api/users", validate(createUserSchema, 'body'), usersControllers.add);
 router.post("/api/comments", validate(userCommentSchema, 'body'), userCommentControllers.add);
 router.post("/api/comment-images", validate(commentImageSchema, 'body'), commentImageControllers.add); 
 router.post("/api/favorite-bars", validate(favoriteBarSchema, 'body'), favoriteBarControllers.add);

@@ -3,7 +3,8 @@ const models = require("../models");
 const browse = (req, res) => {
     models.city
         .findAll()
-        .then(([rows]) => {
+        .then((result) => {
+            const rows = result.rows
             res.send(rows);
         })
         .catch((err) => {
@@ -15,7 +16,8 @@ const browse = (req, res) => {
 const findAssociateBars = (req, res) => {
   models.city
     .findBarsOfOneCity(req.params.city, req.params.region)
-    .then(([rows]) => {
+    .then((result) => {
+      const rows = result.rows;
       res.send(rows);
     })
     .catch((err) => {
@@ -25,9 +27,11 @@ const findAssociateBars = (req, res) => {
 };
 
 const read = (req, res) => {
+    const id = parseInt(req.params.id, 10);
     models.city
-        .find(req.params.id)
-        .then(([rows]) => {
+        .find(id)
+        .then((result) => {
+            const rows = result.rows
             if (rows[0] == null) {
                 res.sendStatus(404);
             } else {
@@ -49,8 +53,8 @@ const edit = (req, res) => {
 
     models.city
         .update(city)
-        .then(([result]) => {
-            if (result.affectedRows === 0) {
+        .then((result) => {
+            if (result.rowCount === 0) {
                 res.sendStatus(404);
             } else {
                 res.sendStatus(204);
@@ -69,7 +73,7 @@ const add = (req, res) => {
 
     models.city
         .insert(city)
-        .then(([result]) => {
+        .then((result) => {
             res.location(`api/citys/${result.insertId}`).sendStatus(201);
         })
         .catch((err) => {
@@ -79,10 +83,11 @@ const add = (req, res) => {
 };
 
 const destroy = (req, res) => {
+    const id = parseInt(req.params.id, 10);
     models.city
-        .delete(req.params.id)
-        .then(([result]) => {
-            if (result.affectedRows === 0) {
+        .delete(id)
+        .then((result) => {
+            if (result.rowCount === 0) {
                 res.sendStatus(404);
             } else {
                 res.sendStatus(204);

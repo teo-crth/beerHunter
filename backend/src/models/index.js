@@ -1,38 +1,52 @@
 require("dotenv").config();
+const pg = require("pg");
 
-const mysql = require("mysql2/promise");
-
-// create a connection pool to the database
-
+// Récupération des variables d'environnement pour la connexion à la base de données
 const { DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME } = process.env;
 
-const pool = mysql.createPool({
+// Création du pool de connexions PostgreSQL
+const pool = new pg.Pool({
   host: DB_HOST,
   port: DB_PORT,
   user: DB_USER,
   password: DB_PASSWORD,
   database: DB_NAME,
+  client_encoding: "UTF8", // 🔥 Force l'encodage en UTF-8
+  ssl: {
+    rejectUnauthorized: false, // Important pour les connexions SSL
+  },
 });
 
-// try a connection
+// Vérification de la connexion et de l'encodage
+pool.connect()
+  .then(client => {
+    console.info(`✅ Connecté à la base de données : ${DB_NAME}`);
 
-pool.getConnection().catch(() => {
-  console.warn(
-    "Warning:",
-    "Failed to get a DB connection.",
-    "Did you create a .env file with valid credentials?",
-    "Routes using models won't work as intended"
-  );
-});
+    // Vérifier si PostgreSQL envoie bien des données en UTF-8
+    return client.query("SHOW client_encoding;")
+      .then(res => {
+        console.log(`🔍 Encodage client PostgreSQL : ${res.rows[0].client_encoding}`);
+        if (res.rows[0].client_encoding !== "UTF8") {
+          console.warn("⚠️ Attention : l'encodage client n'est pas UTF-8 !");
+        }
+        client.release();
+      })
+      .catch(err => {
+        console.error("❌ Erreur lors de la vérification de l'encodage :", err);
+        client.release();
+      });
+  })
+  .catch(() => {
+    console.warn(
+      "⚠️ Warning: Impossible de se connecter à la base de données.",
+      "Vérifiez votre fichier .env et assurez-vous que la base est accessible."
+    );
+  });
 
-// declare and fill models: that's where you should register your own managers
-
+// Initialisation des modèles
 const models = {};
 
-// const ItemManager = require("./ItemManager");
-// models.item = new ItemManager();
-// models.item.setDatabase(pool);
-
+// Ajout de chaque manager (gestionnaire de modèles)
 const BarManager = require("./barManager");
 models.bar = new BarManager();
 models.bar.setDatabase(pool);
@@ -73,10 +87,7 @@ const BarCityManager = require("./barCityManager");
 models.bar_city = new BarCityManager();
 models.bar_city.setDatabase(pool);
 
-
-// bonus: use a proxy to personalize error message,
-// when asking for a non existing model
-
+// Proxy pour capturer les erreurs de modèle manquant
 const handler = {
   get(obj, prop) {
     if (prop in obj) {
@@ -87,11 +98,12 @@ const handler = {
       string.slice(0, 1).toUpperCase() + string.slice(1);
 
     throw new ReferenceError(
-      `models.${prop} is not defined. Did you create ${pascalize(
+      `models.${prop} is not défini. Avez-vous créé ${pascalize(
         prop
-      )}Manager.js, and did you register it in backend/src/models/index.js?`
+      )}Manager.js et l'avez-vous enregistré dans backend/src/models/index.js ?`
     );
   },
 };
 
+// Exporter les modèles avec un proxy pour gérer les erreurs
 module.exports = new Proxy(models, handler);

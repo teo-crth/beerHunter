@@ -3,7 +3,8 @@ const models = require("../models");
 const browse = (req, res) => {
     models.bar
         .findAll()
-        .then(([rows]) => {
+        .then((result) => {
+            const rows = result.rows;           
             res.send(rows);
         })
         .catch((err) => {
@@ -13,9 +14,11 @@ const browse = (req, res) => {
 };
 
 const findAssociateComments = (req, res) => {
+    const id = parseInt(req.params.id, 10);
     models.bar
-        .findCommentsOfOneBar(req.params.id)
-        .then(([rows]) => {
+        .findCommentsOfOneBar(id)
+        .then((result) => {
+            const rows = result.rows
             res.send(rows);
         })
         .catch((err) => {
@@ -25,9 +28,11 @@ const findAssociateComments = (req, res) => {
 };
 
 const findAssociateBeers = (req, res) => {
+    const id = parseInt(req.params.id, 10);
     models.bar
-        .findBeersOfOneBar(req.params.id)
-        .then(([rows]) => {
+        .findBeersOfOneBar(id)
+        .then((result) => {
+            const rows = result.rows;
             res.send(rows);
         })
         .catch((err) => {
@@ -37,9 +42,11 @@ const findAssociateBeers = (req, res) => {
 };
 
 const read = (req, res) => {
+    const id = parseInt(req.params.id, 10);
     models.bar
-        .find(req.params.id)
-        .then(([rows]) => {
+        .find(id)
+        .then((result) => {
+            const rows = result.rows;
             if (rows[0] == null) {
                 res.sendStatus(404);
             } else {
@@ -61,8 +68,8 @@ const edit = (req, res) => {
 
     models.bar
         .update(bar)
-        .then(([result]) => {
-            if (result.affectedRows === 0) {
+        .then((result) => {
+            if (result.rowCount === 0) {
                 res.sendStatus(404);
             } else {
                 res.sendStatus(204);
@@ -81,7 +88,7 @@ const add = (req, res) => {
 
     models.bar
         .insert(bar)
-        .then(([result]) => {
+        .then((result) => {
             res.location(`api/bars/${result.insertId}`).sendStatus(201);
         })
         .catch((err) => {
@@ -93,8 +100,8 @@ const add = (req, res) => {
 const destroy = (req, res) => {
     models.bar
         .delete(req.params.id)
-        .then(([result]) => {
-            if (result.affectedRows === 0) {
+        .then((result) => {
+            if (result.rowCount === 0) {
                 res.sendStatus(404);
             } else {
                 res.sendStatus(204);
