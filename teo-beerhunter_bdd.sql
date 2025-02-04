@@ -107,7 +107,7 @@ CREATE TABLE `beer` (
   `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
---
+-- 
 -- Dumping data for table `beer`
 --
 
@@ -117,7 +117,7 @@ INSERT INTO beer (name, subtitle, alcool_degree, description, image_link, beer_t
 ('Heineken', 'Bière rafraichissante', 5, 'Bière blonde néerlandaise, légère et rafraîchissante, avec une saveur légèrement fruitée et une amertume modérée.', '/assets/images/beer/heineken-carre.webp', 1),
 ('Chimay', 'Chimay blanche', 4.5, 'Bière abbaye belge blanche', '/assets/images/beer/chimay-carre.webp', 3),
 ('Pelforth', 'Pelfforth brune', 5, 'Bière brune française', '/assets/images/beer/pelforth-carre.webp', 2),
-('Pelforth', 'Pelfforth française', 5.8, 'Bière Blonde française', '/assets/images/beer/pelforth-carre.webp', 1),
+('Pelforth', 'Bière Blonde', 5.8, 'Bière Blonde française', '/assets/images/beer/pelforth-carre.webp', 1),
 ('Eku Kulminator', 'Eku Kulminator', 28, 'Bière allamande brune ', '/assets/images/beer/eku-carre.webp', 2),
 ('1664', 'Bière Blonde désaltérante', 5.5, 'Bière française emblématique, la 1664 est appréciée pour sa fraîcheur et son caractère désaltérant.', '/assets/images/beer/1664-carre.webp', 1),
 ('Leffe', 'Bière belge', 6.6, 'Bière d''abbaye belge, la Leffe Blonde est une bière de dégustation, avec des arômes fruités et épicés, et une légère amertume.', '/assets/images/beer/leffe-carre.webp', 1),
