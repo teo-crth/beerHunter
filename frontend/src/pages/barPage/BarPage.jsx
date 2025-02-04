@@ -85,20 +85,20 @@ const BarPage = () => {
     const lienMapsBar = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2886.8726415578477!2d4.828161076524192!3d45.764043679105226!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47f4ebdd46e4b257%3A0x39c2331b8dcff1d6!2sAyers%20Rock!5e0!3m2!1sfr!2sfr!4v1617063968425!5m2!1sfr!2sfr';
 
     return (
-        <div style={{ fontFamily: 'Arial, sans-serif', margin: '20px', padding: '20px', border: '1px solid #ddd', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '6em' }}>
+        <div className='font-text m-3 p-3 rounded-md shadow-md flex flex-col items-center'>
+            <div className='flex items-center mb-5 flex-col md:flex-row lg:flex-row gap-4'>
                 <img
                     src="https://theseum.fr/wp-content/uploads/2022/09/ayers-rock-bar-lyon-1-1.jpg"
                     alt="Ayers rock"
-                    style={{ width: '50em', height: '30em', borderRadius: '1em', marginRight: '4em' }}
+                    className='w-full md:w-1/4 lg:w-1/4  rounded-md'
                 />
                 <div>
-                    <h1 style={{ margin: '0 0 10px', color: '#333' }}>{nomBar}</h1>
-                    <p style={{ margin: '5px 0', color: '#666' }}>
+                    <h1 className='font-bold text-2xl'>{nomBar}</h1>
+                    <p>
                         {descriptionBar}
                     </p>
-                    <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center' }}>
-                        <span style={{ color: '#333', fontWeight: 'bold', marginRight: '10px' }}>
+                    <div className='mt-1 flex items-center'>
+                        <span className='font-bold mr-2'>
                             Note : {rating}/5
                         </span>
                         {renderStars(rating)}
@@ -106,21 +106,21 @@ const BarPage = () => {
                 </div>
             </div>
 
-            <div style={{ display: 'flex', width: '100%', marginTop: '2em' }}>
-                <div style={{ width: '40%', textAlign: 'center' }}>
-                    <h1 style={{ margin: '0', color: '#333', marginBottom: '1em' }}>Bières disponibles</h1>
-                    <div style={{ width: '100%', alignItems: 'center' }}>
+            <div className='flex w-full mt-1 justify-between'>
+                <div className='w-full md:w-1/3 lg:w-1/3 text-center'>
+                    <h1 className='mb-2 font-bold'>Bières disponibles</h1>
+                    <div>
                         <Slider {...settings}>
                             {images.map((img, index) => (
-                                <div key={index}>
-                                    <img src={img} alt={`Biere-${index}`} style={{ width: '10em', borderRadius: '1em', alignItems: 'center' }} />
+                                <div className='flex gap-10' key={index}>
+                                    <img src={img} alt={`Biere-${index}`} className='w-100 rounded-2xl items-center' style={{ alignItems: 'center' }} />
                                 </div>
                             ))}
                         </Slider>
                     </div>
                 </div>
 
-                <div style={{ width: '30%', marginLeft: 'auto' }}>
+                <div className='w-full md:w-1/3 lg:w-1/3 text-center'>
                     <iframe
                         title="Google Maps"
                         src={lienMapsBar}
