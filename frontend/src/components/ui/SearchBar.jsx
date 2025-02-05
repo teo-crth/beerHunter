@@ -11,7 +11,7 @@ const SearchBar = () => {
     const [filteredCities, setFilteredCities] = useState([]);
     const [selectedCityId, setSelectedCityId] = useState(null);
 
-    const { openModal, setOpenModal } = useContext(AppContext);
+    const { openModal, setOpenModal, setSearchResultBars } = useContext(AppContext);
 
     useEffect(() => {
         if (cities.length === 0) {
@@ -30,6 +30,7 @@ const SearchBar = () => {
     const handleChange = (e) => {
         const value = e.target.value;
         setSearchTerm(value);
+        setSelectedCityId(null);
 
         const containsDigit = /\d/.test(value);
         setIsDropdownOpen(value.length > 0 && !containsDigit);
@@ -43,19 +44,20 @@ const SearchBar = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const containsDigit = /\d/.test(value);
-
-        if (!containsDigit || !selectedCityId) {
-            openModal('errorMessage', 'Veuillez sélectionner une ville dans la liste déroulante');
-        }
 
         const city = cities.find(city => city.id === selectedCityId);
 
-        // fetch bars by city id if no bars, call google api to get bars
+        if (!city) {
+            openModal('errorMessage', 'Veuillez sélectionner une ville dans la liste déroulante');
+        }
+
+        // fetch bars by city id in bdd if no bars, call google api to get bars
         fetchGoogleBars(city.latitude, city.longitude)
             .then((data) => {
                 console.log(data)
                 // ADD THE BARS TO THE DATABASE
+                // fetchBarsByCityId(selectedCityId) from bdd
+                // setSearchResultBars(dataFromBdd)
             })
             .catch((error) => {
                 console.error(error);
