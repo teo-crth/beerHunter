@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { AppContext } from '../../context/context';
+import Bar from './Bar';
 
 const SearchResultBars = () => {
     const { searchResultBars, setSearchResultBars } = useContext(AppContext);
@@ -15,13 +16,7 @@ const SearchResultBars = () => {
     return (
         <div>
             {searchResultBars.map(bar => (
-                <div key={bar.id}>
-                    <h2>{bar.name}</h2>
-                    <p>{bar.address}</p>
-                    <p>{bar.city}</p>
-                    <p>{bar.rate}</p>
-                    <p>{bar.image}</p>
-                </div>
+                <Bar key={bar.id} bar={bar} />
             ))    
             }
         </div>
