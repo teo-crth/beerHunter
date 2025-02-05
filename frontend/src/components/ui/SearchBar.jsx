@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { AppContext } from 'src/context/context';
+import { AppContext } from '../../context/context';
 import { fetchAllCities } from '../../api/city/cityCrud';
 import { fetchGoogleBars } from '../../api/google_api/fetchGoogleApi';
 import Button from './Button';
