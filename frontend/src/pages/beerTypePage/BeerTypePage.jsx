@@ -10,7 +10,6 @@ const BeerTypePage = () => {
         const getBeerTypes = async () => {
             try {
                 const data = await fetchAllBeerTypes();
-                console.log(data);
                 setBeerTypes(data);
             } catch (err) {
                 setError('Erreur lors du chargement des types de bières.');
