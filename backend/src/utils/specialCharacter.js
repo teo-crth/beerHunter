@@ -16,7 +16,7 @@ const replaceSpecialChars = (obj) => {
         return text.replace(/(?<![ea])(?<!doux)(?<=[a-zA-Z]),(?=[a-zA-Z])|(?<=\b|[a-zA-Z]|\s|')(?<![ea])(?<!doux),(?=\s|,)|,(?=,)/g, 'é');
     }
 
-    function recursiveReplace(value, key = null) {        
+    function recursiveReplace(value, key = null) {
         if (typeof value === 'string' && (key === null || keysToModify.has(key))) {
             value = replaceCommas(value);
             return value.replace(/[Š“ˆŒ–ƒ…‚]/g, match => charMap[match]);
