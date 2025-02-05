@@ -1,4 +1,3 @@
-
 const replaceSpecialChars = (obj) => {
     const charMap = {
         'Š': 'è',

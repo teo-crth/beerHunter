@@ -47,13 +47,13 @@ const Login = () => {
             {formik => (
                 <form onSubmit={formik.handleSubmit}>
                     <label htmlFor="email">Email</label>
-                    <input id="email" type="email" {...formik.getFieldProps('email')} />
+                    <input className="pl-2" id="email" type="email" {...formik.getFieldProps('email')} />
                     {formik.touched.email && formik.errors.email ? (
                         <div className='text-error'>{formik.errors.email}</div>
                     ) : null}
 
                     <label htmlFor="password">Mot de passe</label>
-                    <input id="password" type="password" {...formik.getFieldProps('password')} />
+                    <input className="pl-2" id="password" type="password" {...formik.getFieldProps('password')} />
                     {formik.touched.password && formik.errors.password ? (
                         <div className='text-error'>{formik.errors.password}</div>
                     ) : null}
