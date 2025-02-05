@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { fetchAllBeerTypes } from './beer-type-crude';
+import { fetchAllBeerTypes } from './beerTypeCrude';
 
 const BeerTypePage = () => {
     const [beerTypes, setBeerTypes] = useState([]);
