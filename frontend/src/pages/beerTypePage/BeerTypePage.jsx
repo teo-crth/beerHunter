@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { fetchAllBeerTypes } from './beerTypeCrude';
+import { fetchAllBeerTypes } from '../../api/beerType/beerTypeCrud';
 
 const BeerTypePage = () => {
     const [beerTypes, setBeerTypes] = useState([]);
@@ -10,6 +10,7 @@ const BeerTypePage = () => {
         const getBeerTypes = async () => {
             try {
                 const data = await fetchAllBeerTypes();
+                console.log(data);
                 setBeerTypes(data);
             } catch (err) {
                 setError('Erreur lors du chargement des types de bières.');

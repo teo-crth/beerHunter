@@ -10,6 +10,7 @@ import ContactForm from '../components/contact/ContactForm';
 import Profil from '../pages/Profil';
 import BarPage from '../pages/barPage/BarPage';
 import BeerPage from '../pages/beerPage/BeerPage';
+import BeerTypePage from '../pages/beerTypePage/BeerTypePage';
 
 const router = createBrowserRouter([
   {
@@ -52,6 +53,10 @@ const router = createBrowserRouter([
       {
         path: 'BarPage',
         element: <BarPage />,
+      },
+      {
+        path: '/beer-types', // Route enfant
+        element: <BeerTypePage />,
       },
     ],
   },
