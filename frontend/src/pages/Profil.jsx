@@ -8,6 +8,7 @@ import Modal from "../components/ui/Modal";
 
 import { fetchOneUser } from "../api/user/oneUserCrud";
 import { fetchCommentsOfOneUser } from "../api/user_comments/commentsCrud";
+import { fetchImagesOfOneComment } from "../api/user_comments/imagesCommentCrud";
 
 
 export default function Profil() {
@@ -21,11 +22,21 @@ export default function Profil() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const userData = await fetchOneUser(4);
+        const userData = await fetchOneUser(2);
         setUser(userData);
   
         const commentsData = await fetchCommentsOfOneUser(userData.id);
-        setUser((prev) => ({ ...prev, comments: commentsData }));
+
+        const updatedUserData = { ...userData, comments: [] };
+
+        const commentsWithImages = await Promise.all(
+          commentsData.map(async (comment) => {
+            const commentImage = await fetchImagesOfOneComment(comment.id);
+            return { ...comment, commentImage };
+          })
+        );
+
+        setUser((prev) => ({ ...updatedUserData, comments: commentsWithImages }));
 
         // const favoriteBarsData = await fetchFavoriteBarsOfOneUser(userData.id);
         // setUser((prev) => ({ ...prev, favoriteBars: favoriteBarsData }));
@@ -44,7 +55,7 @@ export default function Profil() {
 
   return (
     <div className="container-profilPage min-h-full">
-      <h1 className=" light-mode:bg-amber-100 text-light light-mode:text-dark text-center text-3xl font-title font-bold pt-3 mb-3">Mon profil</h1>
+      <h1 className=" light-mode:bg-amber-100 text-light light-mode:text-dark text-center text-3xl font-title font-bold p-3">Mon profil</h1>
       <div className="container-profil w-full min-h-full flex flex-wrap items-center justify-center light-mode:bg-amber-100 p-2 pb-5">
         <section className="container-profilCard w-full m-2 xl:w-1/3 md:w-1/3 flex justify-center items-center">
           <ProfilCard user={user} />
