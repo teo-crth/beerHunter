@@ -21,7 +21,7 @@ export default function Profil() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const userData = await fetchOneUser(6);
+        const userData = await fetchOneUser(4);
         setUser(userData);
   
         const commentsData = await fetchCommentsOfOneUser(userData.id);

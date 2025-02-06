@@ -11,9 +11,6 @@ export default function Home() {
                 <h3 className="text-xs mt-2">Trouver les bars près de chez vous qui servent votre bière préférée</h3>
             </section>
             <SearchBar />
-            <Link to="/beer-types" className="mt-4 inline-block px-6 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600">
-        Voir les types de bières
-      </Link>
         </>
     );
 }
