@@ -91,7 +91,7 @@ const EditForm = () => {
                     name: user.name,
                     email: user.email,
                     birth_date: dayjs(user?.birth_date).format('DD/MM/YYYY'),
-                    theme: userTheme,
+                    theme: userTheme === "Clair" ? "light" : "dark",
                     city: user.city_id,
                     address: user.address,
                     profil_picture: user.profil_picture ? user.profil_picture : null,
