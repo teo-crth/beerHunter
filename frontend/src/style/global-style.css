@@ -43,10 +43,10 @@
     box-sizing: border-box;
 }
 
-.container-profilPage, .container-contact {
+.container-profilPage, .container-contact, .container-homePage {
     background: radial-gradient(circle at center, rgb(218, 176, 38) 50%, rgba(0, 0, 0, 1) 100%);
 }
 
-.light-mode .container-profilPage, .light-mode .container-contact {
+.light-mode .container-profilPage, .light-mode .container-contact, .light-mode .container-homePage {
     background: rgb(252, 255, 229);
 }
