@@ -8,7 +8,7 @@ const NoFoundPage = () => {
     const navigate = useNavigate();
 
     const handleBackToHome = () => {
-        navigate("/au-detour-des-mots");
+        navigate("/");
     }
     return (
         <>

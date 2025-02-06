@@ -1,19 +1,28 @@
 // Charger les variables d'environnement
-const { DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME } = process.env;
+// const { DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME } = process.env;
+
+const { POSTGRES_DATABASE } = process.env;
 
 // Importer pg pour PostgreSQL
 const pg = require("pg");
 
 // Création d'un pool de connexions
+// const client = new pg.Pool({
+//   host: DB_HOST,
+//   port: DB_PORT,
+//   user: DB_USER,
+//   password: DB_PASSWORD,
+//   database: DB_NAME,
+//   client_encoding: "UTF8", // 🔥 Force UTF-8
+//   ssl: {
+//     rejectUnauthorized: false, // Important pour certaines connexions SSL
+//   },
+// });
+
 const client = new pg.Pool({
-  host: DB_HOST,
-  port: DB_PORT,
-  user: DB_USER,
-  password: DB_PASSWORD,
-  database: DB_NAME,
-  client_encoding: "UTF8", // 🔥 Force UTF-8
+  connectionString: process.env.DATABASE_URL,
   ssl: {
-    rejectUnauthorized: false, // Important pour certaines connexions SSL
+    rejectUnauthorized: false,
   },
 });
 
@@ -21,7 +30,8 @@ const client = new pg.Pool({
 client
   .connect()
   .then(() => {
-    console.info('✅ Connecté à la base de données', DB_NAME);
+    // console.info('✅ Connecté à la base de données', DB_NAME);
+    console.info('✅ Connecté à la base de données', POSTGRES_DATABASE);
 
     // Vérifier si l'encodage de la connexion est bien UTF-8
     return client.query("SHOW client_encoding;");
@@ -38,7 +48,7 @@ client
   });
 
 // Stocker le nom de la base de données dans le client
-client.databaseName = DB_NAME;
-
+client.databaseName = POSTGRES_DATABASE;
+// client.databaseName = DB_NAME;
 // Exporter le client pour l'utiliser ailleurs
 module.exports = client;
