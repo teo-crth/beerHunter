@@ -50,16 +50,16 @@ router.get("/api/cities", cityControllers.browse);
 router.put("/api/passwordUsers/:id", jwtMiddleware, validate(updatePasswordUserSchema, 'body'), usersControllers.editPassword);
 router.put("/api/users/:id",  jwtMiddleware, upload.single("profil_picture"), validate(updateUserSchema, 'body'), usersControllers.edit);
 router.put("/api/beertype/:id", beerTypeControllers.edit);
-router.put("/api/comments/:id", validate(userCommentSchema, 'body'), userCommentControllers.edit);
+router.put("/api/comments/:id", jwtMiddleware, validate(userCommentSchema, 'body'), userCommentControllers.edit);
 router.put("/api/favorite-bars/:id", jwtMiddleware, validate(favoriteBarSchema, 'body'), favoriteBarControllers.edit);
 
 // POST
-router.post("/api/bars", validate(barSchema, 'body'), barControllers.add);
-router.post("/api/beers", beerControllers.add);
+router.post("/api/bars", jwtMiddleware, validate(barSchema, 'body'), barControllers.add);
+router.post("/api/beers", jwtMiddleware, beerControllers.add);
 router.post("/api/users", validate(createUserSchema, 'body'), usersControllers.add);
-router.post("/api/comments", validate(userCommentSchema, 'body'), userCommentControllers.add);
-router.post("/api/comment-images", validate(commentImageSchema, 'body'), commentImageControllers.add); 
-router.post("/api/favorite-bars", validate(favoriteBarSchema, 'body'), favoriteBarControllers.add);
+router.post("/api/comments", jwtMiddleware, validate(userCommentSchema, 'body'), userCommentControllers.add);
+router.post("/api/comment-images", jwtMiddleware, validate(commentImageSchema, 'body'), commentImageControllers.add); 
+router.post("/api/favorite-bars", jwtMiddleware, validate(favoriteBarSchema, 'body'), favoriteBarControllers.add);
 
 // DELETE
 router.delete("/api/bars/:id", jwtMiddleware, barControllers.destroy);
