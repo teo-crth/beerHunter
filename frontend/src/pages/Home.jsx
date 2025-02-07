@@ -1,7 +1,23 @@
-import logo from "../assets/logo.svg";
+import React from "react";
+
+import SearchResultBars from "../components/bar/SearchResultBars";
 import SearchBar from "../components/ui/SearchBar";
 
+
 export default function Home() {
+<<<<<<< HEAD
+  return (
+   <div className="container-home flex flex-col items-center justify-start bg-dark light-mode:bg-light pb-5 min-h-dvh text-light light-mode:text-dark-black">
+      <section className="presentation font-text text-center flex flex-col items-center justify-center pt-5">
+        <h1 className="text-2xl font-bold p-1">Bienvenue sur BeerHunter !</h1>
+        <h2 className="text-xl">Ne restez jamais sur votre soif</h2>
+        <h3 className="text-xs mt-2">Trouver les bars près de chez vous qui servent votre bière préférée</h3>
+      </section>
+      <SearchBar />
+      <SearchResultBars />
+   </ div>
+  );
+=======
 
     return (
         <div className="container-homePage min-h-full">
@@ -13,4 +29,5 @@ export default function Home() {
             <SearchBar />
         </ div>
     );
+>>>>>>> fe4e75c490fa862fcc6c9c4c3233652b67dd7f02
 }

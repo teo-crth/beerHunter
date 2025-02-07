@@ -22,7 +22,7 @@ const EditForm = () => {
     const [cities, setCities] = useState([]);
     const [searchTerm, setSearchTerm] = useState(`${user.city_name}`);
     const [filteredCities, setFilteredCities] = useState([]);
-    const [ isDropdownOpen, setIsDropdownOpen ] = useState(false);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     useEffect(() => {
         if (cities.length === 0) {

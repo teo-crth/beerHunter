@@ -10,6 +10,7 @@ export const AppProvider = ({ children }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [isModalEditOpen, setIsModalEditOpen] = useState(false);
+  const [searchResultBars , setSearchResultBars] = useState([]);
 
   // DARK MODE
     const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -68,7 +69,9 @@ export const AppProvider = ({ children }) => {
             setIsModalEditOpen,
             openModal, 
             closeModal,
-            modalState
+            modalState,
+            searchResultBars,
+            setSearchResultBars
           }}>
           {children}
         </AppContext.Provider>

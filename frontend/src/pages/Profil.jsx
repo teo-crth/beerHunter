@@ -55,7 +55,11 @@ export default function Profil() {
 
   return (
     <div className="container-profilPage min-h-full">
+<<<<<<< HEAD
+      <h1 className=" light-mode:bg-amber-100 text-light light-mode:text-dark text-center text-3xl font-title font-bold p-5">Mon profil</h1>
+=======
       <h1 className=" light-mode:bg-amber-100 text-light light-mode:text-dark text-center text-3xl font-title font-bold p-3">Mon profil</h1>
+>>>>>>> fe4e75c490fa862fcc6c9c4c3233652b67dd7f02
       <div className="container-profil w-full min-h-full flex flex-wrap items-center justify-center light-mode:bg-amber-100 p-2 pb-5">
         <section className="container-profilCard w-full m-2 xl:w-1/3 md:w-1/3 flex justify-center items-center">
           <ProfilCard user={user} />
