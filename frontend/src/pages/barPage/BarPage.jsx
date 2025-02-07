@@ -1,7 +1,7 @@
 import React from 'react';
 import Slider from 'react-slick';
-import '../../../node_modules/slick-carousel/slick/slick.css';
-import '../../../node_modules/slick-carousel/slick/slick-theme.css';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 const BarPage = () => {
     const openingHours = [
@@ -16,34 +16,13 @@ const BarPage = () => {
 
     const translateOpeningHours = (hours) => {
         const daysTranslation = {
-            Monday: 'Lundi',
-            Tuesday: 'Mardi',
-            Wednesday: 'Mercredi',
-            Thursday: 'Jeudi',
-            Friday: 'Vendredi',
-            Saturday: 'Samedi',
-            Sunday: 'Dimanche'
+            Monday: 'Lundi', Tuesday: 'Mardi', Wednesday: 'Mercredi',
+            Thursday: 'Jeudi', Friday: 'Vendredi', Saturday: 'Samedi', Sunday: 'Dimanche'
         };
-
         return hours.map(({ day, hours }) => ({
             day: daysTranslation[day] || day,
-            hours: hours === 'Closed' ? 'Fermé' : convertTo24HourFormat(hours)
+            hours: hours === 'Closed' ? 'Fermé' : hours
         }));
-    };
-
-    const convertTo24HourFormat = (timeRange) => {
-        const convert = (time) => {
-            const [hour, modifier] = time.split(/(?<=\d)(AM|PM)/i);
-            let [hours, minutes] = hour.split(':').map(Number);
-
-            if (modifier.toUpperCase() === 'PM' && hours < 12) hours += 12;
-            if (modifier.toUpperCase() === 'AM' && hours === 12) hours = 0;
-
-            return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-        };
-
-        const [start, end] = timeRange.split(' - ');
-        return `${convert(start)} - ${convert(end)}`;
     };
 
     const translatedOpeningHours = translateOpeningHours(openingHours);
@@ -51,128 +30,82 @@ const BarPage = () => {
     const images = [
         "https://thumbs.dreamstime.com/b/logo-guinness-sur-l-%C3%A9ditorial-d-illustration-de-fond-blanc-le-imprim%C3%A9-vecteur-env-du-livre-est-une-bi%C3%A8re-malt-s%C3%A8che-irlandaise-202270216.jpg",
         "https://images.squarespace-cdn.com/content/v1/6409fa08ee63336eeee45782/1678463783648-2EA8HWW6DN3PFBAC3VXZ/carr%C3%A9+blanche.jpg?format=2500w",
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-QV1NhER3k-Q61-Xs9oJb7M43tuePteX7rL_e2oAUM2HddEs5Uf4TEpiaSkvyh5r9YaM&usqp=CAU",
-        "https://i.pinimg.com/736x/59/32/6f/59326f0a35c1d851e0d56690970fcccc.jpg",
-        "https://www.brasserieartisanaleduder.fr/wp-content/uploads/2024/10/bragarde.jpg",
+        "https://thumbs.dreamstime.com/b/logo-guinness-sur-l-%C3%A9ditorial-d-illustration-de-fond-blanc-le-imprim%C3%A9-vecteur-env-du-livre-est-une-bi%C3%A8re-malt-s%C3%A8che-irlandaise-202270216.jpg",
+        "https://images.squarespace-cdn.com/content/v1/6409fa08ee63336eeee45782/1678463783648-2EA8HWW6DN3PFBAC3VXZ/carr%C3%A9+blanche.jpg?format=2500w",
+        "https://thumbs.dreamstime.com/b/logo-guinness-sur-l-%C3%A9ditorial-d-illustration-de-fond-blanc-le-imprim%C3%A9-vecteur-env-du-livre-est-une-bi%C3%A8re-malt-s%C3%A8che-irlandaise-202270216.jpg",
+        "https://images.squarespace-cdn.com/content/v1/6409fa08ee63336eeee45782/1678463783648-2EA8HWW6DN3PFBAC3VXZ/carr%C3%A9+blanche.jpg?format=2500w",
+        "https://thumbs.dreamstime.com/b/logo-guinness-sur-l-%C3%A9ditorial-d-illustration-de-fond-blanc-le-imprim%C3%A9-vecteur-env-du-livre-est-une-bi%C3%A8re-malt-s%C3%A8che-irlandaise-202270216.jpg",
     ];
 
     const rating = 4;
-
     const address = "10 Rue des Bons Vivants, 69001 Lyon, France";
     const phoneNumber = "+33 4 78 56 78 90";
 
     const settings = {
-        dots: true,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 5,
-        slidesToScroll: 1
+        dots: true, infinite: true, speed: 500, slidesToShow: 5, slidesToScroll: 1, responsive: [
+            {
+                breakpoint: 768,
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 1
+                }
+            },
+        ]
     };
 
-    const renderStars = (rating) => {
-        const stars = [];
-        for (let i = 1; i <= 5; i++) {
-            if (i <= rating) {
-                stars.push(<span key={i} style={{ color: '#FFD700', fontSize: '1.5em' }}>★</span>);
-            } else {
-                stars.push(<span key={i} style={{ color: '#ddd', fontSize: '1.5em' }}>★</span>);
-            }
-        }
-        return stars;
-    };
+    const renderStars = (rating) => (
+        [...Array(5)].map((_, i) => (
+            <span key={i} className={`text-2xl ${i < rating ? 'text-yellow-400' : 'text-gray-300'}`}>★</span>
+        ))
+    );
+    const imageBar = 'https://theseum.fr/wp-content/uploads/2022/09/ayers-rock-bar-lyon-1-1.jpg';
     const nomBar = 'Ayers Rock';
-    const descriptionBar = 'Description : Ayers Rock est un bar emblématique, parfait pour passer une soirée conviviale entre amis. Avec son ambiance chaleureuse, ses bières artisanales et une sélection musicale animée, c’est l’endroit idéal pour se détendre et profiter d’un bon moment.';
-    const lienMapsBar = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2886.8726415578477!2d4.828161076524192!3d45.764043679105226!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47f4ebdd46e4b257%3A0x39c2331b8dcff1d6!2sAyers%20Rock!5e0!3m2!1sfr!2sfr!4v1617063968425!5m2!1sfr!2sfr';
+    const description = 'Ambiance chaleureuse, bières artisanales et musique animée.';
 
     return (
-        <div className='font-text m-3 p-3 rounded-md shadow-md flex flex-col items-center'>
-            <div className='flex items-center mb-5 flex-col md:flex-row lg:flex-row gap-4'>
-                <img
-                    src="https://theseum.fr/wp-content/uploads/2022/09/ayers-rock-bar-lyon-1-1.jpg"
-                    alt="Ayers rock"
-                    className='w-full md:w-1/4 lg:w-1/4  rounded-md'
-                />
+        <div className='font-sans m-6 p-6 rounded-lg shadow-lg flex flex-col items-center bg-white'>
+            <div className='flex flex-col md:flex-row gap-6 items-center'>
+                <img src={imageBar} alt={nomBar} className='w-full md:w-1/3 rounded-lg' />
                 <div>
-                    <h1 className='font-bold text-2xl'>{nomBar}</h1>
-                    <p>
-                        {descriptionBar}
-                    </p>
-                    <div className='mt-1 flex items-center'>
-                        <span className='font-bold mr-2'>
-                            Note : {rating}/5
-                        </span>
+                    <h1 className='text-3xl font-bold'>{nomBar}</h1>
+                    <p className='mt-2 text-gray-700'>{description}</p>
+                    <div className='mt-2 flex items-center'>
+                        <span className='font-bold mr-2'>Note : {rating}/5</span>
                         {renderStars(rating)}
                     </div>
                 </div>
             </div>
 
-            <div className='flex w-full mt-1 justify-between'>
-                <div className='w-full md:w-1/3 lg:w-1/3 text-center'>
-                    <h1 className='mb-2 font-bold'>Bières disponibles</h1>
-                    <div>
-                        <Slider {...settings}>
-                            {images.map((img, index) => (
-                                <div className='flex gap-10' key={index}>
-                                    <img src={img} alt={`Biere-${index}`} className='w-100 rounded-2xl items-center' style={{ alignItems: 'center' }} />
-                                </div>
+            <div className='w-full mt-6 flex flex-col md:flex-row gap-6'>
+                <div className='w-full md:w-1/3'>
+                    <h2 className='text-xl font-bold text-center'>Bières disponibles</h2>
+                    <Slider {...settings} className='mt-4'>
+                        {images.map((img, index) => (
+                            <div key={index} className='flex justify-center'>
+                                <img src={img} alt={`Bière-${index}`} className='w-32 h-32 object-cover rounded-lg' />
+                            </div>
+                        ))}
+                    </Slider>
+                    <div className='mt-6 text-center'>
+                        <h2 className='text-xl font-bold'>Horaires d'ouverture</h2>
+                        <ul className='mt-2 text-gray-700'>
+                            {translatedOpeningHours.map((item, index) => (
+                                <li key={index} className='mt-1'><strong>{item.day} :</strong> {item.hours}</li>
                             ))}
-                        </Slider>
+                        </ul>
                     </div>
                 </div>
 
-                <div className='w-full md:w-1/3 lg:w-1/3 text-center'>
-                    <iframe
-                        title="Google Maps"
-                        src={lienMapsBar}
-                        width="100%"
-                        height="300px"
-                        style={{ border: '0', borderRadius: '8px' }}
-                        allowFullScreen=""
-                        loading="lazy"
-                    ></iframe>
-                    <div style={{ marginTop: '1em', color: '#333', textAlign: 'center' }}>
-                        <p><strong>Adresse :</strong> {address}</p>
-                        <p><strong>Téléphone :</strong> {phoneNumber}</p>
-                    </div>
+                <div className='w-full md:w-2/3 text-center'>
+                    <iframe title='Google Maps' src='https://www.google.com/maps/embed?...' className='w-full h-60 rounded-lg' allowFullScreen loading='lazy'></iframe>
+                    <p className='mt-2 text-gray-700'><strong>Adresse :</strong> {address}</p>
+                    <p className='text-gray-700'><strong>Téléphone :</strong> {phoneNumber}</p>
                 </div>
             </div>
 
-            <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', alignItems: 'center', marginTop: '2em' }}>
-                <div style={{ width: '40%' }}>
-                    <h1 style={{ textAlign: 'center', color: '#333', marginBottom: '1em' }}>Horaires d'ouverture</h1>
-                    <ul style={{ listStyleType: 'none', padding: 0, textAlign: 'center', color: '#666' }}>
-                        {translatedOpeningHours.map((item, index) => (
-                            <li key={index} style={{ marginBottom: '5px' }}>
-                                <strong>{item.day} :</strong> {item.hours}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-
-                <div style={{ width: '60%', textAlign: 'center', display: 'flex', justifyContent: 'center', gap: '10px', marginRight: 'auto' }}>
-                    <button style={{
-                        padding: '10px 20px',
-                        backgroundColor: '#FFA500',
-                        color: '#fff',
-                        border: 'none',
-                        borderRadius: '25px',
-                        cursor: 'pointer',
-                        fontWeight: 'bold'
-                    }}>
-                        Ajoutez Bière
-                    </button>
-                    <button style={{
-                        padding: '10px 20px',
-                        backgroundColor: '#FFA500',
-                        color: '#fff',
-                        border: 'none',
-                        borderRadius: '25px',
-                        cursor: 'pointer',
-                        fontWeight: 'bold'
-                    }}>
-                        Ajoutez Commentaire
-                    </button>
-                </div>
+            <div className='flex justify-center gap-4 mt-6'>
+                <button className='px-4 py-2 bg-orange-500 text-white rounded-full font-bold hover:bg-orange-600'>Ajoutez Bière</button>
+                <button className='px-4 py-2 bg-orange-500 text-white rounded-full font-bold hover:bg-orange-600'>Ajoutez Commentaire</button>
             </div>
         </div>
     );
