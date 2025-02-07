@@ -1,9 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Slider from 'react-slick';
+import { fetchBars } from '../../api/bar/barCrud';
 import '../../../node_modules/slick-carousel/slick/slick.css';
 import '../../../node_modules/slick-carousel/slick/slick-theme.css';
 
 const BarPage = () => {
+    const [bars, setBars] = useState([]);
+    useEffect(() => {
+        const fetchBarsData = async () => {
+            try {
+                const barData = await fetchBars();
+                setBars(barData);
+                console.log(barData);
+            }
+            catch (error) {
+                console.error(error);
+            };
+        }
+        fetchBarsData();
+    }, []);
     const openingHours = [
         { day: 'Monday', hours: 'Closed' },
         { day: 'Tuesday', hours: '4:00PM - 00:00AM' },
