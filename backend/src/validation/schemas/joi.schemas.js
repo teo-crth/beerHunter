@@ -3,6 +3,17 @@ const Joi = require('joi');
 const eighteenYearsAgo = new Date();
 eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
 
+const loginSchema = Joi.object({
+    email: Joi.string().email().pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.(fr|com|net)$/).required(),
+    password: Joi.string()
+    .min(12)
+    .max(30)
+    .pattern(/(?=.*[A-Z])/, 'at least one uppercase letter')
+    .pattern(/(?=.*\d)/, 'at least one digit')
+    .pattern(/(?=.*[!@#$%^&*(),.?":{}|<>])/ , 'at least one special character')
+    .required(),
+});
+
 const createUserSchema = Joi.object({
     name: Joi.string().min(3).max(30).required(),
     email: Joi.string().email().pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.(fr|com|net)$/).required(),
@@ -14,7 +25,7 @@ const createUserSchema = Joi.object({
         .pattern(/(?=.*[!@#$%^&*(),.?":{}|<>])/ , 'at least one special character')
         .required(),
     confirmPassword: Joi.ref('password'),
-    profile_picture: Joi.string().allow(null),
+    profil_picture: Joi.string().allow(null),
     cityId: Joi.number().allow(null),
     theme: Joi.string().valid('light', 'dark').allow(null),
     address: Joi.string().min(3).allow(null),
@@ -104,4 +115,4 @@ const commentImageSchema = Joi.object({
     user_comment_id: Joi.number().required()
 });
 
-module.exports = { updatePasswordUserSchema, updateUserSchema, createUserSchema, userCommentSchema, commentImageSchema, favoriteBarSchema, barSchema };
+module.exports = { updatePasswordUserSchema, updateUserSchema, createUserSchema, userCommentSchema, commentImageSchema, favoriteBarSchema, barSchema, loginSchema };

@@ -1,5 +1,6 @@
 const path = require('path');
 require('dotenv').config();
+const generateToken = require('../utils/generateToken');
 
 const models = require("../models");
 const { compare } = require("../utils/cryptoPassword");
@@ -143,7 +144,7 @@ const editPassword = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  const { name, birth_date, email, password, confirmPassword, theme, cityId } = req.body;
+  const { name, birth_date, email, password, confirmPassword, theme, cityId, profil_picture } = req.body;
 
   if (password !== confirmPassword) {
     res.status(400).send("Les mots de passe ne correspondent pas");
@@ -155,7 +156,7 @@ const add = async (req, res) => {
   // TODO validations (length, format...)
 
   models.users
-    .insert(name, birth_date, email, hashPassword, theme, cityId)
+    .insert(email, birth_date, hashPassword, cityId, name, theme, profil_picture)
     .then((result) => {
       res.location(`/users/${result.insertId}`).sendStatus(201);
     })
@@ -206,10 +207,8 @@ const login = async (req, res) => {
       return;
     }
 
-    res.status(200).send("Vous êtes connecté");
-
-    // Tu peux renvoyer l'account ou un token si tu veux ici (ex: pour l'authentification par token)
-
+    const token = generateToken(account);
+    res.status(200).send({ token, userId: account.id});
   } catch (err) {
     console.error(err);
     res.status(500).send("Une erreur est survenue, veuillez réessayer.");

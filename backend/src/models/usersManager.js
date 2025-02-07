@@ -33,18 +33,14 @@ class UsersManager extends AbstractManager {
     );
   }
 
-  insert(name, birth_date, email, cityId, hashPassword, theme) {
+  insert(email, birth_date, hashPassword, cityId, name, theme, profil_picture) {
+    console.log('insert', email, birth_date, hashPassword, cityId, name, theme);
+    
     return this.database.query(
-      `INSERT INTO ${this.table} (email, birth_date, password, city_id, name, theme) values ($1, $2, $3, $4, $5, $6)`,
-      [email, birth_date, hashPassword, cityId, name, theme]);
+      `INSERT INTO ${this.table} (email, birth_date, password, city_id, name, theme, profil_picture) values ($1, $2, $3, $4, $5, $6, $7)`,
+      [email, birth_date, hashPassword, cityId, name, theme, profil_picture]);
   }
 
-  // update(users) {
-  //   return this.database.query(
-  //     `UPDATE ${this.table} SET email = ?, birth_date = ?, password = ?, address = ?, city = ?, name = ?, theme = ?, profil_picture = ? WHERE id = ?`,
-  //     [users.email, users.birth_date, users.password, users.address, users.city, users.name, users.theme, users.profil_picture, users.id]
-  //   );
-  // }
 
   update(id, users) {
     const fieldsToUpdate = [];
