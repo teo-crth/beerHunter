@@ -17,7 +17,9 @@ DROP TABLE IF EXISTS "city" CASCADE;
 CREATE TABLE "city" (
   "id" SERIAL PRIMARY KEY,
   "name" VARCHAR(250) NOT NULL,
-  "region" INTEGER NOT NULL
+  "code" INTEGER NOT NULL,
+  "latitude" REAL DEFAULT NULL,
+  "longitude" REAL DEFAULT NULL
 );
 
 -- Create table "bar"
@@ -58,6 +60,7 @@ CREATE TABLE "bar_image" (
 CREATE TABLE "beer_type" (
   "id" SERIAL PRIMARY KEY,
   "name" VARCHAR(50) NOT NULL,
+  "description" TEXT DEFAULT NULL,
   "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   "updated_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT "beer_type_name_unique" UNIQUE ("name") 
@@ -117,7 +120,6 @@ CREATE TABLE "user_comment" (
 CREATE TABLE "comment_image" (
   "id" SERIAL PRIMARY KEY,
   "image_link" VARCHAR(2083) NOT NULL,
-  "image_alt" VARCHAR(255) DEFAULT NULL,
   "user_comment_id" INTEGER DEFAULT NULL,
   "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   "updated_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
