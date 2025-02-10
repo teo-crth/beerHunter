@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
-import { use } from "react";
+import { fetchAllCities } from "../api/city/cityCrud";
 
 // Création du contexte
 export const AppContext = createContext();
@@ -11,6 +11,8 @@ export const AppProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isModalEditOpen, setIsModalEditOpen] = useState(false);
   const [searchResultBars , setSearchResultBars] = useState([]);
+  const [ isLogin, setIsLogin ] = useState(false);
+   const [cities, setCities] = useState([]);
 
   // DARK MODE
     const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -30,6 +32,9 @@ export const AppProvider = ({ children }) => {
 
     useEffect(() => {
       if (user) {
+      localStorage.setItem('token', JSON.stringify(user.token));
+      localStorage.setItem('user', JSON.stringify(user));
+      
         if (user.theme === 'dark') {
           setIsDarkMode(true);
         } else {
@@ -37,6 +42,34 @@ export const AppProvider = ({ children }) => {
         }
       }
     }, [user]);
+
+    useEffect(() => {
+      const localStorageToken = localStorage.getItem('token');
+      
+      if (localStorageToken) {
+          JSON.parse(localStorageToken);
+          setIsLogin(true);
+      } else {
+        setIsLogin(false);
+      }
+    
+      const localStorageUser = localStorage.getItem('user');
+      
+      if (localStorageUser) {
+          const user = JSON.parse(localStorageUser);
+          setUser(user);
+      } else {
+        setUser(null);
+      }
+
+      fetchAllCities()
+      .then((data) => {
+          setCities(data);
+      })
+      .catch((error) => {
+          console.error(error);
+      });
+    }, []); 
     
     const toggleTheme = () => {
         setIsDarkMode(prevMode => !prevMode);
@@ -65,13 +98,17 @@ export const AppProvider = ({ children }) => {
             toggleTheme,
             user,
             setUser,
+            cities,
+            setCities,
             isModalEditOpen, 
             setIsModalEditOpen,
             openModal, 
             closeModal,
             modalState,
             searchResultBars,
-            setSearchResultBars
+            setSearchResultBars, 
+            isLogin,
+            setIsLogin
           }}>
           {children}
         </AppContext.Provider>

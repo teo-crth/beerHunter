@@ -9,20 +9,12 @@ import Button from '../ui/Button';
 
 const EditForm = () => {
     const {
-        isModalEditPasswordProfilOpen,
-        setIsModalEditPasswordProfilOpen,
         user,
         setUser,
         closeModal,
         openModal
     } = useContext(AppContext);
 
-
-    const handleCancelClick = () => {
-        setIsModalEditPasswordProfilOpen(!isModalEditPasswordProfilOpen);
-    };
-
-    // Form submission handler
     const handleSubmit = (values) => {
         const password = values.password.trim();        
         const confirmPassword = values.confirmPassword.trim();        

@@ -15,6 +15,7 @@
     --color-tertiary: #A37E1B;
     --color-middle: #503F15;
     --color-dark: #2B220F;
+    --color-black-transparent: rgba(0, 0, 0, 0.5);
     --color-dark-black: rgb(0, 0, 0);
     --color-light: white;
     --color-radial-gradient: radial-gradient(circle at 1% 100%, rgba(133, 107, 24, 1) 1%, rgba(0, 0, 0, 1) 100%);
@@ -26,10 +27,10 @@
     box-sizing: border-box;
 }
 
-.container-profilPage, .container-contact, .container-homePage {
+.container-profilPage, .container-contact, .container-homePage, main {
     background: radial-gradient(circle at center, rgb(218, 176, 38) 50%, rgba(0, 0, 0, 1) 100%);
 }
 
-.light-mode .container-profilPage, .light-mode .container-contact, .light-mode .container-homePage {
+.light-mode .container-profilPage, .light-mode .container-contact, .light-mode .container-homePage, .light-mode main {
     background: rgb(252, 255, 229);
 }
