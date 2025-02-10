@@ -208,7 +208,17 @@ const login = async (req, res) => {
     }
 
     const token = generateToken(account);
-    res.status(200).send({ token, userId: account.id});
+    res.status(200).send({ 
+      token, userId: 
+      account.id, 
+      name: account.name, 
+      profil_picture: account.profil_picture, 
+      theme: account.theme,
+      city_id: account.city_id,
+      birth_date: account.birth_date,
+      email: account.email,
+      address: account.address
+    });
   } catch (err) {
     console.error(err);
     res.status(500).send("Une erreur est survenue, veuillez réessayer.");
