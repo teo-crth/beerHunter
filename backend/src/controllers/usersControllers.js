@@ -1,5 +1,6 @@
 const path = require('path');
 require('dotenv').config();
+const fs = require('fs'); 
 const generateToken = require('../utils/generateToken');
 
 const models = require("../models");
@@ -88,18 +89,30 @@ const edit = (req, res) => {
 
   if (userData.password) updatedFields.password = userData.password;
 
-  if (req.file) {
-    console.log('req.file image', req.file);
-    
+  if (req.file) {   
     const profilePicturePath = path.join("public", "assets", "images", "profil-pictures", req.file.filename);
-
+    const uploadPath = path.join(__dirname, "..", "..", "public", "assets", "images", "profil-pictures");
+    const uploadedFileName = req.file.filename;
     const imageUrl = `/assets/images/profil-pictures/${req.file.filename}`;
     updatedFields.profil_picture = imageUrl;
+
+    const oldImageName = `id${id}-`;
+    const filesInDirectory = fs.readdirSync(uploadPath);
+  
+    filesInDirectory.forEach(file => {
+      if (file.startsWith(oldImageName) && file !== uploadedFileName) {
+        const oldFilePath = path.join(uploadPath, file);
+        fs.unlinkSync(oldFilePath);
+        console.log(`Ancienne image supprimée: ${file}`);
+      }
+    });
   }
 
   if (Object.keys(updatedFields).length === 0) {
     return res.status(400).send('Aucun champ n\'a été modifié');
   }
+
+
 
   models.users
     .update(id, updatedFields)

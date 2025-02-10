@@ -10,9 +10,10 @@ const storage = multer.diskStorage({
     cb(null, uploadPath);
   },
   filename: (req, file, cb) => {
+    const id = req.params.id;
     console.log('Original file name:', file.originalname);
     // Le nom de l'image avec un timestamp pour éviter les conflits
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1E9);
+    const uniqueSuffix = "id" + id + "-" + Date.now() + "-" + Math.round(Math.random() * 1E9);
     cb(null, uniqueSuffix + path.extname(file.originalname)); // .jpg, .png, etc.
   }
 });
