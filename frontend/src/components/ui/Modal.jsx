@@ -15,13 +15,17 @@ const Modal = () => {
 
   if (!isOpen) return null;
 
+  if( type === 'signup') {
+    console.log('signup');
+  }
+
   return (
     <div className="modal-overlay bg-gray-700/50 absolute flex justify-center items-center w-full h-full top-0 left-0" onClick={closeModal}>
-      <div className={`modal ${type} w-120  z-50 flex flex-col items-center justify-center text-center gap-0.5 shadow-xs shadow-primary bg-dark-black light-mode:bg-light text-light light-mode:text-dark rounded-lg p-5`} onClick={(e) => e.stopPropagation()}>
+      <div className={`modal ${type} w-[95%] md:w-120 lg:w-120 z-50 flex flex-col items-center justify-center text-center gap-0.5 shadow-xs shadow-primary bg-dark-black light-mode:bg-light text-light light-mode:text-dark rounded-lg p-5`} onClick={(e) => e.stopPropagation()}>
           { type === 'editUser' && <EditForm />}
           { type === 'editPassword' && <EditPassword />}
           { type === 'deleteProfil' && <DeleteProfil />}
-          { type === 'connexion' && <Connexion />}
+          { type === 'signup' && <Connexion />}
           { type === 'errorMessage' || type === 'successMessage' ? <MessageModal text={text} type={type} onClose={closeModal} isOpen={isOpen} /> : null}
       </div>
     </div>

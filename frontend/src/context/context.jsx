@@ -30,9 +30,10 @@ export const AppProvider = ({ children }) => {
     }, [isDarkMode]);
 
     useEffect(() => {
-      localStorage.setItem('token', JSON.stringify(user.token));
-      
       if (user) {
+      localStorage.setItem('token', JSON.stringify(user.token));
+      localStorage.setItem('user', JSON.stringify(user));
+      
         if (user.theme === 'dark') {
           setIsDarkMode(true);
         } else {
@@ -40,6 +41,28 @@ export const AppProvider = ({ children }) => {
         }
       }
     }, [user]);
+
+    useEffect(() => {
+      const localStorageToken = localStorage.getItem('token');
+      console.log('localStorageToken', localStorageToken);
+      
+      if (localStorageToken) {
+          JSON.parse(localStorageToken);
+          setIsLogin(true);
+      } else {
+        setIsLogin(false);
+      }
+    
+      const localStorageUser = localStorage.getItem('user');
+      console.log('localStorageUser', localStorageUser);
+      
+      if (localStorageUser) {
+          const user = JSON.parse(localStorageUser);
+          setUser(user);
+      } else {
+        setUser(null);
+      }
+    }, []); 
     
     const toggleTheme = () => {
         setIsDarkMode(prevMode => !prevMode);

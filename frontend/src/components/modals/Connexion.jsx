@@ -7,7 +7,7 @@ import Button from '../ui/Button';
 import { connexionUser } from '../../api/user/oneUserCrud';
 
 const Connexion = () => {
-    const { closeModal, openModal, setUser } = useContext(AppContext);
+    const { closeModal, openModal, setUser, setIsLogin } = useContext(AppContext);
 
     const handleSignupClick = () => {
         closeModal();
@@ -51,16 +51,16 @@ const Connexion = () => {
                 onSubmit={handleSubmit}
             >
                 {formik => (
-                    <form onSubmit={formik.handleSubmit} className='container-form w-120 flex flex-col items-center justify-center text-center gap-0.5 shadow-md bg-dark-black light-mode:bg-light text-light light-mode:text-dark rounded-lg p-5'>
-                        <h3 className='font-text font-bold text-xl'>Se connecter</h3>
+                    <form onSubmit={formik.handleSubmit} className='container-form w-120 flex flex-col items-center justify-center text-center gap-0.5 bg-dark-black light-mode:bg-light text-light light-mode:text-dark rounded-lg p-5'>
+                        <h3 className='font-title font-bold text-xl'>Connexion</h3>
                         <label className="mt-[5px]" htmlFor="email">Email</label>
-                        <input id="email" type="text" className='border border-light light-mode:border-dark-black rounded-md' {...formik.getFieldProps('email')} />
+                        <input id="email" type="text" className='border border-light light-mode:border-dark-black rounded-md pl-2' {...formik.getFieldProps('email')} />
                         {formik.touched.email && formik.errors.email ? (
                             <div className='text-error text-xs text-red-400'>{formik.errors.email}</div>
                         ) : null}
 
                         <label className="mt-[5px]" htmlFor="password">Mot de passe</label>
-                        <input id="password" type="password" className='border border-light light-mode:border-dark-black rounded-md' {...formik.getFieldProps('password')} />
+                        <input id="password" type="password" className='border border-light light-mode:border-dark-black rounded-md pl-2' {...formik.getFieldProps('password')} />
                         {formik.touched.password && formik.errors.password ? (
                             <div className='text-error text-xs text-red-400'>{formik.errors.password}</div>
                         ) : null}
@@ -70,7 +70,7 @@ const Connexion = () => {
                             <Button type='submit' className='bg-primary hover:bg-secondary' text="Se connecter" />
                             <Button onClick={closeModal} type="button" className='bg-primary hover:bg-secondary' text="Annuler" />
                         </div>
-                        <p className='font-text text-xs text-gray-200' onClick={handleSignupClick}>Vous n'avez pas de compte ? Inscrivez-vous</p>
+                        <p className='font-text text-xs text-light light-mode:text-dark-black mt-2' onClick={handleSignupClick}>Vous n'avez pas de compte ? Inscrivez-vous</p>
                     </form>
                 )}
             </Formik>

@@ -6,11 +6,21 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faMoon } from '@fortawesome/free-solid-svg-icons';
 
 const BurgerMenu = () => {
-    const { menuOpen, setMenuOpen, isDarkMode, toggleTheme } = useContext(AppContext);
+    const { 
+        menuOpen, 
+        setMenuOpen, 
+        isDarkMode, 
+        toggleTheme, 
+        isLogin, 
+        openModal,
+        user
+    } = useContext(AppContext);
 
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
     };
+
+    const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
     return (
         <div className={`container-burgerMenu bg-dark-black light-mode:bg-light text-white light-mode:text-dark-black z-50 shadow-lg' : 'bg-white shadow-md'} flex flex-col justify-start w-[70%] absolute left-0 bottom-0 h-full`}>
@@ -18,8 +28,14 @@ const BurgerMenu = () => {
                 <FontAwesomeIcon icon={faXmark} />
             </div>
             <nav className="nav-mobile flex flex-col items-center gap-5 p-5 mt-8 text-xm">
-                <NavLink to="/" className={({ isActive }) => isActive ? 'active' : ''}>Accueil</NavLink>
-                <NavLink to="/contact" className={({ isActive }) => isActive ? 'active' : ''}>Contact</NavLink>
+                {isLogin ? 
+                    <NavLink to="/profil" onClick={toggleMenu} aria-label="Navigation vers la page profil" className="container-profil w-10 h-10 flex items-center justify-center rounded-full border-primary border-solid  cursor-pointer box-border">
+                        <img className="w-full rounded-full" src={`${VITE_BACKEND_URL}${user.profil_picture}`} alt="Profil de l'utilisateur" />
+                    </NavLink>                    
+                    : <p className="cursor-pointer" aria-label="Ouvre un formulaire de connexion" onClick={() => { openModal('signup'); toggleMenu()}}>Connexion</p>
+                }
+                <NavLink to="/" className={({ isActive }) => isActive ? 'active' : ''} onClick={toggleMenu}>Accueil</NavLink>
+                <NavLink to="/contact" className={({ isActive }) => isActive ? 'active' : ''} onClick={toggleMenu}>Contact</NavLink>
                 <div className="container-theme-mode-icon w-10 h-10 p-3 flex items-center justify-center rounded-full border border-solid cursor-pointer box-border">
                     <FontAwesomeIcon className="dark-mode-icon text-lg cursor-pointer" icon={faMoon} onClick={toggleTheme} />
                 </div>
