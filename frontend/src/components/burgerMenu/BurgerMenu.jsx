@@ -32,7 +32,7 @@ const BurgerMenu = () => {
                     <NavLink to="/profil" onClick={toggleMenu} aria-label="Navigation vers la page profil" className="container-profil w-10 h-10 flex items-center justify-center rounded-full border-primary border-solid  cursor-pointer box-border">
                         <img className="w-full rounded-full" src={`${VITE_BACKEND_URL}${user.profil_picture}`} alt="Profil de l'utilisateur" />
                     </NavLink>                    
-                    : <p className="cursor-pointer" aria-label="Ouvre un formulaire de connexion" onClick={() => { openModal('signup'); toggleMenu()}}>Connexion</p>
+                    : <p className="cursor-pointer" aria-label="Ouvre un formulaire de connexion" onClick={() => { openModal('login'); toggleMenu()}}>Connexion</p>
                 }
                 <NavLink to="/" className={({ isActive }) => isActive ? 'active' : ''} onClick={toggleMenu}>Accueil</NavLink>
                 <NavLink to="/contact" className={({ isActive }) => isActive ? 'active' : ''} onClick={toggleMenu}>Contact</NavLink>

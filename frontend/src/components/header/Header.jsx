@@ -28,7 +28,7 @@ const Header = () => {
     };
 
     return (
-        <header className="flex justify-between items-center w-full px-2.5  bg-dark-black light-mode:bg-light shadow-md z-55 relative">
+        <header className="flex justify-between items-center w-full px-2.5  bg-dark-black light-mode:bg-light shadow-md z-45 relative">
             <NavLink to="/" className={({ isActive }) => isActive ? 'active' : ''}><img src={isDarkMode ? logo : logoLight} alt="Logo table avec des livres" className='w-50' /></NavLink>
             <div className="container-nav flex justify-around items-center gap-10">
                 <nav className="nav-desktop hidden lg:flex xl:flex gap-10 items-center text-primary fontFamily-title">
@@ -38,10 +38,7 @@ const Header = () => {
                     <NavLink to="/profil" aria-label="Navigation vers la page profil" className="container-profil w-10 h-10 flex items-center justify-center rounded-full border-primary border-solid  cursor-pointer box-border">
                         <img className="w-full rounded-full" src={`${VITE_BACKEND_URL}${user.profil_picture}`} alt="Profil de l'utilisateur" />
                     </NavLink>                    
-                    : <p className="cursor-pointer" aria-label="Ouvre un formulaire de connexion" onClick={() => openModal('signup')}>Connexion</p>}
-                    {/* <div className="container-theme-mode-icon w-10 h-10 p-3 flex items-center justify-center rounded-full border border-solid cursor-pointer box-border">
-                        <FontAwesomeIcon className="dark-mode-icon text-2xl w-6 h-6 light-mode:text-dark-black text-light shadow-primary" icon={faMoon} onClick={toggleTheme}/>
-                    </div> */}
+                    : <p className="cursor-pointer" aria-label="Ouvre un formulaire de connexion" onClick={() => openModal('login')}>Connexion</p>}
                 </nav>
                 <div className='container-burgerMenu-icon sm:block md:block lg:hidden xl:hidden text-light light-mode:text-dark-black' onClick={toggleMenu}>
                     <FontAwesomeIcon icon={faBars} />

@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
-import { use } from "react";
+import { fetchAllCities } from "../api/city/cityCrud";
 
 // Création du contexte
 export const AppContext = createContext();
@@ -12,6 +12,7 @@ export const AppProvider = ({ children }) => {
   const [isModalEditOpen, setIsModalEditOpen] = useState(false);
   const [searchResultBars , setSearchResultBars] = useState([]);
   const [ isLogin, setIsLogin ] = useState(false);
+   const [cities, setCities] = useState([]);
 
   // DARK MODE
     const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -44,7 +45,6 @@ export const AppProvider = ({ children }) => {
 
     useEffect(() => {
       const localStorageToken = localStorage.getItem('token');
-      console.log('localStorageToken', localStorageToken);
       
       if (localStorageToken) {
           JSON.parse(localStorageToken);
@@ -54,7 +54,6 @@ export const AppProvider = ({ children }) => {
       }
     
       const localStorageUser = localStorage.getItem('user');
-      console.log('localStorageUser', localStorageUser);
       
       if (localStorageUser) {
           const user = JSON.parse(localStorageUser);
@@ -62,6 +61,14 @@ export const AppProvider = ({ children }) => {
       } else {
         setUser(null);
       }
+
+      fetchAllCities()
+      .then((data) => {
+          setCities(data);
+      })
+      .catch((error) => {
+          console.error(error);
+      });
     }, []); 
     
     const toggleTheme = () => {
@@ -91,6 +98,8 @@ export const AppProvider = ({ children }) => {
             toggleTheme,
             user,
             setUser,
+            cities,
+            setCities,
             isModalEditOpen, 
             setIsModalEditOpen,
             openModal, 

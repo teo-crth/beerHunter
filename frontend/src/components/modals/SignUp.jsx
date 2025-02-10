@@ -1,47 +1,70 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { AppContext } from '../../context/context';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import createOneUser from '../../api/user/createOneUser';
-import { city } from '../../api/city/cityCrud';
+import dayjs from 'dayjs';
+import customParseFormat from "dayjs/plugin/customParseFormat";
+
+import { createOneUser } from '../../api/user/oneUserCrud';
+import Button from '../ui/Button';
 
 const SignUp = () => {
 
-    const { isModalOpen, setIsModalOpen, toggleModal } = useContext(AppContext);
+    const {
+        toggleModal,
+        cities,
+        openModal,
+        closeModal,
+        isModalOpen,
+        setIsModalOpen,
+        setCities
+    } = useContext(AppContext);
+
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filteredCities, setFilteredCities] = useState([]);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     useEffect(() => {
-        fetchAllCities()
-            .then((data) => {
-                console.log(data);
-                const city = data;
-                return city
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    }, []);
+        setFilteredCities(
+            cities.filter(city => city.name.toLowerCase().startsWith(searchTerm.toLowerCase()))
+        );
+    }, [searchTerm, cities]);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log('submit');
+    const handleSearchChange = (e) => {
+        const value = e.target.value;
+        setSearchTerm(value);
 
-        createOneUser({ 
-            name: values.name,
-            email: values.email,
-            birth_date: values.birth_date,
-            city: values.city,
-            password: values.password,
-            confirmPassword: values.confirmPassword
+        const containsDigit = /\d/.test(value);
+        setIsDropdownOpen(value.length > 0 && !containsDigit);
+    };
+
+    const handleCityClick = (cityName, cityCode, cityId, formik) => {
+        setSearchTerm(`${cityName} (${cityCode})`);
+        formik.setFieldValue('city', cityId);
+        setIsDropdownOpen(false);
+    };
+
+    const handleSubmit = (values) => {
+        dayjs.extend(customParseFormat);
+        const dateFormated = dayjs(values.birth_date, "DD/MM/YYYY").format("YYYY-MM-DD");
+        const name = values.name;
+        const email = values.email;
+        const birth_date = dateFormated;
+        const cityId = values.city;
+        const password = values.password;
+        const confirmPassword = values.confirmPassword;
+        
+        createOneUser(name, email, birth_date, cityId, password, confirmPassword)
+        .then(() => {
+            closeModal();
+            openModal('successMessage', 'Inscription réussie, connectez-vous !');
         })
-            .then((data) => {
-                console.log(data);
-                toggleModal();
-            })
-            .catch((error) => {
-                console.error(error);
-            });
+        .catch((error) => {
+            console.error(error);
+            closeModal();
+            openModal('errorMessage', 'Un problème est survenu, veuillez rééssayer');
+        });    
     }
-
 
     return (
         <Formik
@@ -54,22 +77,16 @@ const SignUp = () => {
                 birth_date: Yup.string()
                     .matches(
                         /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d\d$/,
-                        "Le format de la date doit être dd/mm/yyyy"
+                        "Le format de la date doit être jj/mm/aaaa"
                     )
                     .test('age', 'Vous devez avoir plus de 18 ans', (value) => {
                         if (!value) return false;
 
                         const [day, month, year] = value.split('/').map((item) => parseInt(item, 10));
-                        const birthDate = new Date(year, month - 1, day); // Mois est 0-indexé
-
-                        const age = today.getFullYear() - birthDate.getFullYear();
-                        const m = today.getMonth() - birthDate.getMonth();
-
-                        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-                            return age - 1 >= 18; // Si l'anniversaire n'est pas encore passé cette année
-                        }
-
-                        return age >= 18;
+                        const birthDate = new Date(year, month - 1, day);
+                        const age = new Date().getFullYear() - birthDate.getFullYear();
+                        const m = new Date().getMonth() - birthDate.getMonth();
+                        return age > 18 || (age === 18 && m >= 0);
                     })
                     .required('Champ obligatoire'),
                 city: Yup.string().required('Champ obligatoire'),
@@ -80,58 +97,96 @@ const SignUp = () => {
                     .matches(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/, 'Le mot de passe doit contenir au moins un caractère spécial.'),
                 confirmPassword: Yup.string().oneOf([Yup.ref('password'), null], 'Le mot de passe de confirmation doit correspondre au mot de passe.')
             })}
-            onSubmit={(values, { setSubmitting }) => {
-                setTimeout(() => {
-                    alert(JSON.stringify(values, null, 2));
-                    setSubmitting(false);
-                }, 400);
-            }}
+            onSubmit={handleSubmit}
         >
             {formik => (
-                <form onSubmit={formik.handleSubmit}>
-                    <label htmlFor="name">Nom</label>
+                <form onSubmit={formik.handleSubmit} className='container-form w-120  z-50 flex flex-col items-center justify-center text-center gap-0.5 text-light light-mode:text-dark p-5'>
+                    <h3 className='font-text font-bold text-xl'>Inscription</h3>
+                    <label className="mt-[5px]" htmlFor="name">Nom</label>
                     <input
                         id="name"
                         type="text"
+                        className='border border-light light-mode:border-dark-black rounded-md pl-1'
                         {...formik.getFieldProps('name')}
                     />
                     {formik.touched.name && formik.errors.name ? (
-                        <div className='text-error'>{formik.errors.name}</div>
+                        <div className='text-error text-xs text-red-400'>{formik.errors.name}</div>
                     ) : null}
 
-                    <label htmlFor="email">Email</label>
-                    <input id="email" type="email" {...formik.getFieldProps('email')} />
+                    <label className="mt-[5px]" htmlFor="email">Email</label>
+                    <input
+                        id="email"
+                        type="email"
+                        className='border border-light light-mode:border-dark-black rounded-md pl-1'
+                        {...formik.getFieldProps('email')}
+                    />
                     {formik.touched.email && formik.errors.email ? (
-                        <div className='text-error'>{formik.errors.email}</div>
+                        <div className='text-error text-xs text-red-400'>{formik.errors.email}</div>
                     ) : null}
 
-                    <label htmlFor="birth_date">Date de naissance</label>
-                    <input id="birth_date" type="date" {...formik.getFieldProps('birth_date')} />
+                    <label className="mt-[5px]" htmlFor="birth_date">Date de naissance</label>
+                    <input
+                        id="birth_date"
+                        type="text"
+                        className='border border-light light-mode:border-dark-black rounded-md pl-1'
+                        {...formik.getFieldProps('birth_date')}
+                    />
                     {formik.touched.birth_date && formik.errors.birth_date ? (
-                        <div className='text-error'>{formik.errors.birth_date}</div>
+                        <div className='text-error text-xs text-red-400'>{formik.errors.birth_date}</div>
                     ) : null}
 
-                    <label htmlFor="city">Ville</label>
-                    <select id="city" {...formik.getFieldProps('city')}>
-                        <option value="">Choisir une ville</option>
-                        {city.map((city) => (
-                            <option key={city} value={city}>{city}</option>
-                        ))}
-                    </select>
+                    <div className="container-input-city relative flex flex-col items-center justify-center">
+                        <label className="mt-[5px]" htmlFor="city">Ville</label>
+                        <input
+                            id="city"
+                            name="city"
+                            type="text"
+                            value={searchTerm}
+                            onChange={handleSearchChange}
+                            className='border border-light light-mode:border-dark-black rounded-md pl-1'
+                            placeholder="Rechercher une ville"
+                        />
+                        {isDropdownOpen && filteredCities.length > 0 && (
+                            <ul className="absolute top-13 bg-dark text-light border border-primary overflow-y-scroll shadow-lg max-h-40 mt-1 rounded-md w-full z-10">
+                                {filteredCities.map((city) => (
+                                    <li
+                                        key={city.id}
+                                        className="p-2 cursor-pointer hover:bg-dark-black"
+                                        onClick={() => handleCityClick(city.name, city.code, city.id, formik)}
+                                    >
+                                        {`${city.name} (${city.code})`}
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                        {formik.touched.city && formik.errors.city && (
+                            <div className="text-error text-xs text-red-400">{formik.errors.city}</div>
+                        )}
+                    </div>
 
-                    <label htmlFor="password">Mot de passe</label>
-                    <input id="password" type="password" {...formik.getFieldProps('password')} />
+                    <label className="mt-[5px]" htmlFor="password">Mot de passe</label>
+                    <input
+                        id="password"
+                        type="password"
+                        className='border border-light light-mode:border-dark-black rounded-md pl-1'
+                        {...formik.getFieldProps('password')}
+                    />
                     {formik.touched.password && formik.errors.password ? (
-                        <div className='text-error'>{formik.errors.password}</div>
+                        <div className='text-error text-xs text-red-400'>{formik.errors.password}</div>
                     ) : null}
 
-                    <label htmlFor="confirmPassword">Confirmer le mot de passe</label>
-                    <input id="confirmPassword" type="password" {...formik.getFieldProps('confirmPassword')} />
+                    <label className="mt-[5px]" htmlFor="confirmPassword">Confirmer le mot de passe</label>
+                    <input
+                        id="confirmPassword"
+                        type="password"
+                        className='border border-light light-mode:border-dark-black rounded-md pl-1'
+                        {...formik.getFieldProps('confirmPassword')}
+                    />
                     {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
-                        <div className='text-error'>{formik.errors.confirmPassword}</div>
+                        <div className='text-error text-xs text-red-400'>{formik.errors.confirmPassword}</div>
                     ) : null}
 
-                    <button type="submit" onclick={handleSubmit}>Inscription</button>
+                    <Button type="submit" text="Inscription" className="bg-primary hover:bg-secondary mt-[15px]" />
                 </form>
             )}
         </Formik>

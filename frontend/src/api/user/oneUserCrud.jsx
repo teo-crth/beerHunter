@@ -17,7 +17,8 @@ export const fetchOneUser = async (userId, setUser) => {
   }
 };
 
-export const createOneUser = async (email, password, confirmPassword, name, cityId) => {
+export const createOneUser = async (name, email, birth_date, cityId, password, confirmPassword) => {
+
   try {
     // Requête avec axios
     const response = await axios.post(`${BASE_URL}/api/users`, {
@@ -26,7 +27,9 @@ export const createOneUser = async (email, password, confirmPassword, name, city
       confirmPassword: confirmPassword,
       name: name,
       cityId: cityId,
-      theme: 'dark'
+      birth_date: birth_date,
+      theme: 'dark', 
+      profil_picture: '/assets/images/profil-pictures/default-profil-picture.webp'
     });
 
     return response.data;
