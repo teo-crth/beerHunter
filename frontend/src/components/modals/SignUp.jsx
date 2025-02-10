@@ -101,7 +101,7 @@ const SignUp = () => {
         >
             {formik => (
                 <form onSubmit={formik.handleSubmit} className='container-form w-120  z-50 flex flex-col items-center justify-center text-center gap-0.5 text-light light-mode:text-dark p-5'>
-                    <h3 className='font-text font-bold text-xl'>Inscription</h3>
+                    <h3 className='font-title font-bold text-xl'>Inscription</h3>
                     <label className="mt-[5px]" htmlFor="name">Nom</label>
                     <input
                         id="name"
