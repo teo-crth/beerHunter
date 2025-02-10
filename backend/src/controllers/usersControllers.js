@@ -93,7 +93,7 @@ const edit = (req, res) => {
     
     const profilePicturePath = path.join("public", "assets", "images", "profil-pictures", req.file.filename);
 
-    const imageUrl = `http://localhost:${APP_PORT}/assets/images/profil-pictures/${req.file.filename}`;
+    const imageUrl = `/assets/images/profil-pictures/${req.file.filename}`;
     updatedFields.profil_picture = imageUrl;
   }
 
