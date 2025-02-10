@@ -11,6 +11,7 @@ export const AppProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isModalEditOpen, setIsModalEditOpen] = useState(false);
   const [searchResultBars , setSearchResultBars] = useState([]);
+  const [ isLogin, setIsLogin ] = useState(false);
 
   // DARK MODE
     const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -29,6 +30,8 @@ export const AppProvider = ({ children }) => {
     }, [isDarkMode]);
 
     useEffect(() => {
+      localStorage.setItem('token', JSON.stringify(user.token));
+      
       if (user) {
         if (user.theme === 'dark') {
           setIsDarkMode(true);
@@ -71,7 +74,9 @@ export const AppProvider = ({ children }) => {
             closeModal,
             modalState,
             searchResultBars,
-            setSearchResultBars
+            setSearchResultBars, 
+            isLogin,
+            setIsLogin
           }}>
           {children}
         </AppContext.Provider>

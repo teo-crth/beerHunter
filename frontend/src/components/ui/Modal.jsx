@@ -4,6 +4,7 @@ import { AppContext } from '../../context/context';
 import EditForm from '../modals/EditForm';
 import EditPassword from '../modals/EditPassword';
 import DeleteProfil from '../modals/DeleteProfil';
+import Connexion from '../modals/Connexion';
 import MessageModal from '../modals/MessageModal';
 
 const Modal = () => {
@@ -20,6 +21,7 @@ const Modal = () => {
           { type === 'editUser' && <EditForm />}
           { type === 'editPassword' && <EditPassword />}
           { type === 'deleteProfil' && <DeleteProfil />}
+          { type === 'connexion' && <Connexion />}
           { type === 'errorMessage' || type === 'successMessage' ? <MessageModal text={text} type={type} onClose={closeModal} isOpen={isOpen} /> : null}
       </div>
     </div>
