@@ -23,7 +23,7 @@ const BurgerMenu = () => {
     const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
     return (
-        <div className={`container-burgerMenu bg-dark-black light-mode:bg-light text-white light-mode:text-dark-black z-50 shadow-lg' : 'bg-white shadow-md'} flex flex-col justify-start w-[70%] absolute left-0 bottom-0 h-full`}>
+        <div className={`container-burgerMenu bg-dark-black light-mode:bg-light text-white light-mode:text-dark-black z-65 shadow-md flex flex-col justify-start w-[70%] absolute left-0 bottom-0 h-full`}>
             <div className="container-close-icon flex justify-end items-center p-5 cursor-pointer" onClick={toggleMenu}>
                 <FontAwesomeIcon icon={faXmark} />
             </div>

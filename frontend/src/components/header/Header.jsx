@@ -44,9 +44,9 @@ const Header = () => {
                     <FontAwesomeIcon icon={faBars} />
                 </div>
             </div>
-            {menuOpen && (
+            {/* {menuOpen && (
                 <BurgerMenu />
-            )}
+            )} */}
         </header>
     );
 };

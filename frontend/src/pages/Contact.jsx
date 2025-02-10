@@ -1,6 +1,7 @@
 import React from 'react';
 import { useForm, ValidationError } from '@formspree/react';
 import Button from '../components/ui/Button';
+import Modal from '../components/ui/Modal';
 
 const Contact = () => {
     const [state, handleSubmit] = useForm("xanqjakq");
@@ -62,6 +63,7 @@ const Contact = () => {
                     <Button type='submit' disabled={state.submitting} className='bg-primary hover:bg-secondary' text="Envoyer" />
                 </div>
             </form>
+            <Modal />
         </div>
     );
 };
