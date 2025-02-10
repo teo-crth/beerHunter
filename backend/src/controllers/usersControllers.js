@@ -144,7 +144,7 @@ const editPassword = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  const { name, birth_date, email, password, confirmPassword, theme, cityId, profil_picture } = req.body;
+  const { name, email, birth_date, cityId, password, confirmPassword, theme, profil_picture } = req.body;
 
   if (password !== confirmPassword) {
     res.status(400).send("Les mots de passe ne correspondent pas");
