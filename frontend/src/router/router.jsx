@@ -10,7 +10,7 @@ import Contact from '../pages/Contact';
 import Profil from '../pages/Profil';
 import BarPage from '../pages/barPage/BarPage';
 import BeerPage from '../pages/beerPage/BeerPage';
-import BeerTypePage from '../pages/beerTypePage/BeerTypePage';
+import BeerTypePage from '../pages/BeerTypePage';
 
 const router = createBrowserRouter([
   {
@@ -23,20 +23,20 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: '/type-de-biere',
-        element: <BeerTypes />,
+        path: 'types-de-biere',
+        element: <BeerTypePage />,
       },
       {
-        path: '/type-de-biere/:type',
+        path: 'types-de-biere/:type',
         element: <Beer />,
       },
       {
-        path: '/bieres/:id',
-        element: <Beer />,
+        path: 'bieres/:id',
+        element: <BeerPage />,
       },
       {
-        path: '/bars/:id',
-        element: <Bar />,
+        path: 'bars/:id',
+        element: <BarPage />,
       },
       {
         path: 'contact',
@@ -45,19 +45,7 @@ const router = createBrowserRouter([
       {
         path: 'profil',
         element: <Profil />,
-      },
-      {
-        path: 'BeerPage',
-        element: <BeerPage />,
-      },
-      {
-        path: 'BarPage',
-        element: <BarPage />,
-      },
-      {
-        path: '/beer-types', // Route enfant
-        element: <BeerTypePage />,
-      },
+      }
     ],
   },
 ]);
