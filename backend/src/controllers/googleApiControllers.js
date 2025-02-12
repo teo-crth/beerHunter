@@ -29,4 +29,16 @@ const readPhoto = async (req, res) => {
     }
 }
 
-module.exports = { browse, readPhoto };
+const read =   async (req, res) => {
+    const { place_id } = req.query;
+
+    try {
+        const response = await axios.get(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${place_id}&key=${GOOGLE_KEY}`);
+        res.send(response.data);
+    } catch (error) {
+        console.error('Error fetching data from Google API:', error);
+        res.status(500).json({ error: 'Error fetching place' });
+    }
+}
+
+module.exports = { browse, readPhoto, read};

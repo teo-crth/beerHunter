@@ -16,8 +16,9 @@ const SearchBar = () => {
     const [selectedBeerId, setSelectedBeerId] = useState(null);
     const [ beers, setBeers ] = useState([]);
     const [bars, setBars] = useState([]);
-
+    
     const { openModal, setOpenModal, setSearchResultBars } = useContext(AppContext);
+    const GOOGLE_KEY = import.meta.env.GOOGLE_KEY;
 
     useEffect(() => {
         if (cities.length === 0) {
@@ -73,6 +74,8 @@ const SearchBar = () => {
                 fetchGoogleBars(city.latitude, city.longitude)
                 .then((data) => {
                     const barsToSave = [];
+                    console.log('data du foreach', data);
+                    
                     data.forEach((GoogleBar) => {
 
                         const bar = {
@@ -81,29 +84,33 @@ const SearchBar = () => {
                             address: GoogleBar.vicinity,
                             latitude: GoogleBar.geometry.location.lat,
                             longitude: GoogleBar.geometry.location.lng,
-                            rate: GoogleBar.rating,
-                            opening_hours: "",
+                            rate: GoogleBar.rating ? GoogleBar.rating : null,
+                            opening_hours: null,
                             city_id: selectedCityId,
-                            bar_picture: GoogleBar.photos && GoogleBar.photos[0]?.photo_reference ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${GoogleBar.photos[0].photo_reference}&key=${GOOGLE_KEY}` : ""
+                            bar_picture: null
                         };
 
-                        
-                        // fetchBarMainImage(GoogleBar.photos[0].photo_reference)
-                        // .then((data) => {
-                        //     bar.bar_picture = data.request.responseURL;
-                        // })
+                        if(GoogleBar.photos[0]) {
+                            fetchBarMainImage(GoogleBar.photos[0].photo_reference)
+                            .then((data) => {                           
+                                bar.bar_picture = data;
+                            })
+                        }
                         
                         fetchOneGoogleBar(GoogleBar.place_id)
                         .then((data) => {
-                            console.log(data)
-                            bar.opening_hours = data.result.current_opening_hours.weekday_text;
+
+                            const openingHours = data.result.current_opening_hours.weekday_text.join(', ');
+                            if (openingHours) { bar.opening_hours = openingHours;}
                         })
                         
                         barsToSave.push(bar);
-                        setBars([...bars, bar])
+                        // setBars(prevBars => [...prevBars, bar]);                      
                     })
 
+                    console.log('barsToSave', barsToSave);
                     if (barsToSave.length > 0) {
+                        
                         createBars(barsToSave)
                         .then(() => {
                             fetchBarsByCityId(selectedCityId)
@@ -130,6 +137,9 @@ const SearchBar = () => {
 
             
     }
+
+    console.log('bars', bars);
+    
 
     return (
         <div className='w-full md:w-2/3 lg:w-1/2 flex items-center justify-center'>

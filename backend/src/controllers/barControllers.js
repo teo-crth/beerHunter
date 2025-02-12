@@ -106,7 +106,7 @@ const add = (req, res) => {
 
 const addMultipleBars = async (req, res) => {
     const bars = req.body;
-
+    
     if (!Array.isArray(bars) || bars.length === 0) {
         return res.status(400).send('Aucune donnée valide pour les bars');
     }
@@ -124,7 +124,8 @@ const addMultipleBars = async (req, res) => {
                 fs.writeFileSync(imagePath, imageResponse.data);
                 bar.bar_picture = `/assets/images/bar-images/${imageName}`;
             }
-
+            console.log('bar envoyé au model', bar);
+            
             return models.bar.insert(bar);
         }));
 

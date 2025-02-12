@@ -17,7 +17,7 @@ const jwtMiddleware = require("./services/middleware/jwt.token");
 
 // VALIDATION JOI
 const validate = require("./validation/validator");
-const { createUserSchema, updatePasswordUserSchema, updateUserSchema, userCommentSchema, commentImageSchema, favoriteBarSchema, barSchema, loginSchema } = require("./validation/schemas/joi.schemas");
+const { createUserSchema, updatePasswordUserSchema, updateUserSchema, userCommentSchema, commentImageSchema, favoriteBarSchema, loginSchema, barsSchema } = require("./validation/schemas/joi.schemas");
 
 // CONNEXION
 router.post("/api/login", validate(loginSchema, 'body'), usersControllers.login);
@@ -25,6 +25,7 @@ router.post("/api/login", validate(loginSchema, 'body'), usersControllers.login)
 // GET
 router.get("/api/places", googleApiControllers.browse);
 router.get("/api/place/photo", googleApiControllers.readPhoto);
+router.get("/api/place/details", googleApiControllers.read);
 router.get("/api/bars/city/:id", cityControllers.findAssociateBars);
 router.get("/api/bars/:id/beers", barControllers.findAssociateBeers);
 router.get("/api/bars/:id/comments", barControllers.findAssociateComments);
@@ -68,7 +69,7 @@ router.put("/api/favorite-bars/:id", validate(favoriteBarSchema, 'body'), favori
 // router.put("/api/favorite-bars/:id", jwtMiddleware, validate(favoriteBarSchema, 'body'), favoriteBarControllers.edit);
 
 // POST
-router.post("/api/bars", jwtMiddleware, validate(barSchema, 'body'), barControllers.addMultipleBars);
+router.post("/api/bars", validate(barsSchema, 'body'), barControllers.addMultipleBars);
 router.post("/api/beers", jwtMiddleware, beerControllers.add);
 router.post("/api/users", validate(createUserSchema, 'body'), usersControllers.add);
 router.post("/api/comments", jwtMiddleware, validate(userCommentSchema, 'body'), userCommentControllers.add);

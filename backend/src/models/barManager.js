@@ -22,7 +22,7 @@ class BarManager extends AbstractManager {
 
 
     insert(bar) {
-        return this.database.query(`INSERT INTO ${this.table} (name, address, latitude, longitude, rate, opening_hours, city_id, bar_pictur, id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`, [
+        return this.database.query(`INSERT INTO ${this.table} (name, address, latitude, longitude, rate, opening_hours, city_id, bar_picture, place_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`, [
             bar.name,
             bar.address,
             bar.latitude,
