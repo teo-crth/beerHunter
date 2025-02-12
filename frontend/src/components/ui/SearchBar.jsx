@@ -72,6 +72,8 @@ const SearchBar = () => {
                 console.error(error);
                 openModal('errorMessage', 'Erreur lors de la récupération des bars');
             });
+
+            
     }
 
     return (
