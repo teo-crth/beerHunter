@@ -1,4 +1,8 @@
 const models = require("../models");
+const fs = require('fs');
+const path = require('path');
+const axios = require('axios');
+const uuid = require('uuid');
 
 const browse = (req, res) => {
     models.bar
@@ -100,6 +104,37 @@ const add = (req, res) => {
         });
 };
 
+const addMultipleBars = async (req, res) => {
+    const bars = req.body;
+
+    if (!Array.isArray(bars) || bars.length === 0) {
+        return res.status(400).send('Aucune donnée valide pour les bars');
+    }
+
+    try {
+        const barsWithPictures = await Promise.all(bars.map(async (bar) => {
+            if (bar.bar_picture) {
+                // Téléchargement de l'image
+                const imageUrl = bar.bar_picture;
+                const imageResponse = await axios.get(imageUrl, { responseType: 'arraybuffer' });
+
+                const imageName = `${uuid.v4()}.webp`;
+                const imagePath = path.join(__dirname, 'assets', 'images', 'bar-images', imageName);
+
+                fs.writeFileSync(imagePath, imageResponse.data);
+                bar.bar_picture = `/assets/images/bar-images/${imageName}`;
+            }
+
+            return models.bar.insert(bar);
+        }));
+
+        res.status(201).json(barsWithPictures);
+    } catch (error) {
+        console.error('Erreur lors de l\'ajout des bars:', error);
+        res.status(500).send('Erreur interne lors de l\'ajout des bars');
+    }
+};
+
 const destroy = (req, res) => {
     models.bar
         .delete(req.params.id)
@@ -123,5 +158,6 @@ module.exports = {
     add,
     destroy,
     findAssociateComments,
-    findAssociateBeers
+    findAssociateBeers,
+    addMultipleBars
 };

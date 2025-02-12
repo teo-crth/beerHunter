@@ -7,7 +7,7 @@ export const fetchAllBeers = async () => {
         const response = await axios.get(`${BASE_URL}/api/beers`);
         return response.data;
     } catch (error) {
-        console.error('Erreur lors de la récupération du biere type:', error);
+        console.error('Erreur lors de la récupération des bieres :', error);
         throw error;
     }
 };

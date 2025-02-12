@@ -1,9 +1,11 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { AppContext } from '../../context/context';
 import { fetchAllCities } from '../../api/city/cityCrud';
-import { fetchGoogleBars } from '../../api/google_api/fetchGoogleApi';
+import { fetchGoogleBars, fetchOneGoogleBar, fetchBarMainImage } from '../../api/google_api/fetchGoogleApi';
 import { fetchAllBeers } from '../../api/beer/beerCrud';
+import { createBars, fetchBarsByCityId } from '../../api/bar/barsCrud';
 import Button from './Button';
+
 
 const SearchBar = () => {
     const [ cities, setCities ] = useState([]);
@@ -13,6 +15,7 @@ const SearchBar = () => {
     const [selectedCityId, setSelectedCityId] = useState(null);
     const [selectedBeerId, setSelectedBeerId] = useState(null);
     const [ beers, setBeers ] = useState([]);
+    const [bars, setBars] = useState([]);
 
     const { openModal, setOpenModal, setSearchResultBars } = useContext(AppContext);
 
@@ -60,18 +63,70 @@ const SearchBar = () => {
             openModal('errorMessage', 'Veuillez sélectionner une ville dans la liste déroulante');
         }
 
-        // fetch bars by city id in bdd if no bars, call google api to get bars
-        fetchGoogleBars(city.latitude, city.longitude)
-            .then((data) => {
-                console.log(data)
-                // ADD THE BARS TO THE DATABASE
-                // fetchBarsByCityId(selectedCityId) from bdd
-                // setSearchResultBars(dataFromBdd)
-            })
-            .catch((error) => {
-                console.error(error);
-                openModal('errorMessage', 'Erreur lors de la récupération des bars');
-            });
+        fetchBarsByCityId(selectedCityId)
+        .then((data) => {
+            if (data.length > 5) {
+                setSearchResultBars(data);
+                return;
+            } else {
+                // fetch bars by city id in bdd if no bars, call google api to get bars
+                fetchGoogleBars(city.latitude, city.longitude)
+                .then((data) => {
+                    const barsToSave = [];
+                    data.forEach((GoogleBar) => {
+
+                        const bar = {
+                            id: GoogleBar.place_id,
+                            name: GoogleBar.name,
+                            address: GoogleBar.vicinity,
+                            latitude: GoogleBar.geometry.location.lat,
+                            longitude: GoogleBar.geometry.location.lng,
+                            rate: GoogleBar.rating,
+                            opening_hours: "",
+                            city_id: selectedCityId,
+                            bar_picture: GoogleBar.photos && GoogleBar.photos[0]?.photo_reference ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${GoogleBar.photos[0].photo_reference}&key=${GOOGLE_KEY}` : ""
+                        };
+
+                        
+                        // fetchBarMainImage(GoogleBar.photos[0].photo_reference)
+                        // .then((data) => {
+                        //     bar.bar_picture = data.request.responseURL;
+                        // })
+                        
+                        fetchOneGoogleBar(GoogleBar.place_id)
+                        .then((data) => {
+                            console.log(data)
+                            bar.opening_hours = data.result.current_opening_hours.weekday_text;
+                        })
+                        
+                        barsToSave.push(bar);
+                        setBars([...bars, bar])
+                    })
+
+                    if (barsToSave.length > 0) {
+                        createBars(barsToSave)
+                        .then(() => {
+                            fetchBarsByCityId(selectedCityId)
+                            .then((data) => {
+                                setSearchResultBars(data);
+                            })
+                            .catch((error) => {
+                                console.error(error);
+                                openModal('errorMessage', 'Erreur lors de la récupération des bars');
+                            });
+                        })
+                        .catch((error) => {
+                            console.error(error);
+                            openModal('errorMessage', 'Erreur lors de la création des bars');
+                        });
+                    }
+                })
+                .catch((error) => {
+                    console.error(error);
+                    openModal('errorMessage', 'Erreur lors de la récupération des bars depuis Google API');
+                });
+            }
+        })
 
             
     }
