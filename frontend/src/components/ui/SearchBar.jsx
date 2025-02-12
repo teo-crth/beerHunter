@@ -16,6 +16,7 @@ const SearchBar = () => {
     const [selectedBeerId, setSelectedBeerId] = useState(null);
     const [ beers, setBeers ] = useState([]);
     const [bars, setBars] = useState([]);
+    const [isLoading, setIsloading] = useState(false);
     
     const { openModal, setOpenModal, setSearchResultBars } = useContext(AppContext);
     const GOOGLE_KEY = import.meta.env.GOOGLE_KEY;
@@ -55,8 +56,10 @@ const SearchBar = () => {
         setSelectedCityId(cityId);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+
+        setIsloading(true);
 
         const city = cities.find(city => city.id === selectedCityId);
 
@@ -64,78 +67,60 @@ const SearchBar = () => {
             openModal('errorMessage', 'Veuillez sélectionner une ville dans la liste déroulante');
         }
 
-        fetchBarsByCityId(selectedCityId)
-        .then((data) => {
-            if (data.length > 5) {
-                setSearchResultBars(data);
+        try {
+
+            const barsFromDB = await fetchBarsByCityId(selectedCityId);
+            
+            if (barsFromDB.length > 2) {
+                setSearchResultBars(barsFromDB);
                 return;
             } else {
                 // fetch bars by city id in bdd if no bars, call google api to get bars
-                fetchGoogleBars(city.latitude, city.longitude)
-                .then((data) => {
-                    const barsToSave = [];
-                    console.log('data du foreach', data);
-                    
-                    data.forEach((GoogleBar) => {
+                const googleBars = await fetchGoogleBars(city.latitude, city.longitude);
+                const barsToSave = [];
+                
+                await Promise.all(googleBars.map(async (GoogleBar) => {
+                    const bar = {
+                        id: GoogleBar.place_id,
+                        name: GoogleBar.name,
+                        address: GoogleBar.vicinity,
+                        latitude: GoogleBar.geometry.location.lat,
+                        longitude: GoogleBar.geometry.location.lng,
+                        rate: GoogleBar.rating ? GoogleBar.rating : null,
+                        opening_hours: null,
+                        city_id: selectedCityId,
+                        photo_reference: GoogleBar.photos && GoogleBar.photos[0] ? GoogleBar.photos[0].photo_reference : null,
+                        bar_picture: null
+                    };
 
-                        const bar = {
-                            id: GoogleBar.place_id,
-                            name: GoogleBar.name,
-                            address: GoogleBar.vicinity,
-                            latitude: GoogleBar.geometry.location.lat,
-                            longitude: GoogleBar.geometry.location.lng,
-                            rate: GoogleBar.rating ? GoogleBar.rating : null,
-                            opening_hours: null,
-                            city_id: selectedCityId,
-                            bar_picture: null
-                        };
-
-                        if(GoogleBar.photos[0]) {
-                            fetchBarMainImage(GoogleBar.photos[0].photo_reference)
-                            .then((data) => {                           
-                                bar.bar_picture = data;
-                            })
-                        }
+                    // if (GoogleBar.photos && GoogleBar.photos[0]) {
+                    //     const image = await fetchBarMainImage(GoogleBar.photos[0].photo_reference);
+                    //     bar.bar_picture = image;
+                    // }
                         
-                        fetchOneGoogleBar(GoogleBar.place_id)
-                        .then((data) => {
-
-                            const openingHours = data.result.current_opening_hours.weekday_text.join(', ');
-                            if (openingHours) { bar.opening_hours = openingHours;}
-                        })
+                    const googleBarDetails = await fetchOneGoogleBar(GoogleBar.place_id);
+                    const openingHours = googleBarDetails.result.current_opening_hours?.weekday_text?.join(', ');
+                    if (openingHours) bar.opening_hours = openingHours;
                         
-                        barsToSave.push(bar);
+                    barsToSave.push(bar);
                         // setBars(prevBars => [...prevBars, bar]);                      
-                    })
+                }));
 
-                    console.log('barsToSave', barsToSave);
-                    if (barsToSave.length > 0) {
-                        
-                        createBars(barsToSave)
-                        .then(() => {
-                            fetchBarsByCityId(selectedCityId)
-                            .then((data) => {
-                                setSearchResultBars(data);
-                            })
-                            .catch((error) => {
-                                console.error(error);
-                                openModal('errorMessage', 'Erreur lors de la récupération des bars');
-                            });
-                        })
-                        .catch((error) => {
-                            console.error(error);
-                            openModal('errorMessage', 'Erreur lors de la création des bars');
-                        });
-                    }
-                })
-                .catch((error) => {
-                    console.error(error);
-                    openModal('errorMessage', 'Erreur lors de la récupération des bars depuis Google API');
-                });
+                console.log('barsToSave', barsToSave);
+                if (barsToSave.length > 0) {
+                    
+                    await createBars(barsToSave);
+                    
+                    const updatedBars = await fetchBarsByCityId(selectedCityId);
+                    setSearchResultBars(updatedBars);     
+                }
             }
-        })
-
-            
+        } catch (error) {
+            console.error(error);
+            openModal('errorMessage', 'Erreur lors de la récupération des bars depuis Google API');
+        } finally {
+            setIsloading(false);
+        } 
     }
 
     console.log('bars', bars);
@@ -167,7 +152,8 @@ const SearchBar = () => {
                         <option key={beer.id} value={beer.id} className='text-light light-mode:text-dark-black bg-dark-black light-mode:bg-light'>{beer.name}</option>
                     ))}
                 </select>
-                <Button type='submit' onClick={handleSubmit} className='bg-primary text-light light-mode:bg-dark rounded-r-lg h-10' text="Rechercher" />
+                {isLoading && <p>Chargement...</p>}
+                { !isLoading && <Button type='submit' onClick={handleSubmit} className='bg-primary text-light light-mode:bg-dark rounded-r-lg h-10' text="Rechercher" />}
             </form>
             
         </div>

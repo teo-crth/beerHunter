@@ -96,7 +96,8 @@ const barSchema = Joi.object({
     rate: Joi.number().min(0).max(5).allow(null).allow(''),
     opening_hours: Joi.string().min(3).max(500).allow(null).allow(''),
     city_id: Joi.number().required(),
-    bar_picture: Joi.string().allow(null).allow('')
+    bar_picture: Joi.string().allow(null).allow(''),
+    photo_reference: Joi.string().allow(null).allow('')
 });
 
 const barsSchema = Joi.array().items(barSchema);

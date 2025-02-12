@@ -1,8 +1,11 @@
 const models = require("../models");
 const fs = require('fs');
 const path = require('path');
-const axios = require('axios');
 const uuid = require('uuid');
+const {processImage} = require('../utils/resizeImage');
+const { config } = require('dotenv');
+
+config({ path: '.env' });
 
 const browse = (req, res) => {
     models.bar
@@ -113,23 +116,22 @@ const addMultipleBars = async (req, res) => {
 
     try {
         const barsWithPictures = await Promise.all(bars.map(async (bar) => {
-            if (bar.bar_picture) {
-                // Téléchargement de l'image
-                const imageUrl = bar.bar_picture;
-                const imageResponse = await axios.get(imageUrl, { responseType: 'arraybuffer' });
-
-                const imageName = `${uuid.v4()}.webp`;
-                const imagePath = path.join(__dirname, 'assets', 'images', 'bar-images', imageName);
-
-                fs.writeFileSync(imagePath, imageResponse.data);
-                bar.bar_picture = `/assets/images/bar-images/${imageName}`;
-            }
-            console.log('bar envoyé au model', bar);
             
-            return models.bar.insert(bar);
+            if (bar.photo_reference) {
+                const photo_reference = bar.photo_reference;
+                const imageBuffer = await processImage(photo_reference);
+                const imageName = `${uuid.v4()}.webp`;
+                const imagePath = path.join(__dirname, "..", "..", "public", 'assets', 'images', 'bar-images', imageName);
+                fs.writeFileSync(imagePath, imageBuffer);
+                bar.bar_picture = `/assets/images/bar-images/${imageName}`;
+            } else {
+                bar.bar_picture = '/assets/images/bar-images/bar-default.webp';
+            }
+
+            await models.bar.insert(bar);
         }));
 
-        res.status(201).json(barsWithPictures);
+        res.status(201).json({messgae: 'Bars ajoutés avec succès', bars: barsWithPictures});
     } catch (error) {
         console.error('Erreur lors de l\'ajout des bars:', error);
         res.status(500).send('Erreur interne lors de l\'ajout des bars');
