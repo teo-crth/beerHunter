@@ -70,6 +70,9 @@ const SearchBar = () => {
         try {
 
             const barsFromDB = await fetchBarsByCityId(selectedCityId);
+
+            console.log('barsFromDB', barsFromDB);
+            
             
             if (barsFromDB.length > 2) {
                 setSearchResultBars(barsFromDB);
