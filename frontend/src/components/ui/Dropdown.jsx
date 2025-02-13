@@ -1,0 +1,48 @@
+import React, { useState } from 'react';
+import { FaChevronDown } from 'react-icons/fa';
+
+const Dropdown = ({ beers, selectedBeerId, setSelectedBeerId }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectText, setSelectText] = useState('Choisir une bière');
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const handleSelect = (id) => {
+    setSelectedBeerId(id);
+    setSelectText(beers.find((beer) => beer.id === id).name);
+    setIsOpen(false);
+  };
+
+  return (
+    <>
+        <div className="relative w-full md:w-[35%] lg:w-[35%] border-2 border-primary rounded-lg">
+            <button
+                type='button'
+                className="bg-transparent text-center text-md relative w-full flex justify-center items-center p-2"
+                onClick={toggleDropdown}
+            >
+                {selectText}
+                <FaChevronDown className={`transform ${isOpen ? 'rotate-180 absolute right-2' : 'absolute right-2'}`} />
+            </button>
+            
+            {isOpen && (
+                <ul className="w-full bg-white border-2 border-primary rounded-lg shadow-lg z-10 overflow-scroll max-h-40 top-9 absolute">
+                {beers.map((beer) => (
+                    <li
+                    key={beer.id}
+                    className="p-2 cursor-pointer hover:bg-gray-100"
+                    onClick={() => handleSelect(beer.id)}
+                    >
+                    {beer.name}
+                    </li>
+                ))}
+                </ul>
+            )}
+        </div>
+    </>
+  );
+};
+
+export default Dropdown;

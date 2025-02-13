@@ -1,9 +1,12 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { AppContext } from '../../context/context';
 import { fetchAllCities } from '../../api/city/cityCrud';
-import { fetchGoogleBars } from '../../api/google_api/fetchGoogleApi';
+import { fetchGoogleBars, fetchOneGoogleBar, fetchBarMainImage } from '../../api/google_api/fetchGoogleApi';
 import { fetchAllBeers } from '../../api/beer/beerCrud';
+import { createBars, fetchBarsByCityId } from '../../api/bar/barsCrud';
 import Button from './Button';
+import Dropdown from './Dropdown';
+
 
 const SearchBar = () => {
     const [ cities, setCities ] = useState([]);
@@ -13,8 +16,10 @@ const SearchBar = () => {
     const [selectedCityId, setSelectedCityId] = useState(null);
     const [selectedBeerId, setSelectedBeerId] = useState(null);
     const [ beers, setBeers ] = useState([]);
-
+    const [isLoading, setIsloading] = useState(false);
+    
     const { openModal, setOpenModal, setSearchResultBars } = useContext(AppContext);
+    const GOOGLE_KEY = import.meta.env.GOOGLE_KEY;
 
     useEffect(() => {
         if (cities.length === 0) {
@@ -51,8 +56,10 @@ const SearchBar = () => {
         setSelectedCityId(cityId);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+
+        setIsloading(true);
 
         const city = cities.find(city => city.id === selectedCityId);
 
@@ -60,29 +67,63 @@ const SearchBar = () => {
             openModal('errorMessage', 'Veuillez sélectionner une ville dans la liste déroulante');
         }
 
-        // fetch bars by city id in bdd if no bars, call google api to get bars
-        fetchGoogleBars(city.latitude, city.longitude)
-            .then((data) => {
-                console.log(data)
-                // ADD THE BARS TO THE DATABASE
-                // fetchBarsByCityId(selectedCityId) from bdd
-                // setSearchResultBars(dataFromBdd)
-            })
-            .catch((error) => {
-                console.error(error);
-                openModal('errorMessage', 'Erreur lors de la récupération des bars');
-            });
+        try {
 
+            const barsFromDB = await fetchBarsByCityId(selectedCityId);
+
+            console.log('barsFromDB', barsFromDB);
             
-    }
+            
+            if (barsFromDB.length > 2) {
+                setSearchResultBars(barsFromDB);
+                return;
+            } else {
+                const googleBars = await fetchGoogleBars(city.latitude, city.longitude);
+                const barsToSave = [];
+                
+                await Promise.all(googleBars.map(async (GoogleBar) => {
+                    const bar = {
+                        id: GoogleBar.place_id,
+                        name: GoogleBar.name,
+                        address: GoogleBar.vicinity,
+                        latitude: GoogleBar.geometry.location.lat,
+                        longitude: GoogleBar.geometry.location.lng,
+                        rate: GoogleBar.rating ? GoogleBar.rating : null,
+                        opening_hours: null,
+                        city_id: selectedCityId,
+                        photo_reference: GoogleBar.photos && GoogleBar.photos[0] ? GoogleBar.photos[0].photo_reference : null,
+                        bar_picture: null
+                    };
+                        
+                    const googleBarDetails = await fetchOneGoogleBar(GoogleBar.place_id);
+                    const openingHours = googleBarDetails.result.current_opening_hours?.weekday_text?.join(', ');
+                    if (openingHours) bar.opening_hours = openingHours;
+                        
+                    barsToSave.push(bar);                  
+                }));
+
+                console.log('barsToSave', barsToSave);
+                if (barsToSave.length > 0) {
+                    await createBars(barsToSave);
+                    const updatedBars = await fetchBarsByCityId(selectedCityId);
+                    setSearchResultBars(updatedBars);     
+                }
+            }
+        } catch (error) {
+            console.error(error);
+            openModal('errorMessage', 'Erreur lors de la récupération des bars depuis Google API');
+        } finally {
+            setIsloading(false);
+        } 
+    }   
 
     return (
-        <div className='w-full md:w-2/3 lg:w-1/2 flex items-center justify-center'>
-            <form action="submit" className='w-full flex items-center justify-between text-left border-primary border-2 rounded-lg m-5 text-light light-mode:text-dark-black'>
-                <div className="container-city-input container-input-city relative flex items-center justify-center">
-                    <input type="text" list="cities" className='w-2/3 p-2 bg-transparent border-0' placeholder='Entrez une ville' onChange={handleChange} value={searchTerm} required/>
+        <div className='w-full md:w-[70%] lg:w-[70%] flex items-center justify-center'>
+            <form action="submit" className='w-full flex flex-col md:flex-row lg:flex-row items-center justify-center gap-1 text-center md:text-left lg:text-left xl:text-left m-5 text-light light-mode:text-dark-black'>
+                <div className="container-city-input container-input-city relative flex items-center justify-center w-full md:w-2/3 lg:2/3">
+                    <input type="text" list="cities" className='w-full p-2 bg-transparent text-center border-2 border-primary rounded-lg' placeholder='Entrez une ville' onChange={handleChange} value={searchTerm}/>
                     {isDropdownOpen  && filteredCities.length > 0 && (
-                        <ul className="absolute top-13 bg-dark text-light border border-primary overflow-y-scroll shadow-lg max-h-40 mt-1 rounded-md w-full z-10">
+                        <ul className="absolute top-13 bg-dark text-light border border-primary overflow-y-scroll shadow-lg max-h-30 mt-1 rounded-md w-full z-10">
                             {filteredCities.map((city) => (
                                 <li
                                     key={city.id}
@@ -95,14 +136,9 @@ const SearchBar = () => {
                         </ul>
                     )}
                 </div>
-                <p className='text-primary'>|</p>
-                <select name="beer" id="beer" className='p-2 bg-transparent border-0' onChange={(e) => setSelectedBeerId(e.target.value)} required>
-                    <option value="" className='text-light light-mode:text-dark-black'>Choisir une bière</option>
-                    {beers.map(beer => (
-                        <option key={beer.id} value={beer.id} className='text-light light-mode:text-dark-black bg-dark-black light-mode:bg-light'>{beer.name}</option>
-                    ))}
-                </select>
-                <Button type='submit' onClick={handleSubmit} className='bg-primary text-light light-mode:bg-dark rounded-r-lg h-10' text="Rechercher" />
+                <Dropdown beers={beers} setSelectedBeerId={setSelectedBeerId} selectedBeerId={selectedBeerId} />
+                {isLoading && <p>Chargement...</p>}
+                { !isLoading && <Button type='submit' onClick={handleSubmit} className='bg-primary text-light light-mode:bg-dark rounded-r-lg h-10' text="Rechercher" />}
             </form>
             
         </div>

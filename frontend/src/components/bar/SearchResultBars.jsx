@@ -14,7 +14,7 @@ const SearchResultBars = () => {
     }
 
     return (
-        <div>
+        <div className='container-searchResultBars flex flex-col items-center justify-center gap-2'>
             {searchResultBars.map(bar => (
                 <Bar key={bar.id} bar={bar} />
             ))    

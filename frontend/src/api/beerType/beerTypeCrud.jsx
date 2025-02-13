@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-// Base URL de l'API Google Books
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
 export const fetchAllBeerTypes = async () => {

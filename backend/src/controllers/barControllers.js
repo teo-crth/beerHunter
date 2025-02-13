@@ -1,4 +1,11 @@
 const models = require("../models");
+const fs = require('fs');
+const path = require('path');
+const uuid = require('uuid');
+const {processImage} = require('../utils/resizeImage');
+const { config } = require('dotenv');
+
+config({ path: '.env' });
 
 const browse = (req, res) => {
     models.bar
@@ -100,6 +107,37 @@ const add = (req, res) => {
         });
 };
 
+const addMultipleBars = async (req, res) => {
+    const bars = req.body;
+    
+    if (!Array.isArray(bars) || bars.length === 0) {
+        return res.status(400).send('Aucune donnée valide pour les bars');
+    }
+
+    try {
+        const barsWithPictures = await Promise.all(bars.map(async (bar) => {
+            
+            if (bar.photo_reference) {
+                const photo_reference = bar.photo_reference;
+                const imageBuffer = await processImage(photo_reference);
+                const imageName = `${uuid.v4()}.webp`;
+                const imagePath = path.join(__dirname, "..", "..", "public", 'assets', 'images', 'bar-images', imageName);
+                fs.writeFileSync(imagePath, imageBuffer);
+                bar.bar_picture = `/assets/images/bar-images/${imageName}`;
+            } else {
+                bar.bar_picture = '/assets/images/bar-images/bar-default.webp';
+            }
+
+            await models.bar.insert(bar);
+        }));
+
+        res.status(201).json({messgae: 'Bars ajoutés avec succès', bars: barsWithPictures});
+    } catch (error) {
+        console.error('Erreur lors de l\'ajout des bars:', error);
+        res.status(500).send('Erreur interne lors de l\'ajout des bars');
+    }
+};
+
 const destroy = (req, res) => {
     models.bar
         .delete(req.params.id)
@@ -123,5 +161,6 @@ module.exports = {
     add,
     destroy,
     findAssociateComments,
-    findAssociateBeers
+    findAssociateBeers,
+    addMultipleBars
 };

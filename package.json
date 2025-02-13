@@ -32,6 +32,7 @@
     "psql": "^0.0.1",
     "slick-carousel": "^1.8.1",
     "tailwindcss": "^4.0.0",
+    "uuid": "^11.0.5",
     "yup": "^1.6.1"
   }
 }

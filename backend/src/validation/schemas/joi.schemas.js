@@ -86,15 +86,21 @@ const updatePasswordUserSchema = Joi.object({
         
 });
 
+
 const barSchema = Joi.object({
+    id: Joi.string().required(),
     name: Joi.string().min(3).max(500).required(),
     address: Joi.string().min(3).max(500).required(),
     latitude: Joi.number().required(),
     longitude: Joi.number().required(),
-    rate: Joi.number().min(0).max(5).required(),
-    opening_hours: Joi.string().min(3).max(50).allow(null),
-    city_id: Joi.number().required()
+    rate: Joi.number().min(0).max(5).allow(null).allow(''),
+    opening_hours: Joi.string().min(3).max(500).allow(null).allow(''),
+    city_id: Joi.number().required(),
+    bar_picture: Joi.string().allow(null).allow(''),
+    photo_reference: Joi.string().allow(null).allow('')
 });
+
+const barsSchema = Joi.array().items(barSchema);
 
 const favoriteBarSchema = Joi.object({
     user_id: Joi.number().required(),
@@ -115,4 +121,4 @@ const commentImageSchema = Joi.object({
     user_comment_id: Joi.number().required()
 });
 
-module.exports = { updatePasswordUserSchema, updateUserSchema, createUserSchema, userCommentSchema, commentImageSchema, favoriteBarSchema, barSchema, loginSchema };
+module.exports = { updatePasswordUserSchema, updateUserSchema, createUserSchema, userCommentSchema, commentImageSchema, favoriteBarSchema, barSchema, loginSchema, barsSchema };
