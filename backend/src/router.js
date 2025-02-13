@@ -12,6 +12,7 @@ const beerTypeControllers = require("./controllers/beerTypeControllers");
 const cityControllers = require("./controllers/cityControllers");
 const googleApiControllers = require("./controllers/googleApiControllers");
 const favoriteBarControllers = require("./controllers/favoriteBarControllers");
+const beerAvailableControllers = require("./controllers/beerAvailableControllers");
 const commentImageControllers = require("./controllers/commentImageControllers");
 const jwtMiddleware = require("./services/middleware/jwt.token");
 
@@ -27,7 +28,6 @@ router.get("/api/places", googleApiControllers.browse);
 router.get("/api/place/photo", googleApiControllers.readPhoto);
 router.get("/api/place/details", googleApiControllers.read);
 router.get("/api/bars/city/:id", cityControllers.findAssociateBars);
-router.get("/api/bars/:id/beers", barControllers.findAssociateBeers);
 router.get("/api/bars/:id/comments", barControllers.findAssociateComments);
 router.get("/api/bars/:id", barControllers.read);
 router.get("/api/bars", barControllers.browse);
@@ -38,11 +38,13 @@ router.get("/api/beertypes", beerTypeControllers.browse);
 router.get("/api/beers/:id", beerControllers.read);
 router.get("/api/beers", beerControllers.browse);
 
-router.get("/api/users/:id/comments/", usersControllers.findAssociateComments);
-router.get("/api/users/:id/favorite-bars/", usersControllers.findAssociateFavorites);
+router.get("/api/users/:id/comments", usersControllers.findAssociateComments);
+router.get("/api/users/:id/favorite-bars", usersControllers.findAssociateFavorites);
 router.get("/api/users/:id", usersControllers.read);
 router.get("/api/users", usersControllers.browse);
 
+router.get("/api/beersavailable", beerAvailableControllers.browse);
+router.get("/api/beersavailable/bar/:id", beerAvailableControllers.findAssociateBeersAvailable);
 // router.get("/api/users/:id/comments/", jwtMiddleware, usersControllers.findAssociateComments);
 // router.get("/api/users/:id/favorite-bars/", jwtMiddleware, usersControllers.findAssociateFavorites);
 // router.get("/api/users/:id", jwtMiddleware, usersControllers.read);
@@ -70,11 +72,12 @@ router.put("/api/favorite-bars/:id", validate(favoriteBarSchema, 'body'), favori
 
 // POST
 router.post("/api/bars", validate(barsSchema, 'body'), barControllers.addMultipleBars);
-router.post("/api/beers", jwtMiddleware, beerControllers.add);
+router.post("/api/beers", beerControllers.add);
 router.post("/api/users", validate(createUserSchema, 'body'), usersControllers.add);
 router.post("/api/comments", jwtMiddleware, validate(userCommentSchema, 'body'), userCommentControllers.add);
 router.post("/api/comment-images", jwtMiddleware, validate(commentImageSchema, 'body'), commentImageControllers.add); 
 router.post("/api/favorite-bars", jwtMiddleware, validate(favoriteBarSchema, 'body'), favoriteBarControllers.add);
+router.post("/api/beers-available", beerAvailableControllers.addMultiple);
 
 // DELETE
 router.delete("/api/bars/:id", jwtMiddleware, barControllers.destroy);

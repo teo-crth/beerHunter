@@ -89,7 +89,7 @@ const updatePasswordUserSchema = Joi.object({
 
 const barSchema = Joi.object({
     id: Joi.string().required(),
-    name: Joi.string().min(3).max(500).required(),
+    name: Joi.string().min(1).max(500).required(),
     address: Joi.string().min(3).max(500).required(),
     latitude: Joi.number().required(),
     longitude: Joi.number().required(),

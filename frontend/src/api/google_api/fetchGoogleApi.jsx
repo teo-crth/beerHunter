@@ -31,8 +31,6 @@ export const fetchOneGoogleBar = async (place_id) => {
         // Requête avec axios
         // const response = await axios.get(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${place_id}&key=${GOOGLE_KEY}`);
         const response = await axios.get(`${BASE_URL}/api/place/details?place_id=${place_id}`);
-        console.log('Bar trouvé depuis l\'API Google:', response.data);
-        
         return response.data;
     } catch (error) {
         console.error('Erreur lors de la récupération du bar:', error);

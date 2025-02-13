@@ -115,7 +115,7 @@ const addMultipleBars = async (req, res) => {
     }
 
     try {
-        const barsWithPictures = await Promise.all(bars.map(async (bar) => {
+        const createdBars = await Promise.all(bars.map(async (bar) => {
             
             if (bar.photo_reference) {
                 const photo_reference = bar.photo_reference;
@@ -128,10 +128,11 @@ const addMultipleBars = async (req, res) => {
                 bar.bar_picture = '/assets/images/bar-images/bar-default.webp';
             }
 
-            await models.bar.insert(bar);
-        }));
+            const result = await models.bar.insert(bar);
+            return result.rows[0];
+        }));      
 
-        res.status(201).json({messgae: 'Bars ajoutés avec succès', bars: barsWithPictures});
+        res.status(201).json({message: 'Bars ajoutés avec succès', bars: createdBars});
     } catch (error) {
         console.error('Erreur lors de l\'ajout des bars:', error);
         res.status(500).send('Erreur interne lors de l\'ajout des bars');

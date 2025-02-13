@@ -4,6 +4,7 @@ import { fetchAllCities } from '../../api/city/cityCrud';
 import { fetchGoogleBars, fetchOneGoogleBar, fetchBarMainImage } from '../../api/google_api/fetchGoogleApi';
 import { fetchAllBeers } from '../../api/beer/beerCrud';
 import { createBars, fetchBarsByCityId } from '../../api/bar/barsCrud';
+import { fetchAllBeersAvailable, createBeersAvailable } from '../../api/beer/beersAvailableInBar';
 import Button from './Button';
 import Dropdown from './Dropdown';
 
@@ -11,10 +12,10 @@ import Dropdown from './Dropdown';
 const SearchBar = () => {
     const [ cities, setCities ] = useState([]);
     const [ searchTerm, setSearchTerm ] = useState('');
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [filteredCities, setFilteredCities] = useState([]);
-    const [selectedCityId, setSelectedCityId] = useState(null);
-    const [selectedBeerId, setSelectedBeerId] = useState(null);
+    const [ isDropdownOpen, setIsDropdownOpen ] = useState(false);
+    const [ filteredCities, setFilteredCities ] = useState([]);
+    const [ selectedCityId, setSelectedCityId ] = useState(null);
+    const [ selectedBeerId, setSelectedBeerId ] = useState(null);
     const [ beers, setBeers ] = useState([]);
     const [isLoading, setIsloading] = useState(false);
     
@@ -69,11 +70,8 @@ const SearchBar = () => {
 
         try {
 
-            const barsFromDB = await fetchBarsByCityId(selectedCityId);
+            const barsFromDB = await fetchBarsByCityId(selectedCityId);          
 
-            console.log('barsFromDB', barsFromDB);
-            
-            
             if (barsFromDB.length > 2) {
                 setSearchResultBars(barsFromDB);
                 return;
@@ -102,11 +100,20 @@ const SearchBar = () => {
                     barsToSave.push(bar);                  
                 }));
 
-                console.log('barsToSave', barsToSave);
                 if (barsToSave.length > 0) {
-                    await createBars(barsToSave);
-                    const updatedBars = await fetchBarsByCityId(selectedCityId);
-                    setSearchResultBars(updatedBars);     
+                    console.log('barsToSave', barsToSave);
+                    
+                    const createdBars = await createBars(barsToSave);                    
+                    const beersToSave = [];
+                    createdBars.bars.forEach((bar) => {
+                        const randomBeers = beers.sort(() => 0.5 - Math.random()).slice(0, Math.floor(Math.random() * 5) + 2);                        
+                        randomBeers.forEach(beer => {
+                            beersToSave.push({ bar_id: bar.id, beer_id: beer.id });
+                        });
+                    });
+                    // APPELER LA FOCNTION POST POUR AJOUTER LES BEER_ID ET BAR_ID DANS LA TABLE INTERMEDIAIRE
+                    createBeersAvailable(beersToSave);
+                    setSearchResultBars(createdBars.bars);     
                 }
             }
         } catch (error) {
