@@ -9,30 +9,37 @@ const Bar = ({bar}) => {
 
     const BASE_URL = import.meta.env.VITE_BACKEND_URL;
     useEffect(() => {
-        // DATA BIZARRE BIERES MELANGEES AVEC BAR
-        fetchBeersAvailableForOneBar(bar.id)
-        .then(beersAvailable => {
-            console.log('tableau biere de bar', beersAvailable)
-            setBeersAvailableId(beersAvailable);              
-        })
-        .catch(error => console.error(error));
+        const fetchBeers = async () => {
+            // DATA BIZARRE BIERES MELANGEES AVEC BAR
+            await fetchBeersAvailableForOneBar(bar.id)
+            .then(beersAvailable => {
+                console.log('tableau biere de bar', beersAvailable)
+                setBeersAvailableId(beersAvailable);              
+            })
+            .catch(error => console.error(error));
 
-        // DATA OK
-        fetchAllBeers()
-        .then(beers => {
-            setBeers(beers);
-        })
-        .catch(error => console.error(error));
+            // DATA OK
+            await fetchAllBeers()
+            .then(beers => {
+                setBeers(beers);
+            })
+            .catch(error => console.error(error));
 
-    }, []);   
-
-    const beersAvailableName = [];
+        }
+        
+        fetchBeers();
+    }, [bar.id]);   
+    
+    const beersAvailable = [];
     beersAvailableId.forEach(beer => {
+        console.log('state beers', beers);
+        
         console.log('bière après foreach du tableau', beer);
         const beerName = beers.find(b => b.id === beer.beer_id).name;
-        beersAvailableName.push(beerName);
+        const beerId = beers.find(b => b.id === beer.beer_id).id;
+        beersAvailable.push({beerName, beerId});
     });
-
+    
     return (
         <div className="bar-card flex flex-col md:flex-row lg:flex-row justify-between items-center shadow-md rounded-lg m-2 w-[95%] bg-dark-black border-1 border-primary light-mode:bg-light">
             <div className="bar-card-image-container rounded-t-md w-full md:rounded-l-lg md:rounded-tr-none lg:rounded-tr-none lg:rounded-l-lg md:w-1/3 lg:w-1/3 h-40">
@@ -45,8 +52,8 @@ const Bar = ({bar}) => {
                 <div className="container-beers w-full flex-col justify-center items-center gap-1 mt-1">
                     <p className="bar-card-beers-title text-center font-text font-bold text-sm">Bières disponibles :</p>
                     <ul className="bar-card-beers-list flex justify-center items-start gap-1 flex-wrap">
-                        {beersAvailableName.map(beer => (
-                            <li key={beer} className="bar-card-beer font-text text-sm rounded-full pr-3 pl-3 p-1 bg-primary text-light cursor-pointer">{beer}</li>
+                        {beersAvailable.map(beer => (
+                            <li key={beer.beerId} className="bar-card-beer font-text text-sm rounded-full pr-3 pl-3 p-1 bg-primary text-light cursor-pointer">{beer.beerName}</li>
                         ))}
                     </ul>
                 </div>
