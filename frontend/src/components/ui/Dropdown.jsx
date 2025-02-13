@@ -17,7 +17,7 @@ const Dropdown = ({ beers, selectedBeerId, setSelectedBeerId }) => {
 
   return (
     <>
-        <div className="relative w-full md:w-1/3 lg:w-1/3 border-2 border-primary rounded-lg">
+        <div className="relative w-full md:w-[35%] lg:w-[35%] border-2 border-primary rounded-lg">
             <button
                 type='button'
                 className="bg-transparent text-center text-md relative w-full flex justify-center items-center p-2"

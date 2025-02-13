@@ -115,7 +115,7 @@ const SearchBar = () => {
     }   
 
     return (
-        <div className='w-full md:w-2/3 lg:w-1/2 flex items-center justify-center'>
+        <div className='w-full md:w-[70%] lg:w-[70%] flex items-center justify-center'>
             <form action="submit" className='w-full flex flex-col md:flex-row lg:flex-row items-center justify-center gap-1 text-center md:text-left lg:text-left xl:text-left m-5 text-light light-mode:text-dark-black'>
                 <div className="container-city-input container-input-city relative flex items-center justify-center w-full md:w-2/3 lg:2/3">
                     <input type="text" list="cities" className='w-full p-2 bg-transparent text-center border-2 border-primary rounded-lg' placeholder='Entrez une ville' onChange={handleChange} value={searchTerm}/>
