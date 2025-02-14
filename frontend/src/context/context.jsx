@@ -10,9 +10,10 @@ export const AppProvider = ({ children }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [isModalEditOpen, setIsModalEditOpen] = useState(false);
-  const [searchResultBars , setSearchResultBars] = useState([]);
-  const [ isLogin, setIsLogin ] = useState(false);
-   const [cities, setCities] = useState([]);
+  const [searchResultBars, setSearchResultBars] = useState([]);
+  const [isLogin, setIsLogin] = useState(false);
+  const [cities, setCities] = useState([]);
+  const [bars, setBars] = useState(null);
 
   // DARK MODE
     const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -100,6 +101,8 @@ export const AppProvider = ({ children }) => {
             setUser,
             cities,
             setCities,
+            bars, 
+            setBars,
             isModalEditOpen, 
             setIsModalEditOpen,
             openModal, 

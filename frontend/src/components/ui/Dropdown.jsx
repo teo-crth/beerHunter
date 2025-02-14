@@ -10,10 +10,21 @@ const Dropdown = ({ beers, selectedBeerId, setSelectedBeerId }) => {
   };
 
   const handleSelect = (id) => {
-    setSelectedBeerId(id);
-    setSelectText(beers.find((beer) => beer.id === id).name);
+    if (id === null) { 
+      setSelectText('Toutes');
+      setSelectedBeerId();
+      console.log('if toutes id', id);
+      
+    } else {
+      setSelectedBeerId(id); 
+      setSelectText(beers.find((beer) => beer.id === id).name);
+      console.log('else id', id);
+    }
+
     setIsOpen(false);
+    
   };
+  console.log("selectedBeerId", selectedBeerId);
 
   return (
     <>
@@ -28,7 +39,8 @@ const Dropdown = ({ beers, selectedBeerId, setSelectedBeerId }) => {
             </button>
             
             {isOpen && (
-                <ul className="w-full bg-white border-2 border-primary rounded-lg shadow-lg z-10 overflow-scroll max-h-40 top-9 absolute">
+                <ul className="w-full bg-dark-black light-mode:bg-white border-2 border-primary rounded-lg shadow-lg z-10 overflow-scroll max-h-40 top-9 absolute">
+                    <li key="toutes" className="p-2 cursor-pointer hover:bg-gray-100" onClick={() => handleSelect(null)}>Toutes</li>
                 {beers.map((beer) => (
                     <li
                     key={beer.id}
