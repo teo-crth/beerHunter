@@ -30,7 +30,7 @@ const SearchBar = () => {
                 .then(data => setCities(data))
                 .catch(error => console.error(error));
         }
-    }, [cities]);
+    }, []);
 
     useEffect(() => {
         setFilteredCities(
@@ -79,17 +79,15 @@ const SearchBar = () => {
             const barsFromDB = await fetchBarsByCityId(selectedCityId);          
 
             if (barsFromDB.length > 2) {
-                if (selectedBeerId) {
-                    console.log('barrrssss', bars);
-                    
-                    const barsWithBeerSelected = bars.filter(bar => beersAvailable.some(beer => beer.bar_id === bar.id && beer.beer_id === selectedBeerId));
+                if (selectedBeerId) {                   
+                    const barsWithBeerSelected = barsFromDB.filter(bar => beersAvailable.some(beer => beer.bar_id === bar.id && beer.beer_id === selectedBeerId));
                     setSearchResultBars(barsWithBeerSelected);
                     return;
                 } else {
                     setSearchResultBars(barsFromDB);
                     return;
                 }
-                
+
             } else {
                 const googleBars = await fetchGoogleBars(city.latitude, city.longitude);
                 const barsToSave = [];
@@ -132,10 +130,10 @@ const SearchBar = () => {
                     .catch(error => console.error(error));
                     
                     setBars(createdBars.bars);
+                    console.log('bars créé en bdd', createdBars.bars);
+                    
 
-                    if (selectedBeerId) {
-                        console.log('barrrssss', bars);
-                        
+                    if (selectedBeerId) {                        
                         const barsWithBeerSelected = bars.filter(bar => beersAvailable.some(beer => beer.bar_id === bar.id && beer.beer_id === selectedBeerId));
                         setSearchResultBars(barsWithBeerSelected);     
                     } else {

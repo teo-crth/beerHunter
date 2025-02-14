@@ -4,8 +4,9 @@ import Bar from './Bar';
 
 const SearchResultBars = () => {
     const { searchResultBars, setSearchResultBars } = useContext(AppContext);
-
-    if (searchResultBars.length === 0) {
+    console.log('searchResultBars', searchResultBars);
+    
+    if (!searchResultBars || searchResultBars.length === 0) {
         return (
             <div>
                 <h2>Aucun bar trouvé</h2>
