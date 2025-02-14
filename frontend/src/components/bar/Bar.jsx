@@ -1,43 +1,41 @@
 import React, { useEffect, useState } from 'react';
 import { fetchBeersAvailableForOneBar } from '../../api/beer/beersAvailableInBar';
 import { fetchAllBeers } from '../../api/beer/beerCrud';
+import { fetchAllBeerTypes } from '../../api/beerType/beerTypeCrud';
 
 const Bar = ({bar}) => {
-
     const [beersAvailableId, setBeersAvailableId] = useState([]);
     const [beers, setBeers] = useState([]);
+    const [beerTypes, setBeerTypes] = useState([]);
 
     const BASE_URL = import.meta.env.VITE_BACKEND_URL;
     useEffect(() => {
         const fetchBeers = async () => {
-            // DATA BIZARRE BIERES MELANGEES AVEC BAR
             await fetchBeersAvailableForOneBar(bar.id)
             .then(beersAvailable => {
-                console.log('tableau biere de bar', beersAvailable)
                 setBeersAvailableId(beersAvailable);              
             })
             .catch(error => console.error(error));
 
-            // DATA OK
             await fetchAllBeers()
-            .then(beers => {
-                setBeers(beers);
-            })
+            .then(beers => setBeers(beers))
             .catch(error => console.error(error));
 
+            await fetchAllBeerTypes()
+            .then(beerTypes => setBeerTypes(beerTypes))
+            .catch(error => console.error(error));
         }
         
         fetchBeers();
-    }, [bar.id]);   
+    }, []);   
     
     const beersAvailable = [];
     beersAvailableId.forEach(beer => {
-        console.log('state beers', beers);
-        
-        console.log('bière après foreach du tableau', beer);
-        const beerName = beers.find(b => b.id === beer.beer_id).name;
-        const beerId = beers.find(b => b.id === beer.beer_id).id;
-        beersAvailable.push({beerName, beerId});
+        const beerName = beers.find(b => b.id === beer.beer_id)?.name;
+        const beerId = beers.find(b => b.id === beer.beer_id)?.id;
+        const beerTypeId = beers.find(b => b.id === beer.beer_id)?.beer_type_id;
+        const beerType = beerTypes.find(bt => bt.id === beerTypeId)?.name;
+        beersAvailable.push({beerName, beerId, beerType});
     });
     
     return (
@@ -53,7 +51,7 @@ const Bar = ({bar}) => {
                     <p className="bar-card-beers-title text-center font-text font-bold text-sm">Bières disponibles :</p>
                     <ul className="bar-card-beers-list flex justify-center items-start gap-1 flex-wrap">
                         {beersAvailable.map(beer => (
-                            <li key={beer.beerId} className="bar-card-beer font-text text-sm rounded-full pr-3 pl-3 p-1 bg-primary text-light cursor-pointer">{beer.beerName}</li>
+                            <li key={beer.beerId} className="bar-card-beer font-text text-sm rounded-full pr-3 pl-3 p-1 bg-primary text-light cursor-pointer">{`${beer.beerName} (${beer.beerType})`}</li>
                         ))}
                     </ul>
                 </div>

@@ -12,6 +12,10 @@ class BeerAvailableManager extends AbstractManager {
         ]);
     }
 
+    findAllBeersAvailable() {
+        return this.database.query(`SELECT * FROM ${this.table}`);
+    }
+
     update(beerAvailable) {
         return this.database.query(`UPDATE ${this.table} SET bar_id = $1, beer_id = $2 WHERE id = $3`, [
             beerAvailable.bar_id,

@@ -2,16 +2,15 @@ const models = require("../models");
 
 const browse = (req, res) => {
     models.beerAvailable
-        .findAll()
-        .then((result) => {
-            const rows = result.rows
-            console.log('FETCH BEERAVAILABLE BACKEND', rows);
-            res.send(rows);
-        })
-        .catch((err) => {
-            console.error(err);
-            res.sendStatus(500);
-        });
+    .findAllBeersAvailable()
+    .then((result) => {
+        const rows = result.rows;
+        res.send(rows);
+    })
+    .catch((err) => {
+        console.error(err);
+        res.sendStatus(500);
+    });
 };
 
 const findAssociateBeersAvailable = async (req, res) => {
