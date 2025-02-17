@@ -12,19 +12,15 @@ const Dropdown = ({ beers, selectedBeerId, setSelectedBeerId }) => {
   const handleSelect = (id) => {
     if (id === null) { 
       setSelectText('Toutes');
-      setSelectedBeerId();
-      console.log('if toutes id', id);
-      
+      setSelectedBeerId();      
     } else {
       setSelectedBeerId(id); 
       setSelectText(beers.find((beer) => beer.id === id).name);
-      console.log('else id', id);
     }
 
     setIsOpen(false);
     
   };
-  console.log("selectedBeerId", selectedBeerId);
 
   return (
     <>

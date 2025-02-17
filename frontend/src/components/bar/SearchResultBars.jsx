@@ -4,8 +4,9 @@ import Bar from './Bar';
 
 const SearchResultBars = () => {
     const { searchResultBars, setSearchResultBars } = useContext(AppContext);
-
-    if (searchResultBars.length === 0) {
+    console.log('searchResultBars', searchResultBars);
+    
+    if (!searchResultBars || searchResultBars.length === 0) {
         return (
             <div>
                 <h2>Aucun bar trouvé</h2>
@@ -14,7 +15,7 @@ const SearchResultBars = () => {
     }
 
     return (
-        <div className='container-searchResultBars flex flex-col items-center justify-center gap-2'>
+        <div className='container-searchResultBars flex flex-col items-center justify-center w-full gap-2'>
             {searchResultBars.map(bar => (
                 <Bar key={bar.id} bar={bar} />
             ))    

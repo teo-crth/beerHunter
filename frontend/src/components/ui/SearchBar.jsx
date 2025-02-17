@@ -21,7 +21,7 @@ const SearchBar = () => {
     const [beers, setBeers] = useState([]);
     const [isLoading, setIsloading] = useState(false);
     
-    const { openModal, setOpenModal, setSearchResultBars, bars, setBars } = useContext(AppContext);
+    const { openModal, setOpenModal, setSearchResultBars, bars, setBars, pastResultBars, setPastResultBars } = useContext(AppContext);
     const GOOGLE_KEY = import.meta.env.GOOGLE_KEY;
 
     useEffect(() => {
@@ -30,7 +30,7 @@ const SearchBar = () => {
                 .then(data => setCities(data))
                 .catch(error => console.error(error));
         }
-    }, [cities]);
+    }, []);
 
     useEffect(() => {
         setFilteredCities(
@@ -65,7 +65,7 @@ const SearchBar = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+        setBars([]);
         setIsloading(true);
 
         const city = cities.find(city => city.id === selectedCityId);
@@ -79,17 +79,15 @@ const SearchBar = () => {
             const barsFromDB = await fetchBarsByCityId(selectedCityId);          
 
             if (barsFromDB.length > 2) {
-                if (selectedBeerId) {
-                    console.log('barrrssss', bars);
-                    
-                    const barsWithBeerSelected = bars.filter(bar => beersAvailable.some(beer => beer.bar_id === bar.id && beer.beer_id === selectedBeerId));
+                if (selectedBeerId) {                   
+                    const barsWithBeerSelected = barsFromDB.filter(bar => beersAvailable.some(beer => beer.bar_id === bar.id && beer.beer_id === selectedBeerId));
                     setSearchResultBars(barsWithBeerSelected);
                     return;
                 } else {
                     setSearchResultBars(barsFromDB);
                     return;
                 }
-                
+
             } else {
                 const googleBars = await fetchGoogleBars(city.latitude, city.longitude);
                 const barsToSave = [];
@@ -132,14 +130,16 @@ const SearchBar = () => {
                     .catch(error => console.error(error));
                     
                     setBars(createdBars.bars);
+                    console.log('bars créé en bdd', createdBars.bars);
+                    
 
-                    if (selectedBeerId) {
-                        console.log('barrrssss', bars);
-                        
+                    if (selectedBeerId) {                        
                         const barsWithBeerSelected = bars.filter(bar => beersAvailable.some(beer => beer.bar_id === bar.id && beer.beer_id === selectedBeerId));
-                        setSearchResultBars(barsWithBeerSelected);     
+                        setSearchResultBars(barsWithBeerSelected);
+                        setPastResultBars(barsWithBeerSelected);     
                     } else {
                         setSearchResultBars(bars);
+                        setPastResultBars(bars);
                     }
                 }
             }
