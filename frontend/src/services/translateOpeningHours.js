@@ -41,9 +41,7 @@ export const translatedOpeningHours = (openingHours) => {
             } else {
 
                 hour = hour.replace(/\u200B|\u200C|\u202F|\u00A0/g, ' ');
-
                 const hours = hour.split(/\s*[\u2013\u2014]\s*/);
-                console.log('heureeeeees l119', hours);
                 
                 if (hours.length === 2) {
                     const startHour = hours[0].trim();

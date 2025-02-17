@@ -14,6 +14,7 @@ export const AppProvider = ({ children }) => {
   const [isLogin, setIsLogin] = useState(false);
   const [cities, setCities] = useState([]);
   const [bars, setBars] = useState(null);
+  const [pastResultBars, setPastResultBars] = useState([]);
 
   // DARK MODE
     const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -103,6 +104,8 @@ export const AppProvider = ({ children }) => {
             setCities,
             bars, 
             setBars,
+            pastResultBars,
+            setPastResultBars,
             isModalEditOpen, 
             setIsModalEditOpen,
             openModal, 
