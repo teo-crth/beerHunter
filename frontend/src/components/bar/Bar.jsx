@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import ReactStars from 'react-stars';
 import { Navigate } from 'react-router-dom';
 import { fetchBeersAvailableForOneBar } from '../../api/beer/beersAvailableInBar';
 import { fetchAllBeers } from '../../api/beer/beerCrud';
@@ -50,9 +51,8 @@ const Bar = ({ bar }) => {
     const handleClickBar = () => {
         console.log('click pris en compte');
         setRedirect(true);
-        console.log('redirect', redirect);
     }
-    
+
     if (redirect) return <Navigate to={`/bars/${bar.id}`} />;
 
     return (
@@ -64,18 +64,18 @@ const Bar = ({ bar }) => {
                 <h3 className="bar-card-title text-center font-title font-bold text-xl p-2">{bar.name}</h3>
                 <p className="bar-card-address text-center font-text text-xs">{bar.address}</p>
                 {translatedHours.length > 0 && (
-                <div className="container-hours flex flex-nowrap overflow-x-scroll w-2/3 justify-start items-center gap-1 flex-col md:flex-row lg:flex-row">
-                    {translatedHours.map(day => (
-                        <div key={day.day} className="bar-card-hours flex justify-center items-center gap-1 min-w-40 border-primary border-1 rounded-md p-1">
-                            <p className="bar-card-day font-text text-xs font-bold">{day.day}</p>
-                            <ul className="bar-card-hours-list flex gap-1">
-                                {day.hours.map(hour => (
-                                    <li key={hour} className="bar-card-hour font-text text-xs">{hour}</li>
-                                ))}
-                            </ul>
-                        </div>
-                    ))}
-                </div>
+                    <div className="container-hours flex flex-nowrap overflow-x-scroll w-2/3 justify-start items-center gap-1 flex-col md:flex-row lg:flex-row">
+                        {translatedHours.map(day => (
+                            <div key={day.day} className="bar-card-hours flex justify-center items-center gap-1 min-w-40 border-primary border-1 rounded-md p-1">
+                                <p className="bar-card-day font-text text-xs font-bold">{day.day}</p>
+                                <ul className="bar-card-hours-list flex gap-1">
+                                    {day.hours.map(hour => (
+                                        <li key={hour} className="bar-card-hour font-text text-xs">{hour}</li>
+                                    ))}
+                                </ul>
+                            </div>
+                        ))}
+                    </div>
                 )}
                 <div className="container-beers w-full flex-col justify-center items-center gap-1 mt-1">
                     <p className="bar-card-beers-title text-center font-text font-bold text-sm">Bières disponibles :</p>
@@ -85,8 +85,15 @@ const Bar = ({ bar }) => {
                         ))}
                     </ul>
                 </div>
-                <div className="container-rate flex justify-end items-center w-full">
-                    <p className="bar-card-rate text-left font-text text-sm">{bar.rate}</p>
+                <div className="container-rate flex justify-end items-center w-full gap-1">
+                    <p className="bar-card-rate text-left font-text text-sm pt-1">{bar.rate}</p>
+                    <ReactStars
+                        count={5}
+                        value={bar.rate}
+                        size={24}
+                        activeColor="#FEC514"
+                        edit={false}
+                    />
                 </div>
             </div>
         </div>
