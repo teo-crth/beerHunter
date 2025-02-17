@@ -1,5 +1,6 @@
-// export const translatedOpeningHours = (openingHours) => {
-export const translatedOpeningHours = (openingHours) => {
+// import { translatedOpeningHours } from '../services/translatedOpeningHours';
+
+const translatedOpeningHours = (openingHours) => {
 
     if (!openingHours) {
         return [];
@@ -76,3 +77,45 @@ export const translatedOpeningHours = (openingHours) => {
 
     return daysAndHours;
 };
+
+describe('translatedOpeningHours doit traduire les heures d ouvertures en francais', () => {
+    test('translatedOpeningHours doit retourner un tableau vide si la valeur passée en paramètre est vide', () => {
+        expect(translatedOpeningHours('')).toEqual([]);
+    });
+
+    test('translatedOpeningHours doit retourner un tableau vide si la valeur passée en paramètre est null', () => {
+        expect(translatedOpeningHours(null)).toEqual([]);
+    });
+
+    test('translatedOpeningHours doit retourner un tableau vide si la valeur passée en paramètre est undefined', () => {
+        expect(translatedOpeningHours(undefined)).toEqual([]);
+    });
+
+    test('translatedOpeningHours doit retourner un tableau vide si la valeur passée en paramètre est un nombre', () => {
+        expect(translatedOpeningHours(123)).toEqual([]);
+    });
+
+    test('translatedOpeningHours doit retourner un tableau vide si la valeur passée en paramètre est un objet', () => {
+        expect(translatedOpeningHours({})).toEqual([]);
+    });
+
+    test('translatedOpeningHours doit retourner un tableau vide si la valeur passée en paramètre est un tableau', () => {
+        expect(translatedOpeningHours([])).toEqual([]);
+    });
+
+    test('translatedOpeningHours doit retourner un tableau vide si la valeur passée en paramètre est un boolean', () => {
+        expect(translatedOpeningHours(true)).toEqual([]);
+    });
+
+    test('translatedOpeningHours doit retourner un tableau vide si la valeur passée en paramètre est un string vide', () => {
+        expect(translatedOpeningHours('')).toEqual([]);
+    });
+
+    test('translatedOpeningHours doit retourner un tableau d\objets avec 7 objets un pour chaque jour.', () => {
+        expect(translatedOpeningHours('Monday: Closed, Tuesday: 7:00 PM – 2:00 AM, Wednesday: 7:00 PM – 2:00 AM, Thursday: 7:00 PM – 2:00 AM, Friday: 7:00 PM – 2:00 AM, Saturday: 7:00 PM – 2:00 AM, Sunday: Closed'))
+        .toEqual([{day: 'Lundi', hours: 'Fermé'}, {day: 'Mardi', hours: '19h00 - 2h00'}, {day: 'Mercredi', hours: '19h00 - 2h00'}, {day: 'Jeudi', hours: '19h00 - 2h00'}, {day: 'Vendredi', hours: '19h00 - 2h00'}, {day: 'Samedi', hours: '19h00 - 2h00'}, {day: 'Dimanche', hours: 'Fermé'}]);
+    });
+});
+
+
+
