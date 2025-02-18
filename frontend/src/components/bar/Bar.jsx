@@ -7,8 +7,7 @@ import { fetchAllBeerTypes } from '../../api/beerType/beerTypeCrud';
 import { translatedOpeningHours } from '../../services/translateOpeningHours';
 
 const Bar = ({ bar }) => {
-    const [beersAvailableId, setBeersAvailableId] = useState([]);
-    const [beers, setBeers] = useState([]);
+    const [beersAvailable, setBeersAvailable] = useState([]);
     const [beerTypes, setBeerTypes] = useState([]);
     const [redirect, setRedirect] = useState(false);
 
@@ -19,33 +18,29 @@ const Bar = ({ bar }) => {
     useEffect(() => {
         const fetchBeers = async () => {
             await fetchBeersAvailableForOneBar(bar.id)
-                .then(beersAvailable => {
-                    setBeersAvailableId(beersAvailable);
-                })
-                .catch(error => console.error(error));
-
-            await fetchAllBeers()
-                .then(beers => setBeers(beers))
-                .catch(error => console.error(error));
+            .then(beersAvailable => {
+                setBeersAvailable(beersAvailable);
+            })
+            .catch(error => console.error(error));
 
             await fetchAllBeerTypes()
-                .then(beerTypes => setBeerTypes(beerTypes))
-                .catch(error => console.error(error));
+            .then(beerTypes => setBeerTypes(beerTypes))
+            .catch(error => console.error(error));
         }
-
+        
         fetchBeers();
     }, []);
-
-    const beersAvailable = [];
-    beersAvailableId.forEach(beer => {
-        const beerName = beers.find(b => b.id === beer.beer_id)?.name;
-        const beerId = beers.find(b => b.id === beer.beer_id)?.id;
-        const beerTypeId = beers.find(b => b.id === beer.beer_id)?.beer_type_id;
-        const beerType = beerTypes.find(bt => bt.id === beerTypeId)?.name;
-        beersAvailable.push({ beerName, beerId, beerType });
+    
+    beersAvailable.forEach(beer => {
+        console.log("beer", beer);
+        beerTypes.forEach(beerType => {
+            if (beer.beer_type_id === beerType.id) {
+                beer.beerType = beerType.name;
+            }
+        });
     });
 
-    let translatedHours = [];
+    let translatedHours = [];   
 
     if (bar?.opening_hours) {
         translatedHours = translatedOpeningHours(bar.opening_hours);
@@ -82,8 +77,8 @@ const Bar = ({ bar }) => {
                 <div className="container-beers w-full flex-col justify-center items-center gap-1 mt-1">
                     <p className="bar-card-beers-title text-center font-text font-bold text-sm">Bières disponibles :</p>
                     <ul className="bar-card-beers-list flex justify-center items-start gap-1 flex-wrap">
-                        {beersAvailable.filter(beer => beer.beerName).sort((a, b) => a.beerName.localeCompare(b.beerName)).map(beer => (
-                            <li key={beer.beerId} className="bar-card-beer font-text text-center text-sm rounded-full pr-3 pl-3 p-1 bg-primary text-light cursor-pointer">{`${beer.beerName} (${beer.beerType})`}</li>
+                        {beersAvailable.sort((a, b) => a.name.localeCompare(b.name)).map(beer => (
+                            <li key={beer.beerId} className="bar-card-beer font-text text-center text-sm rounded-full pr-3 pl-3 p-1 bg-primary text-light cursor-pointer">{`${beer.name} (${beer.beerType})`}</li>
                         ))}
                     </ul>
                 </div>

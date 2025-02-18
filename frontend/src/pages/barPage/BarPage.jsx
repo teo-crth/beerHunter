@@ -4,21 +4,32 @@ import Slider from 'react-slick';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import ReactStars from 'react-stars';
 import { translatedOpeningHours } from '../../services/translateOpeningHours';
+import { fetchBeersAvailableForOneBar } from '../../api/beer/beersAvailableInBar';
 import '../../../node_modules/slick-carousel/slick/slick.css';
 import '../../../node_modules/slick-carousel/slick/slick-theme.css';
 
 const BarPage = () => {
     const BASE_URL = import.meta.env.VITE_BACKEND_URL;
-    const GOOGLE_KEY = import.meta.env.VITE_GOOGLE_KEY;
-    console.log('GOOGLE_API_KEY', GOOGLE_KEY);
-    
-    
+    const GOOGLE_KEY = import.meta.env.VITE_GOOGLE_KEY;  
     const { id } = useParams();
     const location = useLocation();
     const barObject = location.state;
-
+    
     const [bar, setBars] = useState(barObject);
+    const [beersAvailable, setBeersAvailable] = useState([]);
     console.log('bar dans barPage avec usestate', bar);
+
+    useEffect(() => {
+        const fetchBeers = async () => {
+            await fetchBeersAvailableForOneBar(id)
+            .then(beers => setBeersAvailable(beers))
+            .catch(error => console.error(error));
+        }
+
+        fetchBeers();
+    }, []);
+
+    console.log('beersAvailable dans barPage', beersAvailable);
 
     const openingHours = translatedOpeningHours(bar.opening_hours);
 
@@ -70,9 +81,9 @@ const BarPage = () => {
                     <h1 style={{ margin: '0', color: '#333', marginBottom: '1em' }}>Bières disponibles</h1>
                     <div style={{ width: '100%', alignItems: 'center' }}>
                         <Slider {...settings}>
-                            {images.map((img, index) => (
+                            {beersAvailable.length > 0 && beersAvailable.map((beer, index) => (
                                 <div key={index}>
-                                    <img src={img} alt={`Biere-${index}`} style={{ width: '10em', borderRadius: '1em', alignItems: 'center' }} />
+                                    <img src={`${BASE_URL}${beer.image_link}`} alt={`Biere-${index}`} style={{ width: '10em', borderRadius: '1em', alignItems: 'center' }} />
                                 </div>
                             ))}
                         </Slider>
