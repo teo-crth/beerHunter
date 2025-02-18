@@ -39,6 +39,10 @@ const router = createBrowserRouter([
         element: <BarPage />,
       },
       {
+        path: '/bars/',
+        element: <BarPage />,
+      },
+      {
         path: 'contact',
         element: <Contact />,
       },
