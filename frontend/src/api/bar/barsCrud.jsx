@@ -14,7 +14,7 @@ export const createBars = async (bars) => {
 
         return response.data;
     } catch (error) {
-        console.error('Erreur lors de la création des bars :', error);
+        console.error('Erreur lors de la creation des bars :', error);
         throw error;
     }
 }
