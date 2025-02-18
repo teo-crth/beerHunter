@@ -3,6 +3,17 @@ const Joi = require('joi');
 const eighteenYearsAgo = new Date();
 eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
 
+const loginSchema = Joi.object({
+    email: Joi.string().email().pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.(fr|com|net)$/).required(),
+    password: Joi.string()
+    .min(12)
+    .max(30)
+    .pattern(/(?=.*[A-Z])/, 'at least one uppercase letter')
+    .pattern(/(?=.*\d)/, 'at least one digit')
+    .pattern(/(?=.*[!@#$%^&*(),.?":{}|<>])/ , 'at least one special character')
+    .required(),
+});
+
 const createUserSchema = Joi.object({
     name: Joi.string().min(3).max(30).required(),
     email: Joi.string().email().pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.(fr|com|net)$/).required(),
@@ -14,7 +25,7 @@ const createUserSchema = Joi.object({
         .pattern(/(?=.*[!@#$%^&*(),.?":{}|<>])/ , 'at least one special character')
         .required(),
     confirmPassword: Joi.ref('password'),
-    profile_picture: Joi.string().allow(null),
+    profil_picture: Joi.string().allow(null),
     cityId: Joi.number().allow(null),
     theme: Joi.string().valid('light', 'dark').allow(null),
     address: Joi.string().min(3).allow(null),
@@ -75,15 +86,21 @@ const updatePasswordUserSchema = Joi.object({
         
 });
 
+
 const barSchema = Joi.object({
-    name: Joi.string().min(3).max(500).required(),
+    id: Joi.string().required(),
+    name: Joi.string().min(1).max(500).required(),
     address: Joi.string().min(3).max(500).required(),
     latitude: Joi.number().required(),
     longitude: Joi.number().required(),
-    rate: Joi.number().min(0).max(5).required(),
-    opening_hours: Joi.string().min(3).max(50).allow(null),
-    city_id: Joi.number().required()
+    rate: Joi.number().min(0).max(5).allow(null).allow(''),
+    opening_hours: Joi.string().min(3).max(500).allow(null).allow(''),
+    city_id: Joi.number().required(),
+    bar_picture: Joi.string().allow(null).allow(''),
+    photo_reference: Joi.string().allow(null).allow('')
 });
+
+const barsSchema = Joi.array().items(barSchema);
 
 const favoriteBarSchema = Joi.object({
     user_id: Joi.number().required(),
@@ -104,4 +121,4 @@ const commentImageSchema = Joi.object({
     user_comment_id: Joi.number().required()
 });
 
-module.exports = { updatePasswordUserSchema, updateUserSchema, createUserSchema, userCommentSchema, commentImageSchema, favoriteBarSchema, barSchema };
+module.exports = { updatePasswordUserSchema, updateUserSchema, createUserSchema, userCommentSchema, commentImageSchema, favoriteBarSchema, barSchema, loginSchema, barsSchema };

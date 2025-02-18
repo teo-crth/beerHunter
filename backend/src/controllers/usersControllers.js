@@ -1,5 +1,7 @@
 const path = require('path');
 require('dotenv').config();
+const fs = require('fs'); 
+const generateToken = require('../utils/generateToken');
 
 const models = require("../models");
 const { compare } = require("../utils/cryptoPassword");
@@ -87,18 +89,30 @@ const edit = (req, res) => {
 
   if (userData.password) updatedFields.password = userData.password;
 
-  if (req.file) {
-    console.log('req.file image', req.file);
-    
+  if (req.file) {   
     const profilePicturePath = path.join("public", "assets", "images", "profil-pictures", req.file.filename);
-
-    const imageUrl = `http://localhost:${APP_PORT}/assets/images/profil-pictures/${req.file.filename}`;
+    const uploadPath = path.join(__dirname, "..", "..", "public", "assets", "images", "profil-pictures");
+    const uploadedFileName = req.file.filename;
+    const imageUrl = `/assets/images/profil-pictures/${req.file.filename}`;
     updatedFields.profil_picture = imageUrl;
+
+    const oldImageName = `id${id}-`;
+    const filesInDirectory = fs.readdirSync(uploadPath);
+  
+    filesInDirectory.forEach(file => {
+      if (file.startsWith(oldImageName) && file !== uploadedFileName) {
+        const oldFilePath = path.join(uploadPath, file);
+        fs.unlinkSync(oldFilePath);
+        console.log(`Ancienne image supprimée: ${file}`);
+      }
+    });
   }
 
   if (Object.keys(updatedFields).length === 0) {
     return res.status(400).send('Aucun champ n\'a été modifié');
   }
+
+
 
   models.users
     .update(id, updatedFields)
@@ -143,7 +157,7 @@ const editPassword = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  const { name, birth_date, email, password, confirmPassword, theme, cityId } = req.body;
+  const { name, email, birth_date, cityId, password, confirmPassword, theme, profil_picture } = req.body;
 
   if (password !== confirmPassword) {
     res.status(400).send("Les mots de passe ne correspondent pas");
@@ -155,7 +169,7 @@ const add = async (req, res) => {
   // TODO validations (length, format...)
 
   models.users
-    .insert(name, birth_date, email, hashPassword, theme, cityId)
+    .insert(email, birth_date, hashPassword, cityId, name, theme, profil_picture)
     .then((result) => {
       res.location(`/users/${result.insertId}`).sendStatus(201);
     })
@@ -206,10 +220,18 @@ const login = async (req, res) => {
       return;
     }
 
-    res.status(200).send("Vous êtes connecté");
-
-    // Tu peux renvoyer l'account ou un token si tu veux ici (ex: pour l'authentification par token)
-
+    const token = generateToken(account);
+    res.status(200).send({ 
+      token, 
+      id: account.id, 
+      name: account.name, 
+      profil_picture: account.profil_picture, 
+      theme: account.theme,
+      cityId: account.city_id,
+      birth_date: account.birth_date,
+      email: account.email,
+      address: account.address
+    });
   } catch (err) {
     console.error(err);
     res.status(500).send("Une erreur est survenue, veuillez réessayer.");

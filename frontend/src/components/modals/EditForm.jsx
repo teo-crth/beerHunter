@@ -6,7 +6,6 @@ import dayjs from 'dayjs';
 import customParseFormat from "dayjs/plugin/customParseFormat";
 
 import { changeOneUser, fetchOneUser } from '../../api/user/oneUserCrud';
-import { fetchAllCities } from '../../api/city/cityCrud';
 
 import Button from '../ui/Button';
 
@@ -14,23 +13,16 @@ const EditForm = () => {
     const {
         user,
         setUser,
+        cities,
+        setCities,
         closeModal,
         openModal,
         setIsModalEditOpen
     } = useContext(AppContext);
 
-    const [cities, setCities] = useState([]);
     const [searchTerm, setSearchTerm] = useState(`${user.city_name}`);
     const [filteredCities, setFilteredCities] = useState([]);
-    const [ isDropdownOpen, setIsDropdownOpen ] = useState(false);
-
-    useEffect(() => {
-        if (cities.length === 0) {
-            fetchAllCities()
-                .then(data => setCities(data))
-                .catch(error => console.error(error));
-        }
-    }, [cities]);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     useEffect(() => {
         setFilteredCities(
@@ -64,10 +56,7 @@ const EditForm = () => {
         const birth_date = dateFormated;
         const cityId = values.city;
         const address = values.address;
-        const profil_picture = values.profil_picture;  
-        
-        console.log('city valeur champs formik', cityId);
-        
+        const profil_picture = values.profil_picture;     
 
         changeOneUser(id, email, name, theme, birth_date, cityId, address, profil_picture)
             .then(() => {
@@ -94,7 +83,7 @@ const EditForm = () => {
                     name: user.name,
                     email: user.email,
                     birth_date: dayjs(user?.birth_date).format('DD/MM/YYYY'),
-                    theme: userTheme,
+                    theme: userTheme === "Clair" ? "light" : "dark",
                     city: user.city_id,
                     address: user.address,
                     profil_picture: user.profil_picture ? user.profil_picture : null,

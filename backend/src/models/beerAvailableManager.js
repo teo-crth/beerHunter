@@ -6,10 +6,14 @@ class BeerAvailableManager extends AbstractManager {
     }
 
     insert(beerAvailable) {
-        return this.database.query(`INSERT INTO ${this.table} (bar_id, beer_id) VALUES ($1, $2)`, [
+        return this.database.query(`INSERT INTO ${this.table} (bar_id, beer_id) VALUES ($1, $2) RETURNING*`, [
             beerAvailable.bar_id,
             beerAvailable.beer_id
         ]);
+    }
+
+    findAllBeersAvailable() {
+        return this.database.query(`SELECT * FROM ${this.table}`);
     }
 
     update(beerAvailable) {
@@ -18,6 +22,10 @@ class BeerAvailableManager extends AbstractManager {
             beerAvailable.beer_id,
             beerAvailable.id
         ]);
+    }
+
+    findAssociateBeersAvailable(id) {
+        return this.database.query(`SELECT * FROM ${this.table} WHERE bar_id = $1`, [id]);
     }
 }
 

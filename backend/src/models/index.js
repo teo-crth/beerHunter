@@ -1,26 +1,20 @@
 require("dotenv").config();
 const pg = require("pg");
 
-// Récupération des variables d'environnement pour la connexion à la base de données
 const { DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME } = process.env;
+const { POSTGRES_DATABASE } = process.env;
 
-// Création du pool de connexions PostgreSQL
 const pool = new pg.Pool({
-  host: DB_HOST,
-  port: DB_PORT,
-  user: DB_USER,
-  password: DB_PASSWORD,
-  database: DB_NAME,
-  client_encoding: "UTF8", // 🔥 Force l'encodage en UTF-8
+  connectionString: process.env.DATABASE_URL,
   ssl: {
-    rejectUnauthorized: false, // Important pour les connexions SSL
+    rejectUnauthorized: false,
   },
 });
 
 // Vérification de la connexion et de l'encodage
 pool.connect()
   .then(client => {
-    console.info(`✅ Connecté à la base de données : ${DB_NAME}`);
+    console.info(`✅ Connecté à la base de données : ${POSTGRES_DATABASE}`);
 
     // Vérifier si PostgreSQL envoie bien des données en UTF-8
     return client.query("SHOW client_encoding;")

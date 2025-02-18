@@ -6,9 +6,11 @@ import Layout from '../components/layout/Layout';
 import BeerTypes from '../components/beer/BeerType';
 import Beer from '../components/beer/Beer';
 import Bar from '../components/bar/Bar';
-import ContactForm from '../components/contact/ContactForm';
+import Contact from '../pages/Contact';
 import Profil from '../pages/Profil';
 import BarPage from '../pages/barPage/BarPage';
+import BeerPage from '../pages/beerPage/BeerPage';
+import BeerTypePage from '../pages/BeerTypePage';
 
 const router = createBrowserRouter([
   {
@@ -21,20 +23,20 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: '/type-de-biere',
-        element: <BeerTypes />,
+        path: 'types-de-biere',
+        element: <BeerTypePage />,
       },
       {
-        path: '/type-de-biere/:type',
+        path: 'types-de-biere/:type',
         element: <Beer />,
       },
       {
-        path: '/bieres/:id',
-        element: <Beer />,
+        path: 'bieres/:id',
+        element: <BeerPage />,
       },
       {
-        path: '/bars/:id',
-        element: <Bar />,
+        path: 'bars/:id',
+        element: <BarPage />,
       },
       {
         path: '/bars/',
@@ -42,12 +44,12 @@ const router = createBrowserRouter([
       },
       {
         path: 'contact',
-        element: <ContactForm />,
+        element: <Contact />,
       },
       {
         path: 'profil',
         element: <Profil />,
-      },
+      }
     ],
   },
 ]);

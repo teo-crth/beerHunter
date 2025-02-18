@@ -1,14 +1,11 @@
 const models = require("../models");
 
-const {replaceSpecialChars} = require("../utils/specialCharacter");
-
 const browse = (req, res) => {
   models.beer_type
     .findAll()
     .then((result) => {
       const rows = result.rows;
-      const traitedRows = replaceSpecialChars(rows);
-      res.send(traitedRows);
+      res.send(rows);
     })
     .catch((err) => {
       console.error(err);
@@ -37,8 +34,7 @@ const read = (req, res) => {
       if (rows[0] == null) {
         res.sendStatus(404);
       } else {
-        const traitedRows = replaceSpecialChars(rows);
-        res.send(traitedRows[0]);
+        res.send(rows[0]);
       }
     })
     .catch((err) => {
