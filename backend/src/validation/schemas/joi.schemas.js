@@ -22,7 +22,7 @@ const createUserSchema = Joi.object({
         .max(30)
         .pattern(/(?=.*[A-Z])/, 'at least one uppercase letter')
         .pattern(/(?=.*\d)/, 'at least one digit')
-        .pattern(/(?=.*[!@#$%^&*(),.?":{}|<>])/ , 'at least one special character')
+        .pattern(/(?=.*[!@#$%^&*(),.?":{}|<>-_])/ , 'at least one special character')
         .required(),
     confirmPassword: Joi.ref('password'),
     profil_picture: Joi.string().allow(null),
