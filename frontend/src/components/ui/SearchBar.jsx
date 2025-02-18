@@ -103,12 +103,21 @@ const SearchBar = () => {
                         opening_hours: null,
                         city_id: selectedCityId,
                         photo_reference: GoogleBar.photos && GoogleBar.photos[0] ? GoogleBar.photos[0].photo_reference : null,
-                        bar_picture: null
+                        phone_number: null,
+                        maps_url: null,
+                        website: null
                     };
                         
                     const googleBarDetails = await fetchOneGoogleBar(GoogleBar.place_id);
                     const openingHours = googleBarDetails.result.current_opening_hours?.weekday_text?.join(', ');
+                    const phone = googleBarDetails.result.formatted_phone_number;
+                    const mapsUrl = googleBarDetails.result.url;
+                    const website = googleBarDetails.result.website;
+
                     if (openingHours) bar.opening_hours = openingHours;
+                    if (phone) bar.phone_number = phone;
+                    if (mapsUrl) bar.maps_url = mapsUrl;
+                    if (website) bar.website = website;
                         
                     barsToSave.push(bar);                  
                 }));

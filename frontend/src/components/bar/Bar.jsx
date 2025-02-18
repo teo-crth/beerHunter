@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ReactStars from 'react-stars';
-import { Navigate } from 'react-router-dom';
+import { useNavigate  } from 'react-router-dom';
 import { fetchBeersAvailableForOneBar } from '../../api/beer/beersAvailableInBar';
 import { fetchAllBeers } from '../../api/beer/beerCrud';
 import { fetchAllBeerTypes } from '../../api/beerType/beerTypeCrud';
@@ -13,6 +13,9 @@ const Bar = ({ bar }) => {
     const [redirect, setRedirect] = useState(false);
 
     const BASE_URL = import.meta.env.VITE_BACKEND_URL;
+
+    const navigate = useNavigate();
+
     useEffect(() => {
         const fetchBeers = async () => {
             await fetchBeersAvailableForOneBar(bar.id)
@@ -48,15 +51,14 @@ const Bar = ({ bar }) => {
         translatedHours = translatedOpeningHours(bar.opening_hours);
     }
 
-    const handleClickBar = () => {
-        console.log('click pris en compte');
-        setRedirect(true);
-    }
-
-    if (redirect) return <Navigate to={`/bars/${bar.id}`} />;
+    useEffect(() => {
+        if (redirect) {
+            navigate(`/bars/${bar.id}`, { state: bar });
+        }
+    }, [redirect, bar.id, navigate]);
 
     return (
-        <div onClick={handleClickBar} className="bar-card flex flex-col md:flex-row lg:flex-row justify-between items-center shadow-md rounded-lg m-2 w-[95%] bg-dark-black border-1 border-primary light-mode:bg-light">
+        <div onClick={() => setRedirect(true)} className="bar-card flex flex-col md:flex-row lg:flex-row justify-between items-center shadow-md rounded-lg m-2 w-[95%] bg-dark-black border-1 border-primary light-mode:bg-light">
             <div className="bar-card-image-container rounded-t-md w-full md:rounded-l-lg md:rounded-tr-none lg:rounded-tr-none lg:rounded-l-lg md:w-1/3 lg:w-1/3 h-52">
                 <img src={`${BASE_URL}${bar.bar_picture}`} alt={bar.name} className="shadow-lg bar-card-image w-full h-full object-cover  md:rounded-tr-none lg:rounded-tr-none rounded-t-md md:rounded-l-lg lg:rounded-l-lg" />
             </div>

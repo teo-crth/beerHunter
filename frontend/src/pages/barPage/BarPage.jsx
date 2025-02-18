@@ -1,67 +1,26 @@
 import React, { useEffect, useState } from 'react';
+import { useParams, useLocation } from 'react-router-dom';
 import Slider from 'react-slick';
-import { fetchBars } from '../../api/bar/barCrud';
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import ReactStars from 'react-stars';
+import { translatedOpeningHours } from '../../services/translateOpeningHours';
 import '../../../node_modules/slick-carousel/slick/slick.css';
 import '../../../node_modules/slick-carousel/slick/slick-theme.css';
 
 const BarPage = () => {
-    const [bars, setBars] = useState([]);
-    useEffect(() => {
-        const fetchBarsData = async () => {
-            try {
-                const barData = await fetchBars();
-                setBars(barData);
-                console.log(barData);
-            }
-            catch (error) {
-                console.error(error);
-            };
-        }
-        fetchBarsData();
-    }, []);
-    const openingHours = [
-        { day: 'Monday', hours: 'Closed' },
-        { day: 'Tuesday', hours: '4:00PM - 00:00AM' },
-        { day: 'Wednesday', hours: '4:00PM - 00:00AM' },
-        { day: 'Thursday', hours: '4:00PM - 1:00AM' },
-        { day: 'Friday', hours: '4:00PM - 2:00AM' },
-        { day: 'Saturday', hours: '2:00PM - 2:00AM' },
-        { day: 'Sunday', hours: '2:00PM - 11:00PM' },
-    ];
+    const BASE_URL = import.meta.env.VITE_BACKEND_URL;
+    const GOOGLE_KEY = import.meta.env.VITE_GOOGLE_KEY;
+    console.log('GOOGLE_API_KEY', GOOGLE_KEY);
+    
+    
+    const { id } = useParams();
+    const location = useLocation();
+    const barObject = location.state;
 
-    const translateOpeningHours = (hours) => {
-        const daysTranslation = {
-            Monday: 'Lundi',
-            Tuesday: 'Mardi',
-            Wednesday: 'Mercredi',
-            Thursday: 'Jeudi',
-            Friday: 'Vendredi',
-            Saturday: 'Samedi',
-            Sunday: 'Dimanche'
-        };
+    const [bar, setBars] = useState(barObject);
+    console.log('bar dans barPage avec usestate', bar);
 
-        return hours.map(({ day, hours }) => ({
-            day: daysTranslation[day] || day,
-            hours: hours === 'Closed' ? 'Fermé' : convertTo24HourFormat(hours)
-        }));
-    };
-
-    const convertTo24HourFormat = (timeRange) => {
-        const convert = (time) => {
-            const [hour, modifier] = time.split(/(?<=\d)(AM|PM)/i);
-            let [hours, minutes] = hour.split(':').map(Number);
-
-            if (modifier.toUpperCase() === 'PM' && hours < 12) hours += 12;
-            if (modifier.toUpperCase() === 'AM' && hours === 12) hours = 0;
-
-            return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-        };
-
-        const [start, end] = timeRange.split(' - ');
-        return `${convert(start)} - ${convert(end)}`;
-    };
-
-    const translatedOpeningHours = translateOpeningHours(openingHours);
+    const openingHours = translatedOpeningHours(bar.opening_hours);
 
     const images = [
         "https://thumbs.dreamstime.com/b/logo-guinness-sur-l-%C3%A9ditorial-d-illustration-de-fond-blanc-le-imprim%C3%A9-vecteur-env-du-livre-est-une-bi%C3%A8re-malt-s%C3%A8che-irlandaise-202270216.jpg",
@@ -71,11 +30,6 @@ const BarPage = () => {
         "https://www.brasserieartisanaleduder.fr/wp-content/uploads/2024/10/bragarde.jpg",
     ];
 
-    const rating = 4;
-
-    const address = "10 Rue des Bons Vivants, 69001 Lyon, France";
-    const phoneNumber = "+33 4 78 56 78 90";
-
     const settings = {
         dots: true,
         infinite: true,
@@ -84,39 +38,29 @@ const BarPage = () => {
         slidesToScroll: 1
     };
 
-    const renderStars = (rating) => {
-        const stars = [];
-        for (let i = 1; i <= 5; i++) {
-            if (i <= rating) {
-                stars.push(<span key={i} style={{ color: '#FFD700', fontSize: '1.5em' }}>★</span>);
-            } else {
-                stars.push(<span key={i} style={{ color: '#ddd', fontSize: '1.5em' }}>★</span>);
-            }
-        }
-        return stars;
-    };
-    const nomBar = 'Ayers Rock';
-    const descriptionBar = 'Description : Ayers Rock est un bar emblématique, parfait pour passer une soirée conviviale entre amis. Avec son ambiance chaleureuse, ses bières artisanales et une sélection musicale animée, c’est l’endroit idéal pour se détendre et profiter d’un bon moment.';
     const lienMapsBar = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2886.8726415578477!2d4.828161076524192!3d45.764043679105226!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47f4ebdd46e4b257%3A0x39c2331b8dcff1d6!2sAyers%20Rock!5e0!3m2!1sfr!2sfr!4v1617063968425!5m2!1sfr!2sfr';
 
     return (
         <div style={{ fontFamily: 'Arial, sans-serif', margin: '20px', padding: '20px', border: '1px solid #ddd', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <div style={{ display: 'flex', alignItems: 'center', marginBottom: '6em' }}>
                 <img
-                    src="https://theseum.fr/wp-content/uploads/2022/09/ayers-rock-bar-lyon-1-1.jpg"
-                    alt="Ayers rock"
+                    src={`${BASE_URL}${bar.bar_picture}`}
+                    alt={`photo ${bar.name}`}
                     style={{ width: '50em', height: '30em', borderRadius: '1em', marginRight: '4em' }}
                 />
                 <div>
-                    <h1 style={{ margin: '0 0 10px', color: '#333' }}>{nomBar}</h1>
-                    <p style={{ margin: '5px 0', color: '#666' }}>
-                        {descriptionBar}
-                    </p>
+                    <h1 style={{ margin: '0 0 10px', color: '#333' }}>{bar.name}</h1>
                     <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center' }}>
                         <span style={{ color: '#333', fontWeight: 'bold', marginRight: '10px' }}>
-                            Note : {rating}/5
+                            Note : {bar.rate}/5
                         </span>
-                        {renderStars(rating)}
+                        <ReactStars
+                            count={5}
+                            value={bar.rate}
+                            size={24}
+                            activeColor="#FEC514"
+                            edit={false}
+                        />
                     </div>
                 </div>
             </div>
@@ -136,18 +80,20 @@ const BarPage = () => {
                 </div>
 
                 <div style={{ width: '30%', marginLeft: 'auto' }}>
-                    <iframe
-                        title="Google Maps"
-                        src={lienMapsBar}
-                        width="100%"
-                        height="300px"
-                        style={{ border: '0', borderRadius: '8px' }}
-                        allowFullScreen=""
-                        loading="lazy"
-                    ></iframe>
+                    <LoadScript googleMapsApiKey={GOOGLE_KEY}>
+                        <GoogleMap
+                            mapContainerStyle={{width: '100%',
+                                height: '300px'}}
+                            center={{ lat: bar.latitude, lng: bar.longitude }}
+                            zoom={17}
+                        >
+                            <Marker position={{ lat: bar.latitude, lng: bar.longitude }} />
+                        </GoogleMap>
+                    </LoadScript>
                     <div style={{ marginTop: '1em', color: '#333', textAlign: 'center' }}>
-                        <p><strong>Adresse :</strong> {address}</p>
-                        <p><strong>Téléphone :</strong> {phoneNumber}</p>
+                        <p className='font-text text-sm'><strong>Adresse : </strong>{bar.address}</p>
+                        <p className='font-text text-sm'><strong>Téléphone : </strong>{bar.phone_number}</p>
+                        <a href={bar.website} target='blank' className='font-text text-sm text-blue-600 underline'>Site internet</a>
                     </div>
                 </div>
             </div>
@@ -156,7 +102,7 @@ const BarPage = () => {
                 <div style={{ width: '40%' }}>
                     <h1 style={{ textAlign: 'center', color: '#333', marginBottom: '1em' }}>Horaires d'ouverture</h1>
                     <ul style={{ listStyleType: 'none', padding: 0, textAlign: 'center', color: '#666' }}>
-                        {translatedOpeningHours.map((item, index) => (
+                        {openingHours.map((item, index) => (
                             <li key={index} style={{ marginBottom: '5px' }}>
                                 <strong>{item.day} :</strong> {item.hours}
                             </li>
