@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import Slider from 'react-slick';
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import { GoogleMap, LoadScript } from '@react-google-maps/api';
 import ReactStars from 'react-stars';
 import { translatedOpeningHours } from '../../services/translateOpeningHours';
 import { fetchBeersAvailableForOneBar } from '../../api/beer/beersAvailableInBar';
@@ -17,7 +17,7 @@ const BarPage = () => {
     
     const [bar, setBars] = useState(barObject);
     const [beersAvailable, setBeersAvailable] = useState([]);
-    console.log('bar dans barPage avec usestate', bar);
+    const [googleLoaded, setGoogleLoaded] = useState(false);
 
     useEffect(() => {
         const fetchBeers = async () => {
@@ -29,17 +29,12 @@ const BarPage = () => {
         fetchBeers();
     }, []);
 
-    console.log('beersAvailable dans barPage', beersAvailable);
+    // Callback appelé lorsque le script Google Maps est chargé
+    const handleScriptLoad = () => {
+        setGoogleLoaded(true);
+    };
 
     const openingHours = translatedOpeningHours(bar.opening_hours);
-
-    const images = [
-        "https://thumbs.dreamstime.com/b/logo-guinness-sur-l-%C3%A9ditorial-d-illustration-de-fond-blanc-le-imprim%C3%A9-vecteur-env-du-livre-est-une-bi%C3%A8re-malt-s%C3%A8che-irlandaise-202270216.jpg",
-        "https://images.squarespace-cdn.com/content/v1/6409fa08ee63336eeee45782/1678463783648-2EA8HWW6DN3PFBAC3VXZ/carr%C3%A9+blanche.jpg?format=2500w",
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-QV1NhER3k-Q61-Xs9oJb7M43tuePteX7rL_e2oAUM2HddEs5Uf4TEpiaSkvyh5r9YaM&usqp=CAU",
-        "https://i.pinimg.com/736x/59/32/6f/59326f0a35c1d851e0d56690970fcccc.jpg",
-        "https://www.brasserieartisanaleduder.fr/wp-content/uploads/2024/10/bragarde.jpg",
-    ];
 
     const settings = {
         dots: true,
@@ -91,14 +86,20 @@ const BarPage = () => {
                 </div>
 
                 <div style={{ width: '30%', marginLeft: 'auto' }}>
-                    <LoadScript googleMapsApiKey={GOOGLE_KEY}>
+                    <LoadScript googleMapsApiKey={GOOGLE_KEY} onLoad={handleScriptLoad}>
                         <GoogleMap
-                            mapContainerStyle={{width: '100%',
-                                height: '300px'}}
+                            mapContainerStyle={{width: '100%', height: '300px'}}
                             center={{ lat: bar.latitude, lng: bar.longitude }}
-                            zoom={17}
-                        >
-                            <Marker position={{ lat: bar.latitude, lng: bar.longitude }} />
+                            zoom={18}
+                            onLoad={(map) => {
+                                if (googleLoaded) {
+                                    const marker = new google.maps.marker.AdvancedMarkerElement({
+                                      position: { lat: bar.latitude, lng: bar.longitude },
+                                      map: map,
+                                    });
+                                  }
+                            }}
+                        >                        
                         </GoogleMap>
                     </LoadScript>
                     <div style={{ marginTop: '1em', color: '#333', textAlign: 'center' }}>
