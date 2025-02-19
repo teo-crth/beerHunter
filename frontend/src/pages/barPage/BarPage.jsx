@@ -119,7 +119,7 @@ const BarPage = () => {
                     <div style={{ marginTop: '1em', color: '#333', textAlign: 'center' }}>
                         <p className='font-text text-sm'><strong>Adresse : </strong>{bar.address}</p>
                         <p className='font-text text-sm'><strong>Téléphone : </strong>{bar.phone_number}</p>
-                        <a href={bar.website} target='blank' className='font-text text-sm text-blue-600 underline'>Site internet</a>
+                        <a href={bar.website} target='blank' className='font-text text-sm text-blue-600 underline cursor-pointer'>Site internet</a>
                     </div>
                 </div>
             </div>
