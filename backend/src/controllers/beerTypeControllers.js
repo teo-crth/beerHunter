@@ -15,8 +15,9 @@ const browse = (req, res) => {
 
 const findAssociateBeerType = (req, res) => {
     models.beer_type
-      .findBeerOfOneType(req.params.type)
-      .then((rows) => {
+      .findBeersOfOneType(req.params.type)
+      .then((result) => {
+        const rows = result.rows;
         res.send(rows);
       })
       .catch((err) => {

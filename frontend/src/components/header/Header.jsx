@@ -28,10 +28,10 @@ const Header = () => {
     };
 
     return (
-        <header className="flex justify-between items-center w-full px-2.5  bg-dark-black light-mode:bg-light shadow-md z-45 relative">
+        <header className="flex justify-between items-center w-full px-5 bg-dark-black light-mode:bg-light shadow-md z-45 relative">
             <NavLink to="/" className={({ isActive }) => isActive ? 'active' : ''}><img src={isDarkMode ? logo : logoLight} alt="Logo table avec des livres" className='w-50' /></NavLink>
             <div className="container-nav flex justify-around items-center gap-10">
-                <nav className="nav-desktop hidden lg:flex xl:flex gap-10 items-center text-primary fontFamily-title">
+                <nav className="nav-desktop hidden lg:flex xl:flex text-xl gap-10 items-center text-primary fontFamily-title">
                     <NavLink to="/" aria-label="Navigation vers la page d'accueil" className={({ isActive }) => isActive ? 'active font-title' : 'font-title'}>Accueil</NavLink>
                     <NavLink to="/contact" aria-label="Navigation vers la page de contact" className={({ isActive }) => isActive ? 'active' : ''}>Contact</NavLink>
                     {isLogin ? 

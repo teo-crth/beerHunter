@@ -21,3 +21,13 @@ export const fetchOneBeer = async (id) => {
         throw error;
     }
 };
+
+export const fetchBeersOftype = async (type) => {
+    try {
+        const response = await axios.get(`${BASE_URL}/api/beers/type/${type}`);        
+        return response.data;
+    } catch (error) {
+        console.error('Erreur lors de la récupération des bieres :', error);
+        throw error;
+    }
+}

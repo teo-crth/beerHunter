@@ -24,15 +24,8 @@ const BarPage = () => {
     const [bar, setBars] = useState(barObject);
     const [beersAvailable, setBeersAvailable] = useState([]);
     const [googleLoaded, setGoogleLoaded] = useState(false);
-    const [redirect, setRedirect] = useState(false);
-    const [selectedBeerId, setSelectedBeerId] = useState(null);
 
-    useEffect(() => {
-        if (redirect) {
-            navigate(`/bieres/${selectedBeerId}`);
-        }
-    }, [redirect, navigate]);
-
+    
     useEffect(() => {
         const fetchBeers = async () => {
             await fetchBeersAvailableForOneBar(id)
@@ -60,9 +53,8 @@ const BarPage = () => {
         }
     }, [googleLoaded]);
 
-    const handleBeerClick = (beerId) => {
-        setSelectedBeerId(beerId);
-        setRedirect(true);        
+    const handleBeerClick = (beerId) => {     
+        navigate(`/bieres/${beerId}`);
     };
 
     const handleScriptLoad = () => {
@@ -112,7 +104,7 @@ const BarPage = () => {
                     <div className='w-full items-center'>
                         <Slider {...settings}>
                             {beersAvailable.length > 0 && beersAvailable.map((beer, index) => (
-                                <div key={index} className='flex items-center justify-center p-1' onClick={() => handleBeerClick(beer.id)}>
+                                <div key={index} className='flex items-center justify-center p-1 cursor-pointer' onClick={() => handleBeerClick(beer.id)} aria-label={`Navigation vers la page de la bière ${beer.name}`}>
                                     <img src={`${BASE_URL}${beer.image_link}`} alt={`Biere-${index}`} className='border-1 border-primary rounded-2xl items-center' />
                                 </div>
                             ))}
