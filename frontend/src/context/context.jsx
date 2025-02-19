@@ -16,6 +16,10 @@ export const AppProvider = ({ children }) => {
   const [bars, setBars] = useState(null);
   const [pastResultBars, setPastResultBars] = useState([]);
 
+  useEffect(() => {
+    localStorage.setItem('pastResultBars', JSON.stringify(pastResultBars));
+  }, [pastResultBars]);
+
   // DARK MODE
     const [isDarkMode, setIsDarkMode] = useState(() => {
         const savedMode = localStorage.getItem('darkMode');
@@ -26,7 +30,7 @@ export const AppProvider = ({ children }) => {
         if (!isDarkMode) {
           document.body.classList.add('light-mode');
         } else {
-            document.body.classList.remove('light-mode');
+          document.body.classList.remove('light-mode');
         }
     
         localStorage.setItem('darkMode', JSON.stringify(isDarkMode));
@@ -46,6 +50,16 @@ export const AppProvider = ({ children }) => {
     }, [user]);
 
     useEffect(() => {
+      const localStoragePastResult = localStorage.getItem('pastResultBars');
+
+      if (localStoragePastResult) {
+        const pastResultBars = JSON.parse(localStoragePastResult);
+        setPastResultBars(pastResultBars);
+      } else {
+        console.log('rentre dans le cas ou pastresult est pas dans le localstorage');
+        setPastResultBars([]);
+      }
+
       const localStorageToken = localStorage.getItem('token');
       
       if (localStorageToken) {
@@ -78,7 +92,6 @@ export const AppProvider = ({ children }) => {
     };
 
     // Modals
-
     const [modalState, setModalState] = useState({
       isOpen: false,
       type: '',
@@ -87,9 +100,6 @@ export const AppProvider = ({ children }) => {
   
     const openModal = (type, text) => setModalState({ isOpen: true, type, text });
     const closeModal = () => setModalState({ isOpen: false, type: '' });
-
-
-
 
     return (
         <AppContext.Provider 

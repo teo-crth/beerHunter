@@ -27,8 +27,14 @@ const SearchBar = () => {
     useEffect(() => {
         if (cities.length === 0) {
             fetchAllCities()
-                .then(data => setCities(data))
-                .catch(error => console.error(error));
+            .then(data => setCities(data))
+            .catch(error => console.error(error));
+        }
+
+        if(beersAvailable.length === 0) {
+            fetchAllBeersAvailable()
+            .then(data => setBeersAvailable(data))
+            .catch(error => console.error(error));
         }
     }, []);
 
@@ -80,13 +86,17 @@ const SearchBar = () => {
 
             if (barsFromDB.length > 2) {
                 if (selectedBeerId) {    
-                    console.log('beerAvailable', beersAvailable);
+                    console.log('beerAvailablee', beersAvailable);
+                    console.log('bars from bdd when a beer filter is selected', barsFromDB);
+                    
                                    
                     const barsWithBeerSelected = barsFromDB.filter(bar => beersAvailable.some(beer => beer.bar_id === bar.id && beer.beer_id === selectedBeerId));
                     setSearchResultBars(barsWithBeerSelected);
+                    setPastResultBars(barsWithBeerSelected);
                     return;
                 } else {
                     setSearchResultBars(barsFromDB);
+                    setPastResultBars(barsFromDB);
                     return;
                 }
 
@@ -142,6 +152,7 @@ const SearchBar = () => {
                     
                     setBars(createdBars.bars);
                     console.log('bars créé en bdd', createdBars.bars);
+                    console.log('bars créé en bdd qui doivent etre dans ce state', bars);
                     
 
                     if (selectedBeerId) {    
@@ -164,7 +175,7 @@ const SearchBar = () => {
         } 
     }   
 
-    console.log('selectedd bedd', selectedBeerId);
+    console.log('selected beer in search bar', selectedBeerId);
     
 
     return (
