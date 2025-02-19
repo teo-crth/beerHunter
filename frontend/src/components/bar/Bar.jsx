@@ -47,7 +47,7 @@ const Bar = ({ bar }) => {
     }
 
     return (
-        <article onClick={handleBarClick} aria-label={`Navigation vers la page de la bière ${bar.name}`} className="bar-card flex flex-col md:flex-row lg:flex-row justify-between items-center shadow-md rounded-lg w-[95%] bg-dark-black border-1 border-primary light-mode:bg-light cursor-pointer">
+        <article onClick={handleBarClick} aria-label={`Navigation vers la page de la bière ${bar.name}`} className="bar-card flex flex-col md:flex-row lg:flex-row justify-between items-center shadow-md rounded-lg w-[95%] max-h-53 bg-dark-black border-1 border-primary light-mode:bg-light cursor-pointer">
             <div className="bar-card-image-container rounded-t-md w-full md:rounded-l-lg md:rounded-tr-none lg:rounded-tr-none lg:rounded-l-lg md:w-1/3 lg:w-1/3 h-52">
                 <img src={`${BASE_URL}${bar.bar_picture}`} alt={bar.name} className="shadow-lg bar-card-image w-full h-full object-cover  md:rounded-tr-none lg:rounded-tr-none rounded-t-md md:rounded-l-lg lg:rounded-l-lg" />
             </div>
@@ -70,7 +70,7 @@ const Bar = ({ bar }) => {
                 )}
                 <div className="container-beers w-full flex-col justify-center items-center gap-1 mt-1">
                     <p className="bar-card-beers-title text-center font-text font-bold text-sm">Bières disponibles :</p>
-                    <ul className="bar-card-beers-list flex justify-center items-start gap-1 flex-wrap">
+                    <ul className="bar-card-beers-list flex justify-center items-start gap-1 flex-wrap max-h-[60px] overflow-y-scroll">
                         {beersAvailable.sort((a, b) => a.name.localeCompare(b.name)).map(beer => (
                             <li key={beer.beerId} className="bar-card-beer font-text text-center text-sm rounded-full pr-3 pl-3 p-1 bg-primary text-light cursor-pointer">{`${beer.name} (${beer.beerType})`}</li>
                         ))}
