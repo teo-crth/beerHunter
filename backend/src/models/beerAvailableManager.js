@@ -24,8 +24,16 @@ class BeerAvailableManager extends AbstractManager {
         ]);
     }
 
+    // findAssociateBeersAvailable(id) {
+    //     return this.database.query(`SELECT * FROM ${this.table} WHERE bar_id = $1`, [id]);
+    // }
+
     findAssociateBeersAvailable(id) {
-        return this.database.query(`SELECT * FROM ${this.table} WHERE bar_id = $1`, [id]);
+        return this.database.query(`
+            SELECT * FROM ${this.table} 
+            JOIN beer ON beer_available.beer_id = beer.id
+            WHERE bar_id = $1`, [id]
+        );
     }
 }
 

@@ -21,8 +21,8 @@ class BarManager extends AbstractManager {
     insert(bar) {
         return this.database.query(
             `INSERT INTO ${this.table} 
-            (name, address, latitude, longitude, rate, opening_hours, city_id, bar_picture, place_id)
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+            (name, address, latitude, longitude, rate, opening_hours, city_id, bar_picture, phone_number, maps_url, website, place_id)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
             RETURNING *`, 
             [
                 bar.name,
@@ -33,6 +33,9 @@ class BarManager extends AbstractManager {
                 bar.opening_hours,
                 bar.city_id,
                 bar.bar_picture,
+                bar.phone_number,
+                bar.maps_url,
+                bar.website,
                 bar.id
             ]
         );

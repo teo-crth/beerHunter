@@ -1,4 +1,3 @@
-// export const translatedOpeningHours = (openingHours) => {
 export const translatedOpeningHours = (openingHours) => {
 
     if (!openingHours) {

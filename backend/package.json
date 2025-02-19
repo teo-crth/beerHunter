@@ -19,7 +19,8 @@
     "mysql2": "^3.0.1",
     "pg": "^8.13.1",
     "sanitize-html": "^2.14.0",
-    "sharp": "^0.33.5"
+    "sharp": "^0.33.5",
+    "uuid": "^11.0.5"
   },
   "devDependencies": {
     "eslint": "^8.32.0",

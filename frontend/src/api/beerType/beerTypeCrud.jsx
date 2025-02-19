@@ -11,3 +11,13 @@ export const fetchAllBeerTypes = async () => {
         throw error;
     }
 };
+
+export const fetchOneBeerType = async (id) => {
+    try {
+        const response = await axios.get(`${BASE_URL}/api/beertypes/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error('Erreur lors de la récupération du biere type:', error);
+        throw error;
+    }
+};

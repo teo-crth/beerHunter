@@ -1,22 +1,47 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';
+import { fetchOneBeer, fetchBeersOftype } from '../../api/beer/beerCrud';
+import { fetchOneBeerType } from '../../api/beerType/beerTypeCrud';
 import '../../../node_modules/slick-carousel/slick/slick.css';
 import '../../../node_modules/slick-carousel/slick/slick-theme.css';
 
+const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
 const BeerPage = () => {
-    const images = [
-        "https://thumbs.dreamstime.com/b/logo-guinness-sur-l-%C3%A9ditorial-d-illustration-de-fond-blanc-le-imprim%C3%A9-vecteur-env-du-livre-est-une-bi%C3%A8re-malt-s%C3%A8che-irlandaise-202270216.jpg",
-        "https://images.squarespace-cdn.com/content/v1/6409fa08ee63336eeee45782/1678463783648-2EA8HWW6DN3PFBAC3VXZ/carr%C3%A9+blanche.jpg?format=2500w",
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-QV1NhER3k-Q61-Xs9oJb7M43tuePteX7rL_e2oAUM2HddEs5Uf4TEpiaSkvyh5r9YaM&usqp=CAU",
-        "https://i.pinimg.com/736x/59/32/6f/59326f0a35c1d851e0d56690970fcccc.jpg",
-        "https://www.brasserieartisanaleduder.fr/wp-content/uploads/2024/10/bragarde.jpg",
-        "https://thumbs.dreamstime.com/b/logo-guinness-sur-l-%C3%A9ditorial-d-illustration-de-fond-blanc-le-imprim%C3%A9-vecteur-env-du-livre-est-une-bi%C3%A8re-malt-s%C3%A8che-irlandaise-202270216.jpg",
-        "https://images.squarespace-cdn.com/content/v1/6409fa08ee63336eeee45782/1678463783648-2EA8HWW6DN3PFBAC3VXZ/carr%C3%A9+blanche.jpg?format=2500w",
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-QV1NhER3k-Q61-Xs9oJb7M43tuePteX7rL_e2oAUM2HddEs5Uf4TEpiaSkvyh5r9YaM&usqp=CAU",
-        "https://i.pinimg.com/736x/59/32/6f/59326f0a35c1d851e0d56690970fcccc.jpg",
-        "https://www.brasserieartisanaleduder.fr/wp-content/uploads/2024/10/bragarde.jpg"
-    ];
+    const { id } = useParams();
+    const [beer, setBeer] = useState(null);
+    const [beerType, setBeerType] = useState(null);
+    const [similarBeers, setSimilarBeers] = useState([]);
+    const navigate = useNavigate();
+
+    const handleBeerClick = (beerId) => {
+        navigate(`/bieres/${beerId}`);
+    };
+
+    useEffect(() => {
+        const fetch = async () => {
+            await fetchOneBeer(id)
+            .then(beer => {
+                setBeer(beer)
+
+                console.log("beer", beer);
+                fetchOneBeerType(beer.beer_type_id)
+                .then(beerType => {
+                    setBeerType(beerType)
+                    fetchBeersOftype(beerType.name)
+                    .then(beers => {
+                        setSimilarBeers(beers);
+                        
+                    })
+                })
+                .catch(error => console.error(error));
+            })
+            .catch(error => console.error(error));
+        }
+
+        fetch();
+    }, [id]);
 
     const settings = {
         dots: true,
@@ -25,38 +50,34 @@ const BeerPage = () => {
         slidesToShow: 5,
         slidesToScroll: 1
     };
-    const name = 'Guinness';
-    const alcoolDegree = '5.5';
-    const Type = 'Bière stout';
+
     const Description = "Guinness est une bière emblématique d'Irlande, célèbre pour sa texture onctueuse et son goût unique qui mélange des notes de malt torréfié et une subtile amertume.";
     const taste = 'Café, chocolat, malt torréfié';
 
 
     return (
-        <div style={{ fontFamily: 'Arial, sans-serif', margin: '20px', padding: '20px', border: '1px solid #ddd', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
-            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '6em' }}>
+        <div className='flex flex-col items-center justify-center p-5'>
+            <div className='flex items-center justify-center m-3 w-full flex-wrap'>
                 <img
-                    src="https://thumbs.dreamstime.com/b/logo-guinness-sur-l-%C3%A9ditorial-d-illustration-de-fond-blanc-le-imprim%C3%A9-vecteur-env-du-livre-est-une-bi%C3%A8re-malt-s%C3%A8che-irlandaise-202270216.jpg"
-                    alt="Guinness"
-                    style={{ width: '30em', height: '30em', borderRadius: '1em', marginRight: '4em' }}
+                    src={`${BASE_URL}${beer?.image_link}`}	
+                    alt={`image ${beer?.name}`}
+                    className='rounded-lg w-[95%] md:w-[29%] lg:w-[29%] border-2 border-primary shadow-lg'
                 />
-                <div>
-                    <h1 style={{ margin: '0 0 10px', color: '#333' }}>{name}</h1>
-                    <p style={{ margin: '10px 0', color: '#666' }}><strong>Degré d'alcool :</strong> {alcoolDegree}%</p>
-                    <p style={{ margin: '5px 0', color: '#666' }}><strong>Type :</strong> {Type}</p>
-                    <p style={{ margin: '5px 0', color: '#666' }}>
-                        Description : {Description}
+                <div className='flex flex-col items-start justify-center w-[95%] md:w-[65%] lg:w-[65%] p-5 gap-3'>
+                    <h1 className='font-title font-bold text-4xl text-light light-mode:text-dark-black'>{beer?.name}</h1>
+                    <p className='font-title text-xl text-light light-mode:text-dark-black'><strong>Degré d'alcool :</strong> {beer?.alcool_degree}%</p>
+                    <p className='font-title text-xl text-light light-mode:text-dark-black'><strong>Type :</strong> {beerType?.name}</p>
+                    <p className='font-title text-xl text-light light-mode:text-dark-black'>
+                    <strong>Description :</strong> {beer?.description}
                     </p>
-                    <p style={{ margin: '5px 0', color: '#666' }}><strong>Arômes :</strong> {taste}</p>
                 </div>
             </div>
-            <h1 style={{ margin: '0 0 10px', color: '#333' }}>Bières similaires</h1>
-            <div style={{ width: '100%', marginTop: '2em' }}>
+            <h1 className='font-title font-bold text-2xl text-light light-mode:text-dark-black'>Bières similaires</h1>
+            <div className='w-full md:w-2/3 lg:w-2/3 p-2'>
                 <Slider {...settings}>
-                    {images.map((img, index) => (
-                        <div key={index}>
-                            <img src={img} alt={`Biere-${index}`} style={{ width: '20em', borderRadius: '1em', margin: '0 1em' }} />
-
+                    {similarBeers && similarBeers.map((beer, index) => (
+                        <div key={index} className='flex items-center justify-center p-3 cursor-pointer' onClick={() => handleBeerClick(beer.beer_id)} aria-label={`Navigation vers la page de la bière ${beer.name}`}>
+                            <img src={`${BASE_URL}${beer?.image_link}`} alt={`image ${beer?.name}`} className='rounded-2xl border-2 border-primary' />
                         </div>
                     ))}
                 </Slider>

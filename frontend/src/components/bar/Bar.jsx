@@ -1,62 +1,55 @@
 import React, { useEffect, useState } from 'react';
 import ReactStars from 'react-stars';
-import { Navigate } from 'react-router-dom';
+import { useNavigate  } from 'react-router-dom';
 import { fetchBeersAvailableForOneBar } from '../../api/beer/beersAvailableInBar';
 import { fetchAllBeers } from '../../api/beer/beerCrud';
 import { fetchAllBeerTypes } from '../../api/beerType/beerTypeCrud';
 import { translatedOpeningHours } from '../../services/translateOpeningHours';
+const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Bar = ({ bar }) => {
-    const [beersAvailableId, setBeersAvailableId] = useState([]);
-    const [beers, setBeers] = useState([]);
+    const [beersAvailable, setBeersAvailable] = useState([]);
     const [beerTypes, setBeerTypes] = useState([]);
-    const [redirect, setRedirect] = useState(false);
+    const navigate = useNavigate();
 
-    const BASE_URL = import.meta.env.VITE_BACKEND_URL;
+    const handleBarClick = () => {
+        navigate(`/bars/${bar.id}`, { state: bar });
+    }
+
     useEffect(() => {
         const fetchBeers = async () => {
             await fetchBeersAvailableForOneBar(bar.id)
-                .then(beersAvailable => {
-                    setBeersAvailableId(beersAvailable);
-                })
-                .catch(error => console.error(error));
-
-            await fetchAllBeers()
-                .then(beers => setBeers(beers))
-                .catch(error => console.error(error));
+            .then(beersAvailable => {
+                setBeersAvailable(beersAvailable);
+            })
+            .catch(error => console.error(error));
 
             await fetchAllBeerTypes()
-                .then(beerTypes => setBeerTypes(beerTypes))
-                .catch(error => console.error(error));
+            .then(beerTypes => setBeerTypes(beerTypes))
+            .catch(error => console.error(error));
         }
-
+        
         fetchBeers();
     }, []);
-
-    const beersAvailable = [];
-    beersAvailableId.forEach(beer => {
-        const beerName = beers.find(b => b.id === beer.beer_id)?.name;
-        const beerId = beers.find(b => b.id === beer.beer_id)?.id;
-        const beerTypeId = beers.find(b => b.id === beer.beer_id)?.beer_type_id;
-        const beerType = beerTypes.find(bt => bt.id === beerTypeId)?.name;
-        beersAvailable.push({ beerName, beerId, beerType });
+    
+    beersAvailable.forEach(beer => {
+        console.log("beer", beer);
+        beerTypes.forEach(beerType => {
+            if (beer.beer_type_id === beerType.id) {
+                beer.beerType = beerType.name;
+            }
+        });
     });
 
-    let translatedHours = [];
+    let translatedHours = [];   
 
     if (bar?.opening_hours) {
         translatedHours = translatedOpeningHours(bar.opening_hours);
     }
 
-    const handleClickBar = () => {
-        console.log('click pris en compte');
-        setRedirect(true);
-    }
-
-    if (redirect) return <Navigate to={`/bars/${bar.id}`} />;
 
     return (
-        <div onClick={handleClickBar} className="bar-card flex flex-col md:flex-row lg:flex-row justify-between items-center shadow-md rounded-lg m-2 w-[95%] bg-dark-black border-1 border-primary light-mode:bg-light">
+        <div onClick={handleBarClick} aria-label={`Navigation vers la page de la bière ${bar.name}`} className="bar-card flex flex-col md:flex-row lg:flex-row justify-between items-center shadow-md rounded-lg m-2 w-[95%] bg-dark-black border-1 border-primary light-mode:bg-light cursor-pointer">
             <div className="bar-card-image-container rounded-t-md w-full md:rounded-l-lg md:rounded-tr-none lg:rounded-tr-none lg:rounded-l-lg md:w-1/3 lg:w-1/3 h-52">
                 <img src={`${BASE_URL}${bar.bar_picture}`} alt={bar.name} className="shadow-lg bar-card-image w-full h-full object-cover  md:rounded-tr-none lg:rounded-tr-none rounded-t-md md:rounded-l-lg lg:rounded-l-lg" />
             </div>
@@ -80,8 +73,8 @@ const Bar = ({ bar }) => {
                 <div className="container-beers w-full flex-col justify-center items-center gap-1 mt-1">
                     <p className="bar-card-beers-title text-center font-text font-bold text-sm">Bières disponibles :</p>
                     <ul className="bar-card-beers-list flex justify-center items-start gap-1 flex-wrap">
-                        {beersAvailable.filter(beer => beer.beerName).sort((a, b) => a.beerName.localeCompare(b.beerName)).map(beer => (
-                            <li key={beer.beerId} className="bar-card-beer font-text text-center text-sm rounded-full pr-3 pl-3 p-1 bg-primary text-light cursor-pointer">{`${beer.beerName} (${beer.beerType})`}</li>
+                        {beersAvailable.sort((a, b) => a.name.localeCompare(b.name)).map(beer => (
+                            <li key={beer.beerId} className="bar-card-beer font-text text-center text-sm rounded-full pr-3 pl-3 p-1 bg-primary text-light cursor-pointer">{`${beer.name} (${beer.beerType})`}</li>
                         ))}
                     </ul>
                 </div>
