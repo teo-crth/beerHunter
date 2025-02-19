@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';
 import { LoadScript } from '@react-google-maps/api';
 import ReactStars from 'react-stars';
@@ -19,10 +19,19 @@ const BarPage = () => {
     const { id } = useParams();
     const location = useLocation();
     const barObject = location.state;
+    const navigate = useNavigate();
     
     const [bar, setBars] = useState(barObject);
     const [beersAvailable, setBeersAvailable] = useState([]);
     const [googleLoaded, setGoogleLoaded] = useState(false);
+    const [redirect, setRedirect] = useState(false);
+    const [selectedBeerId, setSelectedBeerId] = useState(null);
+
+    useEffect(() => {
+        if (redirect) {
+            navigate(`/bieres/${selectedBeerId}`);
+        }
+    }, [redirect, navigate]);
 
     useEffect(() => {
         const fetchBeers = async () => {
@@ -51,6 +60,11 @@ const BarPage = () => {
         }
     }, [googleLoaded]);
 
+    const handleBeerClick = (beerId) => {
+        setSelectedBeerId(beerId);
+        setRedirect(true);        
+    };
+
     const handleScriptLoad = () => {
         setGoogleLoaded(true);
     };
@@ -62,7 +76,7 @@ const BarPage = () => {
         infinite: false,
         speed: 500,
         slidesToShow: 5,
-        slidesToScroll: 1
+        slidesToScroll: 1,
     };
 
     const lienMapsBar = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2886.8726415578477!2d4.828161076524192!3d45.764043679105226!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47f4ebdd46e4b257%3A0x39c2331b8dcff1d6!2sAyers%20Rock!5e0!3m2!1sfr!2sfr!4v1617063968425!5m2!1sfr!2sfr';
@@ -98,7 +112,7 @@ const BarPage = () => {
                     <div className='w-full items-center'>
                         <Slider {...settings}>
                             {beersAvailable.length > 0 && beersAvailable.map((beer, index) => (
-                                <div key={index} className='flex items-center justify-center'>
+                                <div key={index} className='flex items-center justify-center p-1' onClick={() => handleBeerClick(beer.id)}>
                                     <img src={`${BASE_URL}${beer.image_link}`} alt={`Biere-${index}`} className='border-1 border-primary rounded-2xl items-center' />
                                 </div>
                             ))}
