@@ -79,7 +79,9 @@ const SearchBar = () => {
             const barsFromDB = await fetchBarsByCityId(selectedCityId);          
 
             if (barsFromDB.length > 2) {
-                if (selectedBeerId) {                   
+                if (selectedBeerId) {    
+                    console.log('beerAvailable', beersAvailable);
+                                   
                     const barsWithBeerSelected = barsFromDB.filter(bar => beersAvailable.some(beer => beer.bar_id === bar.id && beer.beer_id === selectedBeerId));
                     setSearchResultBars(barsWithBeerSelected);
                     return;
@@ -142,7 +144,9 @@ const SearchBar = () => {
                     console.log('bars créé en bdd', createdBars.bars);
                     
 
-                    if (selectedBeerId) {                        
+                    if (selectedBeerId) {    
+                        console.log('beerAvailable', beersAvailable);
+                                            
                         const barsWithBeerSelected = bars.filter(bar => beersAvailable.some(beer => beer.bar_id === bar.id && beer.beer_id === selectedBeerId));
                         setSearchResultBars(barsWithBeerSelected);
                         setPastResultBars(barsWithBeerSelected);     
@@ -159,6 +163,9 @@ const SearchBar = () => {
             setIsloading(false);
         } 
     }   
+
+    console.log('selectedd bedd', selectedBeerId);
+    
 
     return (
         <div className='w-full md:w-[70%] lg:w-[70%] flex items-center justify-center'>

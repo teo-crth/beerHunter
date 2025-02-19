@@ -1,16 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import Slider from 'react-slick';
-import { GoogleMap, LoadScript } from '@react-google-maps/api';
+import { LoadScript } from '@react-google-maps/api';
 import ReactStars from 'react-stars';
 import { translatedOpeningHours } from '../../services/translateOpeningHours';
 import { fetchBeersAvailableForOneBar } from '../../api/beer/beersAvailableInBar';
 import '../../../node_modules/slick-carousel/slick/slick.css';
 import '../../../node_modules/slick-carousel/slick/slick-theme.css';
 
+const BASE_URL = import.meta.env.VITE_BACKEND_URL;
+const GOOGLE_KEY = import.meta.env.VITE_GOOGLE_KEY; 
+const MAP_ID = import.meta.env.VITE_MAP_ID; 
+const LIBRAIRIES = ['places', 'marker'];
+
 const BarPage = () => {
-    const BASE_URL = import.meta.env.VITE_BACKEND_URL;
-    const GOOGLE_KEY = import.meta.env.VITE_GOOGLE_KEY;  
+    const mapRef = useRef(null);
+    const markerRef = useRef(null);   
     const { id } = useParams();
     const location = useLocation();
     const barObject = location.state;
@@ -29,7 +34,23 @@ const BarPage = () => {
         fetchBeers();
     }, []);
 
-    // Callback appelé lorsque le script Google Maps est chargé
+    useEffect(() => {
+        if (mapRef.current && bar) {
+            const { google } = window;
+
+            const map = new google.maps.Map(mapRef.current, {
+                center: { lat: bar.latitude, lng: bar.longitude },
+                zoom: 18,
+                mapId: MAP_ID
+            });
+
+            markerRef.current = new google.maps.marker.AdvancedMarkerElement({
+                position: new google.maps.LatLng(bar.latitude, bar.longitude),
+                map: map,
+            });
+        }
+    }, [googleLoaded]);
+
     const handleScriptLoad = () => {
         setGoogleLoaded(true);
     };
@@ -38,7 +59,7 @@ const BarPage = () => {
 
     const settings = {
         dots: true,
-        infinite: true,
+        infinite: false,
         speed: 500,
         slidesToShow: 5,
         slidesToScroll: 1
@@ -73,12 +94,12 @@ const BarPage = () => {
 
             <div style={{ display: 'flex', width: '100%', marginTop: '2em' }}>
                 <div style={{ width: '40%', textAlign: 'center' }}>
-                    <h1 style={{ margin: '0', color: '#333', marginBottom: '1em' }}>Bières disponibles</h1>
-                    <div style={{ width: '100%', alignItems: 'center' }}>
+                    <h1 className='font-title text-center text-md text-light light-mode:text-dark-black font-bold p-1'>Bières disponibles</h1>
+                    <div className='w-full items-center'>
                         <Slider {...settings}>
                             {beersAvailable.length > 0 && beersAvailable.map((beer, index) => (
-                                <div key={index}>
-                                    <img src={`${BASE_URL}${beer.image_link}`} alt={`Biere-${index}`} style={{ width: '10em', borderRadius: '1em', alignItems: 'center' }} />
+                                <div key={index} className='flex items-center justify-center'>
+                                    <img src={`${BASE_URL}${beer.image_link}`} alt={`Biere-${index}`} className='border-1 border-primary rounded-2xl items-center' />
                                 </div>
                             ))}
                         </Slider>
@@ -86,21 +107,8 @@ const BarPage = () => {
                 </div>
 
                 <div style={{ width: '30%', marginLeft: 'auto' }}>
-                    <LoadScript googleMapsApiKey={GOOGLE_KEY} onLoad={handleScriptLoad}>
-                        <GoogleMap
-                            mapContainerStyle={{width: '100%', height: '300px'}}
-                            center={{ lat: bar.latitude, lng: bar.longitude }}
-                            zoom={18}
-                            onLoad={(map) => {
-                                if (googleLoaded) {
-                                    const marker = new google.maps.marker.AdvancedMarkerElement({
-                                      position: { lat: bar.latitude, lng: bar.longitude },
-                                      map: map,
-                                    });
-                                  }
-                            }}
-                        >                        
-                        </GoogleMap>
+                    <LoadScript googleMapsApiKey={GOOGLE_KEY} onLoad={handleScriptLoad} libraries={LIBRAIRIES}>
+                        <div ref={mapRef} style={{ width: '100%', height: '300px' }} />
                     </LoadScript>
                     <div style={{ marginTop: '1em', color: '#333', textAlign: 'center' }}>
                         <p className='font-text text-sm'><strong>Adresse : </strong>{bar.address}</p>
