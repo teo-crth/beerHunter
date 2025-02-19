@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import ReactStars from 'react-stars';
 import { useNavigate  } from 'react-router-dom';
 import { fetchBeersAvailableForOneBar } from '../../api/beer/beersAvailableInBar';
-import { fetchAllBeers } from '../../api/beer/beerCrud';
 import { fetchAllBeerTypes } from '../../api/beerType/beerTypeCrud';
 import { translatedOpeningHours } from '../../services/translateOpeningHours';
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
@@ -47,9 +46,8 @@ const Bar = ({ bar }) => {
         translatedHours = translatedOpeningHours(bar.opening_hours);
     }
 
-
     return (
-        <div onClick={handleBarClick} aria-label={`Navigation vers la page de la bière ${bar.name}`} className="bar-card flex flex-col md:flex-row lg:flex-row justify-between items-center shadow-md rounded-lg m-2 w-[95%] bg-dark-black border-1 border-primary light-mode:bg-light cursor-pointer">
+        <article onClick={handleBarClick} aria-label={`Navigation vers la page de la bière ${bar.name}`} className="bar-card flex flex-col md:flex-row lg:flex-row justify-between items-center shadow-md rounded-lg w-[95%] bg-dark-black border-1 border-primary light-mode:bg-light cursor-pointer">
             <div className="bar-card-image-container rounded-t-md w-full md:rounded-l-lg md:rounded-tr-none lg:rounded-tr-none lg:rounded-l-lg md:w-1/3 lg:w-1/3 h-52">
                 <img src={`${BASE_URL}${bar.bar_picture}`} alt={bar.name} className="shadow-lg bar-card-image w-full h-full object-cover  md:rounded-tr-none lg:rounded-tr-none rounded-t-md md:rounded-l-lg lg:rounded-l-lg" />
             </div>
@@ -62,8 +60,8 @@ const Bar = ({ bar }) => {
                             <div key={day.day} className="bar-card-hours flex justify-center items-center gap-1 min-w-40 border-primary border-1 rounded-md p-1">
                                 <p className="bar-card-day font-text text-xs font-bold">{day.day}</p>
                                 <ul className="bar-card-hours-list flex gap-1">
-                                    {day.hours.map(hour => (
-                                        <li key={hour} className="bar-card-hour font-text text-xs">{hour}</li>
+                                    {day.hours.map((hour, index) => (
+                                        <li key={index} className="bar-card-hour font-text text-xs">{hour}</li>
                                     ))}
                                 </ul>
                             </div>
@@ -78,7 +76,7 @@ const Bar = ({ bar }) => {
                         ))}
                     </ul>
                 </div>
-                <div className="container-rate flex justify-end items-center w-full gap-1">
+                <div className="container-rate flex justify-end items-center w-full gap-1 absolute -top-3 right-2">
                     <p className="bar-card-rate text-left font-text text-sm pt-1">{bar.rate}</p>
                     <ReactStars
                         count={5}
@@ -89,7 +87,7 @@ const Bar = ({ bar }) => {
                     />
                 </div>
             </div>
-        </div>
+        </article>
     );
 };
 

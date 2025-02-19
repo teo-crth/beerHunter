@@ -36,7 +36,7 @@ const Header = () => {
                     <NavLink to="/contact" aria-label="Navigation vers la page de contact" className={({ isActive }) => isActive ? 'active' : ''}>Contact</NavLink>
                     {isLogin ? 
                     <NavLink to="/profil" aria-label="Navigation vers la page profil" className="container-profil w-10 h-10 flex items-center justify-center rounded-full border-primary border-solid  cursor-pointer box-border">
-                        <img className="w-full rounded-full" src={`${VITE_BACKEND_URL}${user.profil_picture}`} alt="Profil de l'utilisateur" />
+                        <img className="w-full h-full object-cover rounded-full" src={`${VITE_BACKEND_URL}${user.profil_picture}`} alt="Profil de l'utilisateur" />
                     </NavLink>                    
                     : <p className="cursor-pointer" aria-label="Ouvre un formulaire de connexion" onClick={() => openModal('login')}>Connexion</p>}
                 </nav>
