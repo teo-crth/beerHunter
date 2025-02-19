@@ -44,6 +44,10 @@ button.slick-arrow.slick-next::before, button.slick-arrow.slick-prev::before {
     font-size: 40px;   /* Augmente la taille des flèches */
 }
 
+.light-mode .slick-next::before, .light-mode .slick-prev::before {
+    color: #FEC514;
+}
+
 @media (max-width: 668px) {
     button.slick-arrow.slick-next::before, button.slick-arrow.slick-prev::before {
         display: none;   /* Augmente la taille des flèches */
