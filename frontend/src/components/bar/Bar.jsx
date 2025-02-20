@@ -47,7 +47,7 @@ const Bar = ({ bar }) => {
     }
 
     return (
-        <article onClick={handleBarClick} aria-label={`Navigation vers la page de la bière ${bar.name}`} className="bar-card flex flex-col md:flex-row lg:flex-row justify-between items-center shadow-md rounded-lg w-[95%] max-h-53 bg-dark-black border-1 border-primary light-mode:bg-light cursor-pointer">
+        <article onClick={handleBarClick} aria-label={`Navigation vers la page de la bière ${bar.name}`} className="bar-card flex-shrink-0 flex flex-col md:flex-row lg:flex-row justify-between items-center shadow-md rounded-lg w-[95%] bg-dark-black border-1 border-primary light-mode:bg-light cursor-pointer">
             <div className="bar-card-image-container rounded-t-md w-full md:rounded-l-lg md:rounded-tr-none lg:rounded-tr-none lg:rounded-l-lg md:w-1/3 lg:w-1/3 h-52">
                 <img src={`${BASE_URL}${bar.bar_picture}`} alt={bar.name} className="shadow-lg bar-card-image w-full h-full object-cover  md:rounded-tr-none lg:rounded-tr-none rounded-t-md md:rounded-l-lg lg:rounded-l-lg" />
             </div>
@@ -55,13 +55,13 @@ const Bar = ({ bar }) => {
                 <h3 className="bar-card-title text-center font-title font-bold text-xl p-2">{bar.name}</h3>
                 <p className="bar-card-address text-center font-text text-xs">{bar.address}</p>
                 {translatedHours.length > 0 && (
-                    <div className="container-hours flex flex-nowrap overflow-x-scroll w-2/3 justify-start items-center gap-1 flex-col md:flex-row lg:flex-row">
+                    <div className="container-hours flex flex-nowrap overflow-x-scroll w-2/3 justify-start items-center gap-1 md:flex-row lg:flex-row">
                         {translatedHours.map(day => (
-                            <div key={day.day} className="bar-card-hours flex justify-center items-center gap-1 min-w-40 border-primary border-1 rounded-md p-1">
+                            <div key={day.day} className="bar-card-hours flex justify-center items-center gap-1 border-primary border-1 rounded-md p-1">
                                 <p className="bar-card-day font-text text-xs font-bold">{day.day}</p>
                                 <ul className="bar-card-hours-list flex gap-1">
                                     {day.hours.map((hour, index) => (
-                                        <li key={index} className="bar-card-hour font-text text-xs">{hour}</li>
+                                        <li key={index} className="bar-card-hour font-text text-xs whitespace-nowrap">{hour}</li>
                                     ))}
                                 </ul>
                             </div>

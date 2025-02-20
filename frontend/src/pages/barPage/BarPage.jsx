@@ -5,8 +5,9 @@ import Slider from 'react-slick';
 import { LoadScript } from '@react-google-maps/api';
 import ReactStars from 'react-stars';
 import Button from '../../components/ui/Button';
-import { addFavoriteBar } from '../../api/favorites_bar/favoritesBarCrud';
+import { addFavoriteBar, deleteFavoriteBar } from '../../api/favorites_bar/favoritesBarCrud';
 import { translatedOpeningHours } from '../../services/translateOpeningHours';
+import { fetchOneUser } from '../../api/user/oneUserCrud';
 import { fetchBeersAvailableForOneBar } from '../../api/beer/beersAvailableInBar';
 import '../../../node_modules/slick-carousel/slick/slick.css';
 import '../../../node_modules/slick-carousel/slick/slick-theme.css';
@@ -28,7 +29,7 @@ const BarPage = () => {
     const [bar, setBars] = useState(barObject);
     const [beersAvailable, setBeersAvailable] = useState([]);
     const [googleLoaded, setGoogleLoaded] = useState(false);
-    const { isLogin, user, openModal } = useContext(AppContext);
+    const { isLogin, user, openModal, setUser } = useContext(AppContext);
     
     useEffect(() => {
         const fetchBeers = async () => {
@@ -76,15 +77,33 @@ const BarPage = () => {
     };
 
     const handleFavoriteClick = () => {
-        addFavoriteBar(user.id, id)
+        if (user.favoritesBars.includes(bar.id)) {
+            openModal('errorMessage', 'Ce bar est déjà dans vos favoris');
+            return;
+        } else {
+            addFavoriteBar(user.id, id)
+            .then(() => {
+                openModal('successMessage', 'Le bar a bien été ajouté à vos favoris');
+                setUser((prev) => ({ ...prev, favoritesBars: [...prev.favoritesBars, bar] }));
+            })
+            .catch(error => {
+                console.error(error);
+                openModal('errorMessage', 'Une erreur est survenue lors de l\'ajout du bar à vos favoris');
+            });
+        }
+    };
+
+    const handleDeleteFavoriteClick = () => {
+        deleteFavoriteBar(user.id, id)
         .then(() => {
-            openModal('successMessage', 'Le bar a bien été ajouté à vos favoris');
+            openModal('successMessage', 'Le bar a bien été supprimé de vos favoris');
+            setUser((prev) => ({ ...prev, favoritesBars: prev.favoritesBars.filter(favBar => favBar.id !== bar.id) }));
         })
         .catch(error => {
             console.error(error);
-            openModal('errorMessage', 'Une erreur est survenue lors de l\'ajout du bar à vos favoris');
+            openModal('errorMessage', 'Une erreur est survenue lors de la suppression du bar de vos favoris');
         });
-    };
+    }
 
     return (
         <div style={{ fontFamily: 'Arial, sans-serif', margin: '20px', padding: '20px', border: '1px solid #ddd', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -107,8 +126,11 @@ const BarPage = () => {
                             activeColor="#FEC514"
                             edit={false}
                         />
-                        {isLogin && (
+                        {isLogin && !user?.favoritesBars?.some(favBar => favBar.id === bar.id) && (
                             <Button text="Ajouter aux favoris" className="bg-primary" onClick={handleFavoriteClick}/>
+                        )}
+                        {isLogin && user?.favoritesBars?.some(favBar => favBar.id === bar.id) && (
+                            <Button text="Supprimer des favoris" className="bg-primary" onClick={handleDeleteFavoriteClick}/>
                         )}
                     </div>
                 </div>

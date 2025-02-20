@@ -83,7 +83,7 @@ router.post("/api/beers-available", beerAvailableControllers.addMultiple);
 router.delete("/api/bars/:id", jwtMiddleware, barControllers.destroy);
 router.delete("/api/users/:id", jwtMiddleware, usersControllers.destroy);
 router.delete("/api/comments/:id", jwtMiddleware, userCommentControllers.destroy);
-router.delete("/api/favorite-bars/:id", jwtMiddleware, favoriteBarControllers.destroy);
+router.delete("/api/users/:id/favorite-bars/:barId", jwtMiddleware, favoriteBarControllers.destroy);
 router.delete("/api/comment-images/:id", jwtMiddleware, commentImageControllers.destroy);
 
 module.exports = router;

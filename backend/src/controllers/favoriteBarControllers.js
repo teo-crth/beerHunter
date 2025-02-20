@@ -70,9 +70,10 @@ const add = (req, res) => {
 };
 
 const destroy = (req, res) => {
-  const id = parseInt(req.params.id, 10);
+  const userId = parseInt(req.params.id, 10);
+  const barId = parseInt(req.params.barId, 10);
   models.favorite_bar
-    .delete(id)
+    .deleteFavoriteBar(userId, barId)
     .then((result) => {
       if (result.rowCount === 0) {
         res.sendStatus(404);

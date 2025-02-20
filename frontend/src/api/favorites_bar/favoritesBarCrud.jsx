@@ -36,3 +36,22 @@ export const addFavoriteBar = async (userId, barId) => {
         throw error;
     }
 }
+
+export const deleteFavoriteBar = async (userId, barId) => {
+    const token = localStorage.getItem('token').replace(/['"]+/g, '');
+    
+    try {
+        const response = await axios.delete(`${BASE_URL}/api/users/${userId}/favorite-bars/${barId}`, 
+            { 
+                headers: { 
+                    'Content-Type': 'application/json', 
+                    'Authorization': `Bearer ${token}`
+                }
+            }
+        );
+        return response.data;
+    } catch (error) {
+        console.error('Erreur lors de la suppression du bar favori:', error);
+        throw error;
+    }
+}
