@@ -1,12 +1,16 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
+import { AppContext } from '../../context/context';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';
 import { LoadScript } from '@react-google-maps/api';
 import ReactStars from 'react-stars';
+import Button from '../../components/ui/Button';
+import { addFavoriteBar } from '../../api/favorites_bar/favoritesBarCrud';
 import { translatedOpeningHours } from '../../services/translateOpeningHours';
 import { fetchBeersAvailableForOneBar } from '../../api/beer/beersAvailableInBar';
 import '../../../node_modules/slick-carousel/slick/slick.css';
 import '../../../node_modules/slick-carousel/slick/slick-theme.css';
+import Modal from '../../components/ui/Modal';
 
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 const GOOGLE_KEY = import.meta.env.VITE_GOOGLE_KEY; 
@@ -24,7 +28,7 @@ const BarPage = () => {
     const [bar, setBars] = useState(barObject);
     const [beersAvailable, setBeersAvailable] = useState([]);
     const [googleLoaded, setGoogleLoaded] = useState(false);
-
+    const { isLogin, user, openModal } = useContext(AppContext);
     
     useEffect(() => {
         const fetchBeers = async () => {
@@ -71,7 +75,16 @@ const BarPage = () => {
         slidesToScroll: 1,
     };
 
-    const lienMapsBar = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2886.8726415578477!2d4.828161076524192!3d45.764043679105226!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47f4ebdd46e4b257%3A0x39c2331b8dcff1d6!2sAyers%20Rock!5e0!3m2!1sfr!2sfr!4v1617063968425!5m2!1sfr!2sfr';
+    const handleFavoriteClick = () => {
+        addFavoriteBar(user.id, id)
+        .then(() => {
+            openModal('successMessage', 'Le bar a bien été ajouté à vos favoris');
+        })
+        .catch(error => {
+            console.error(error);
+            openModal('errorMessage', 'Une erreur est survenue lors de l\'ajout du bar à vos favoris');
+        });
+    };
 
     return (
         <div style={{ fontFamily: 'Arial, sans-serif', margin: '20px', padding: '20px', border: '1px solid #ddd', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -94,6 +107,9 @@ const BarPage = () => {
                             activeColor="#FEC514"
                             edit={false}
                         />
+                        {isLogin && (
+                            <Button text="Ajouter aux favoris" className="bg-primary" onClick={handleFavoriteClick}/>
+                        )}
                     </div>
                 </div>
             </div>
@@ -161,6 +177,7 @@ const BarPage = () => {
                     </button>
                 </div>
             </div>
+            <Modal />
         </div>
     );
 };

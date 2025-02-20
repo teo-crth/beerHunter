@@ -46,7 +46,7 @@ router.get("/api/users", usersControllers.browse);
 router.get("/api/beersavailable", beerAvailableControllers.browse);
 router.get("/api/beersavailable/bar/:id", beerAvailableControllers.findAssociateBeersAvailable);
 // router.get("/api/users/:id/comments/", jwtMiddleware, usersControllers.findAssociateComments);
-// router.get("/api/users/:id/favorite-bars/", jwtMiddleware, usersControllers.findAssociateFavorites);
+router.get("/api/users/:id/favorite-bars", jwtMiddleware, usersControllers.findAssociateFavorites);
 // router.get("/api/users/:id", jwtMiddleware, usersControllers.read);
 // router.get("/api/users", jwtMiddleware, usersControllers.browse);
 
