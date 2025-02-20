@@ -9,6 +9,7 @@ import NotFoundPage from "./NotFoundPage";
 
 
 import { fetchOneUser } from "../api/user/oneUserCrud";
+import { fetchFavoritesBar } from "../api/favorites_bar/favoritesBarCrud";
 import { fetchCommentsOfOneUser } from "../api/user_comments/commentsCrud";
 import { fetchImagesOfOneComment } from "../api/user_comments/imagesCommentCrud";
 import Button from "@components/ui/Button";
@@ -18,24 +19,28 @@ export default function Profil() {
   
   const { user, setUser, openModal, isLogin, setIsLogin } = useContext(AppContext);
   const navigate = useNavigate();
+  console.log('user', user);
+  
   
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const commentsData = await fetchCommentsOfOneUser(user.id);
-        const updatedUserData = { ...user, comments: [] };
-
-        const commentsWithImages = await Promise.all(
-          commentsData.map(async (comment) => {
-            const commentImage = await fetchImagesOfOneComment(comment.id);
-            return { ...comment, commentImage };
-          })
-        );
-        
-        setUser((prev) => ({ ...updatedUserData, comments: commentsWithImages }));
-        
-        // const favoriteBarsData = await fetchFavoriteBarsOfOneUser(userData.id);
-        // setUser((prev) => ({ ...prev, favoriteBars: favoriteBarsData }));
+        if(user) {
+          const commentsData = await fetchCommentsOfOneUser(user?.id);
+          const updatedUserData = { ...user, comments: [] };
+  
+          const commentsWithImages = await Promise.all(
+            commentsData.map(async (comment) => {
+              const commentImage = await fetchImagesOfOneComment(comment?.id);
+              return { ...comment, commentImage };
+            })
+          );
+          
+          setUser((prev) => ({ ...updatedUserData, comments: commentsWithImages }));
+          
+          const favoritesBarsData = await fetchFavoritesBar(user?.id);
+          setUser((prev) => ({ ...prev, favoritesBars: favoritesBarsData }));
+        }
         
       } catch (error) {
         console.error("Erreur lors de la récupération des données :", error);
@@ -57,19 +62,19 @@ export default function Profil() {
   if (!isLogin) return <NotFoundPage />;
   
   return (
-    <div className="container-profilPage min-h-full">
+    <div className="container-profilPage min-h-[calc(100vh-159px)] justify-center items-center flex flex-col">
       <h1 className=" light-mode:bg-amber-100 text-light light-mode:text-dark text-center text-3xl font-title font-bold p-5">Mon profil</h1>
-      <div className="container-profil w-full min-h-full flex flex-wrap items-center justify-center light-mode:bg-amber-100 p-2 pb-5">
-        <section className="container-profilCard w-full m-2 xl:w-1/3 md:w-1/3 flex justify-center items-center">
+      <div className="container-profil w-full min-h-full flex flex-wrap items-start justify-center light-mode:bg-amber-100 p-2 pb-5">
+        <section className="container-profilCard flex m-2 justify-center items-center">
           <ProfilCard user={user} />
         </section>
-        <section className="container-commentsAndBars flex flex-col justify-center items-center w-full m-2 xl:w-2/3 md:w-1/2 lg:w-1/2">
+        <section className="container-commentsAndBars flex flex-col justify-center items-center w-full m-2 xl:w-1/2 md:w-1/2 lg:w-1/2">
           <CommentsCard user={user} />
           <FavoritesBarCard user={user} />
-          <Button text="Déconnexion" onClick={handleLogout} className="bg-red-700" />
         </section>
-        <Modal />
       </div>
+      <Button text="Déconnexion" onClick={handleLogout} className="bg-red-700 m-5" />
+      <Modal />
     </div>
   );
 }

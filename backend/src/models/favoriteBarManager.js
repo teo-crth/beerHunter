@@ -12,6 +12,13 @@ class FavoriteBarManager extends AbstractManager {
         )
     }
 
+    deleteFavoriteBar(userId, barId){
+        return this.database.query(
+            `DELETE FROM ${this.table} WHERE user_id = $1 AND bar_id = $2`,
+            [userId, barId]
+        )
+    }
+
     update(favorite_bar) {
         return this.database.query(
           `UPDATE ${this.table} SET user_id= $1, bar_id= $2 WHERE id = $3`,

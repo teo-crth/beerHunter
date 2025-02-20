@@ -27,8 +27,8 @@ const Profil = ({ user }) => {
                     <div className='w-2 h-2 bg-light light-mode:bg-dark-black rounded-full'></div>
                 </div>
                 { isModalEditOpen ? <EditProfil /> : null}
-                <div className="container-img">
-                    <img src={`${BASE_URL}${user?.profil_picture}`} alt='photo de profil' className='w-25 rounded-full shadow-2xs'/>
+                <div className="container-img w-20 h-20">
+                    <img src={`${BASE_URL}${user?.profil_picture}`} alt='photo de profil' className='w-full h-full rounded-full shadow-2xs object-cover'/>
                 </div>
                 <div className="container-info flex flex-col items-center justify-start gap-2">
                     <div className="container-name flex flex-col items-center">

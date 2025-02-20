@@ -46,7 +46,7 @@ router.get("/api/users", usersControllers.browse);
 router.get("/api/beersavailable", beerAvailableControllers.browse);
 router.get("/api/beersavailable/bar/:id", beerAvailableControllers.findAssociateBeersAvailable);
 // router.get("/api/users/:id/comments/", jwtMiddleware, usersControllers.findAssociateComments);
-// router.get("/api/users/:id/favorite-bars/", jwtMiddleware, usersControllers.findAssociateFavorites);
+router.get("/api/users/:id/favorite-bars", jwtMiddleware, usersControllers.findAssociateFavorites);
 // router.get("/api/users/:id", jwtMiddleware, usersControllers.read);
 // router.get("/api/users", jwtMiddleware, usersControllers.browse);
 
@@ -83,7 +83,7 @@ router.post("/api/beers-available", beerAvailableControllers.addMultiple);
 router.delete("/api/bars/:id", jwtMiddleware, barControllers.destroy);
 router.delete("/api/users/:id", jwtMiddleware, usersControllers.destroy);
 router.delete("/api/comments/:id", jwtMiddleware, userCommentControllers.destroy);
-router.delete("/api/favorite-bars/:id", jwtMiddleware, favoriteBarControllers.destroy);
+router.delete("/api/users/:id/favorite-bars/:barId", jwtMiddleware, favoriteBarControllers.destroy);
 router.delete("/api/comment-images/:id", jwtMiddleware, commentImageControllers.destroy);
 
 module.exports = router;

@@ -3,11 +3,11 @@ import React from 'react';
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
 const CommentsCard = ({ user }) => {
-    if (!user?.comments) return null;
+    if (!user?.comments || user.comments.length === 0) return null;
 
     return (
         <div className='flex flex-col w-full justify-center items-center'>
-            <h3 className='font-title font-bold text-light light-mode:text-dark-black text-center lg:text-left'>Vos Commentaires</h3>
+            <h3 className='font-title font-bold text-light light-mode:text-dark-black text-center text-2xl lg:text-left'>Vos Commentaires</h3>
             <div className='container-comments flex w-full rounded-md shadow-md gap-2 m-2 overflow-hidden font-text'>
                 {user.comments && user.comments.map((comment) => (
                     <div key={comment.id} className='container-comment-Card flex flex-wrap w-full bg-dark-black items-start light-mode:bg-primary rounded-lg'>

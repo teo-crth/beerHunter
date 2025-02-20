@@ -16,107 +16,117 @@ export const AppProvider = ({ children }) => {
   const [bars, setBars] = useState(null);
   const [pastResultBars, setPastResultBars] = useState([]);
 
+  useEffect(() => {
+    if (pastResultBars.length > 0) {
+      console.log("Mise à jour de localStorage avec", pastResultBars);
+      localStorage.setItem('pastResultBars', JSON.stringify(pastResultBars));
+    }
+  }, [pastResultBars]);
+
   // DARK MODE
-    const [isDarkMode, setIsDarkMode] = useState(() => {
-        const savedMode = localStorage.getItem('darkMode');
-        return savedMode ? JSON.parse(savedMode) : false;
-    });
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const savedMode = localStorage.getItem('darkMode');
+    return savedMode ? JSON.parse(savedMode) : false;
+  });
 
-    useEffect(() => {
-        if (!isDarkMode) {
-          document.body.classList.add('light-mode');
-        } else {
-            document.body.classList.remove('light-mode');
-        }
-    
-        localStorage.setItem('darkMode', JSON.stringify(isDarkMode));
-    }, [isDarkMode]);
+  useEffect(() => {
+    if (!isDarkMode) {
+      document.body.classList.add('light-mode');
+    } else {
+      document.body.classList.remove('light-mode');
+    }
 
-    useEffect(() => {
-      if (user) {
+    localStorage.setItem('darkMode', JSON.stringify(isDarkMode));
+  }, [isDarkMode]);
+
+  useEffect(() => {
+    if (user) {
       localStorage.setItem('token', JSON.stringify(user.token));
       localStorage.setItem('user', JSON.stringify(user));
-      
-        if (user.theme === 'dark') {
-          setIsDarkMode(true);
-        } else {
-          setIsDarkMode(false);
-        }
-      }
-    }, [user]);
 
-    useEffect(() => {
-      const localStorageToken = localStorage.getItem('token');
-      
-      if (localStorageToken) {
-          JSON.parse(localStorageToken);
-          setIsLogin(true);
+      if (user.theme === 'dark') {
+        setIsDarkMode(true);
       } else {
-        setIsLogin(false);
+        setIsDarkMode(false);
       }
-    
-      const localStorageUser = localStorage.getItem('user');
-      
-      if (localStorageUser) {
-          const user = JSON.parse(localStorageUser);
-          setUser(user);
-      } else {
-        setUser(null);
-      }
+    }
+  }, [user]);
 
-      fetchAllCities()
+  useEffect(() => {
+    const localStoragePastResult = localStorage.getItem('pastResultBars');
+
+    if (localStoragePastResult) {
+      const pastResultBars = JSON.parse(localStoragePastResult);
+      setPastResultBars(pastResultBars);
+    }
+
+    const localStorageToken = localStorage.getItem('token');
+
+    if (localStorageToken) {
+      JSON.parse(localStorageToken);
+      setIsLogin(true);
+    } else {
+      setIsLogin(false);
+    }
+
+    const localStorageUser = localStorage.getItem('user');
+
+    if (localStorageUser) {
+      const user = JSON.parse(localStorageUser);
+      setUser(user);
+    } else {
+      setUser(null);
+    }
+
+    fetchAllCities()
       .then((data) => {
-          setCities(data);
+        setCities(data);
       })
       .catch((error) => {
-          console.error(error);
+        console.error(error);
       });
-    }, []); 
-    
-    const toggleTheme = () => {
-        setIsDarkMode(prevMode => !prevMode);
-    };
+  }, []);
 
-    // Modals
+  const toggleTheme = () => {
+    setIsDarkMode(prevMode => !prevMode);
+  };
 
-    const [modalState, setModalState] = useState({
-      isOpen: false,
-      type: '',
-      text: '',
-    });
-  
-    const openModal = (type, text) => setModalState({ isOpen: true, type, text });
-    const closeModal = () => setModalState({ isOpen: false, type: '' });
+  // Modals
+  const [modalState, setModalState] = useState({
+    isOpen: false,
+    type: '',
+    text: '',
+  });
 
+  const openModal = (type, text) => setModalState({ isOpen: true, type, text });
+  const closeModal = () => setModalState({ isOpen: false, type: '' });
 
-
-
-    return (
-        <AppContext.Provider 
-          value={{ 
-            menuOpen, 
-            setMenuOpen,
-            isDarkMode,
-            toggleTheme,
-            user,
-            setUser,
-            cities,
-            setCities,
-            bars, 
-            setBars,
-            pastResultBars,
-            setPastResultBars,
-            isModalEditOpen, 
-            setIsModalEditOpen,
-            openModal, 
-            closeModal,
-            modalState,
-            searchResultBars,
-            setSearchResultBars, 
-            isLogin,
-            setIsLogin
-          }}>
-          {children}
-        </AppContext.Provider>
-      );
+  return (
+    <AppContext.Provider
+      value={{
+        menuOpen,
+        setMenuOpen,
+        isDarkMode,
+        toggleTheme,
+        user,
+        setUser,
+        cities,
+        setCities,
+        bars,
+        setBars,
+        pastResultBars,
+        setPastResultBars,
+        isModalEditOpen,
+        setIsModalEditOpen,
+        openModal,
+        closeModal,
+        modalState,
+        searchResultBars,
+        setSearchResultBars,
+        isLogin,
+        setIsLogin
+      }}>
+      {children}
+    </AppContext.Provider>
+  );
 };

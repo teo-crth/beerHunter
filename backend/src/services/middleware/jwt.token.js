@@ -8,9 +8,8 @@ const debug = debugLib('app:jwtMiddleware');
 
 const jwtMiddleware = (req, res, next) => {
     const authHeader = req.headers.authorization;
-
+    
     debug('Authorization Header', authHeader);
-
 
     if (!authHeader) {
         return res.status(401).json({

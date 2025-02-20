@@ -32,7 +32,7 @@ const BeerPage = () => {
                     fetchBeersOftype(beerType.name)
                     .then(beers => {
                         setSimilarBeers(beers);
-                        
+                        console.log("similaire", similarBeers);
                     })
                 })
                 .catch(error => console.error(error));
@@ -43,11 +43,13 @@ const BeerPage = () => {
         fetch();
     }, [id]);
 
+    const slidesToShow = similarBeers.length >= 5 ? 5 : similarBeers.length;
+
     const settings = {
         dots: true,
-        infinite: true,
+        infinite: false,
         speed: 500,
-        slidesToShow: 5,
+        slidesToShow: slidesToShow,
         slidesToScroll: 1
     };
 
@@ -73,14 +75,16 @@ const BeerPage = () => {
                 </div>
             </div>
             <h1 className='font-title font-bold text-2xl text-light light-mode:text-dark-black'>Bières similaires</h1>
-            <div className='w-full md:w-2/3 lg:w-2/3 p-2'>
-                <Slider {...settings}>
-                    {similarBeers && similarBeers.map((beer, index) => (
-                        <div key={index} className='flex items-center justify-center p-3 cursor-pointer' onClick={() => handleBeerClick(beer.beer_id)} aria-label={`Navigation vers la page de la bière ${beer.name}`}>
-                            <img src={`${BASE_URL}${beer?.image_link}`} alt={`image ${beer?.name}`} className='rounded-2xl border-2 border-primary' />
-                        </div>
-                    ))}
-                </Slider>
+            <div className='w-full md:w-[70%] lg:w-[70%] p-2'>
+                {similarBeers && similarBeers.length > 0 && (
+                    <Slider {...settings}>
+                        {similarBeers && similarBeers.map((beer, index) => (
+                            <div key={index} className='flex items-center justify-center p-2 cursor-pointer' onClick={() => handleBeerClick(beer.beer_id)} aria-label={`Navigation vers la page de la bière ${beer?.beer_name}`}>
+                                <img src={`${BASE_URL}${beer?.image_link}`} alt={`image ${beer?.beer_name}`} className='rounded-2xl border-2 border-primary' />
+                            </div>
+                        ))}
+                    </Slider>
+                )}
             </div>
         </div>
     );

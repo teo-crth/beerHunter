@@ -27,8 +27,14 @@ const SearchBar = () => {
     useEffect(() => {
         if (cities.length === 0) {
             fetchAllCities()
-                .then(data => setCities(data))
-                .catch(error => console.error(error));
+            .then(data => setCities(data))
+            .catch(error => console.error(error));
+        }
+
+        if(beersAvailable.length === 0) {
+            fetchAllBeersAvailable()
+            .then(data => setBeersAvailable(data))
+            .catch(error => console.error(error));
         }
     }, []);
 
@@ -80,13 +86,17 @@ const SearchBar = () => {
 
             if (barsFromDB.length > 2) {
                 if (selectedBeerId) {    
-                    console.log('beerAvailable', beersAvailable);
+                    console.log('beerAvailablee', beersAvailable);
+                    console.log('bars from bdd when a beer filter is selected', barsFromDB);
+                    
                                    
                     const barsWithBeerSelected = barsFromDB.filter(bar => beersAvailable.some(beer => beer.bar_id === bar.id && beer.beer_id === selectedBeerId));
                     setSearchResultBars(barsWithBeerSelected);
+                    setPastResultBars(barsWithBeerSelected);
                     return;
                 } else {
                     setSearchResultBars(barsFromDB);
+                    setPastResultBars(barsFromDB);
                     return;
                 }
 
@@ -142,6 +152,7 @@ const SearchBar = () => {
                     
                     setBars(createdBars.bars);
                     console.log('bars créé en bdd', createdBars.bars);
+                    console.log('bars créé en bdd qui doivent etre dans ce state', bars);
                     
 
                     if (selectedBeerId) {    
@@ -164,13 +175,13 @@ const SearchBar = () => {
         } 
     }   
 
-    console.log('selectedd bedd', selectedBeerId);
+    console.log('selected beer in search bar', selectedBeerId);
     
 
     return (
-        <div className='w-full md:w-[70%] lg:w-[70%] flex items-center justify-center'>
+        <div className='w-full md:w-[60%] lg:w-[40%] flex items-center justify-center'>
             <form action="submit" className='w-full flex flex-col md:flex-row lg:flex-row items-center justify-center gap-1 text-center md:text-left lg:text-left xl:text-left m-5 text-light light-mode:text-dark-black'>
-                <div className="container-city-input container-input-city relative flex items-center justify-center w-full md:w-2/3 lg:2/3">
+                <div className="container-city-input container-input-city relative flex items-center justify-center w-full md:w-1/2 lg:1/2">
                     <input type="text" list="cities" className='w-full p-2 bg-transparent text-center border-2 border-primary rounded-lg' placeholder='Entrez une ville' onChange={handleChange} value={searchTerm}/>
                     {isDropdownOpen  && filteredCities.length > 0 && (
                         <ul className="absolute top-13 bg-dark text-light border border-primary overflow-y-scroll shadow-lg max-h-30 mt-1 rounded-md w-full z-10">
