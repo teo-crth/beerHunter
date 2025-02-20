@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ReactStars from 'react-stars';
-import { useNavigate  } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { fetchBeersAvailableForOneBar } from '../../api/beer/beersAvailableInBar';
 import { fetchAllBeerTypes } from '../../api/beerType/beerTypeCrud';
 import { translatedOpeningHours } from '../../services/translateOpeningHours';
@@ -18,19 +18,19 @@ const Bar = ({ bar }) => {
     useEffect(() => {
         const fetchBeers = async () => {
             await fetchBeersAvailableForOneBar(bar.id)
-            .then(beersAvailable => {
-                setBeersAvailable(beersAvailable);
-            })
-            .catch(error => console.error(error));
+                .then(beersAvailable => {
+                    setBeersAvailable(beersAvailable);
+                })
+                .catch(error => console.error(error));
 
             await fetchAllBeerTypes()
-            .then(beerTypes => setBeerTypes(beerTypes))
-            .catch(error => console.error(error));
+                .then(beerTypes => setBeerTypes(beerTypes))
+                .catch(error => console.error(error));
         }
-        
+
         fetchBeers();
     }, []);
-    
+
     beersAvailable.forEach(beer => {
         console.log("beer", beer);
         beerTypes.forEach(beerType => {
@@ -40,10 +40,35 @@ const Bar = ({ bar }) => {
         });
     });
 
-    let translatedHours = [];   
+    let translatedHours = [];
 
     if (bar?.opening_hours) {
         translatedHours = translatedOpeningHours(bar.opening_hours);
+    
+        const groupedByHours = translatedHours.reduce((acc, { day, hours }) => {
+            if (!acc[hours]) {
+                acc[hours] = [];
+            }
+            acc[hours].push(day);
+            return acc;
+        }, {});
+    
+        translatedHours = Object.keys(groupedByHours).map(hours => {
+            const days = groupedByHours[hours];
+            const formattedDays = days.join(', '); 
+    
+            if (days.length === 7) {
+                return {
+                    hours,
+                    days: `Tous les jours`
+                };
+            } else {
+                return {
+                    hours,
+                    days: formattedDays
+                };
+            }
+        });
     }
 
     return (
@@ -55,15 +80,12 @@ const Bar = ({ bar }) => {
                 <h3 className="bar-card-title text-center font-title font-bold text-xl p-2">{bar.name}</h3>
                 <p className="bar-card-address text-center font-text text-xs">{bar.address}</p>
                 {translatedHours.length > 0 && (
-                    <div className="container-hours flex flex-nowrap overflow-x-scroll w-2/3 justify-start items-center gap-1 md:flex-row lg:flex-row">
-                        {translatedHours.map(day => (
-                            <div key={day.day} className="bar-card-hours flex justify-center items-center gap-1 border-primary border-1 rounded-md p-1">
-                                <p className="bar-card-day font-text text-xs font-bold">{day.day}</p>
-                                <ul className="bar-card-hours-list flex gap-1">
-                                    {day.hours.map((hour, index) => (
-                                        <li key={index} className="bar-card-hour font-text text-xs whitespace-nowrap">{hour}</li>
-                                    ))}
-                                </ul>
+                    <div className="container-hours flex flex-wrap w-[90%] justify-center items-center gap-1 md:flex-row lg:flex-row">
+                        {translatedHours.map((item, index) => (
+                            <div key={index} className="bar-card-hours flex justify-center items-center gap-1 border-primary border-1 rounded-md p-1">
+                                <p className="bar-card-day font-text text-xs font-bold">
+                                    {item.hours === "Fermé" ? `Fermé : ${item.days}` : `${item.days} : ${item.hours}`}
+                                </p>
                             </div>
                         ))}
                     </div>
@@ -76,16 +98,18 @@ const Bar = ({ bar }) => {
                         ))}
                     </ul>
                 </div>
-                <div className="container-rate flex justify-end items-center w-full gap-1 absolute -top-3 right-2">
-                    <p className="bar-card-rate text-left font-text text-sm pt-1">{bar.rate}</p>
-                    <ReactStars
-                        count={5}
-                        value={bar.rate}
-                        size={24}
-                        activeColor="#FEC514"
-                        edit={false}
-                    />
-                </div>
+                {bar?.rate && (
+                    <div className="container-rate flex justify-end items-center w-full gap-1 absolute -top-3 right-2">
+                        <p className="bar-card-rate text-left font-text text-sm pt-1">{bar.rate}</p>
+                        <ReactStars
+                            count={5}
+                            value={bar.rate}
+                            size={24}
+                            activeColor="#FEC514"
+                            edit={false}
+                        />
+                    </div>
+                )}
             </div>
         </article>
     );
