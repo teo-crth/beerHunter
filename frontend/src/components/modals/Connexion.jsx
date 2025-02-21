@@ -70,7 +70,7 @@ const Connexion = () => {
                             <Button type='submit' className='bg-primary hover:bg-secondary' text="Se connecter" />
                             <Button onClick={closeModal} type="button" className='bg-primary hover:bg-secondary' text="Annuler" />
                         </div>
-                        <p className='font-text text-xs text-light light-mode:text-dark-black mt-2' onClick={handleSignupClick}>Vous n'avez pas de compte ? Inscrivez-vous</p>
+                        <p className='font-text text-md text-light light-mode:text-primary font-bold underline mt-3 cursor-pointer' aria-label="Navigation vers la fenetre d'inscription" onClick={handleSignupClick}>Vous n'avez pas de compte ? Inscrivez-vous</p>
                     </form>
                 )}
             </Formik>
