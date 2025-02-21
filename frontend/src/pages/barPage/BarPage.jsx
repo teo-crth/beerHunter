@@ -122,7 +122,7 @@ const BarPage = () => {
                         <Button text="Ajouter aux favoris" className="bg-primary mt-2" onClick={handleFavoriteClick}/>
                     )}
                     {isLogin && user?.favoritesBars?.some(favBar => favBar.id === bar.id) && (
-                        <Button text="Supprimer des favoris" className="bg-primary" onClick={handleDeleteFavoriteClick}/>
+                        <Button text="Supprimer des favoris" className="bg-primary mt-2" onClick={handleDeleteFavoriteClick}/>
                     )}
                 </div>
                 <div className='container-description flex flex-col justify-start gap-3 p-3 items-start w-[95%] md:w-[60%] lg:w-[60%] xl:w-[60%] h-[25em]'>
