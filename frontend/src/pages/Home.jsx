@@ -1,9 +1,7 @@
 import React from "react";
-
 import SearchResultBars from "../components/bar/SearchResultBars";
 import SearchBar from "../components/ui/SearchBar";
 import Modal from "../components/ui/Modal";
-
 
 export default function Home() {
   return (

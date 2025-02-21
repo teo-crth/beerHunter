@@ -1,14 +1,12 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { AppContext } from '../../context/context';
 import { fetchAllCities } from '../../api/city/cityCrud';
-import { fetchGoogleBars, fetchOneGoogleBar, fetchBarMainImage } from '../../api/google_api/fetchGoogleApi';
+import { fetchGoogleBars, fetchOneGoogleBar } from '../../api/google_api/fetchGoogleApi';
 import { fetchAllBeers } from '../../api/beer/beerCrud';
 import { createBars, fetchBarsByCityId } from '../../api/bar/barsCrud';
 import { fetchAllBeersAvailable, createBeersAvailable } from '../../api/beer/beersAvailableInBar';
-
 import Button from './Button';
 import Dropdown from './Dropdown';
-
 
 const SearchBar = () => {
     const [cities, setCities] = useState([]);
@@ -20,21 +18,29 @@ const SearchBar = () => {
     const [beersAvailable, setBeersAvailable] = useState([]);
     const [beers, setBeers] = useState([]);
     const [isLoading, setIsloading] = useState(false);
-    
-    const { openModal, setOpenModal, setSearchResultBars, bars, setBars, pastResultBars, setPastResultBars } = useContext(AppContext);
-    const GOOGLE_KEY = import.meta.env.GOOGLE_KEY;
+    const { openModal, setSearchResultBars, bars, setBars, pastResultBars, setPastResultBars } = useContext(AppContext);
 
     useEffect(() => {
         if (cities.length === 0) {
-            fetchAllCities()
-            .then(data => setCities(data))
-            .catch(error => console.error(error));
+            const fetchCities = async () => {
+                try {
+                    const data = await fetchAllCities()
+                    setCities(data);
+                } catch(error) {console.error(error)};
+            }
+
+            fetchCities();
         }
 
         if(beersAvailable.length === 0) {
-            fetchAllBeersAvailable()
-            .then(data => setBeersAvailable(data))
-            .catch(error => console.error(error));
+            const fetchBeersOfBars = async () => {
+                try {
+                    const data = await fetchAllBeersAvailable()
+                    setBeersAvailable(data)
+                } catch(error) {console.error(error)};
+            }
+
+            fetchBeersOfBars();
         }
     }, []);
 
@@ -46,9 +52,10 @@ const SearchBar = () => {
 
     useEffect(() => {
         const fetchBeers = async () => {
-            await fetchAllBeers()
-            .then(data => setBeers(data))
-            .catch(error => console.error(error));
+            try {
+                await fetchAllBeers()
+                setBeers(data)
+            } catch (error) {console.error(error)};
         }
 
         fetchBeers();
@@ -146,14 +153,10 @@ const SearchBar = () => {
                     });
 
                     await createBeersAvailable(beersToSave);
-                    await fetchAllBeersAvailable()
-                    .then(data => setBeersAvailable(data))
-                    .catch(error => console.error(error));
-                    
+                    const beersAvailabel = await fetchAllBeersAvailable()
+                    setBeersAvailable(beersAvailabel);                    
                     setBars(createdBars.bars);
-                    console.log('bars créé en bdd', createdBars.bars);
-                    console.log('bars créé en bdd qui doivent etre dans ce state', bars);
-                    
+                    console.log('bars créé en bdd', createdBars.bars);                    
 
                     if (selectedBeerId) {    
                         console.log('beerAvailable', beersAvailable);
@@ -174,9 +177,6 @@ const SearchBar = () => {
             setIsloading(false);
         } 
     }   
-
-    console.log('selected beer in search bar', selectedBeerId);
-    
 
     return (
         <div className='w-full md:w-[60%] lg:w-[40%] flex items-center justify-center'>

@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { AppContext } from '../../context/context';
 import { deleteOneUser } from '../../api/user/oneUserCrud';
 import Button from '../ui/Button';
@@ -6,22 +7,20 @@ import Button from '../ui/Button';
 const ValidationDeleteProfil = () => {
 
     const { user, closeModal, openModal } = useContext(AppContext);
+    const navigate = useNavigate();
 
-    const handleDeleteClick = () => {
+    const handleDeleteClick = async () => {
 
-        deleteOneUser(user.id)
-            .then((data) => {
-                console.log(data);
-                closeModal();
-                openModal('successMessage', 'Profil supprimé avec succès');
-                window.location.href = '/';
-            }
-            )
-            .catch((error) => {
-                console.error("Erreur Objet", error);
-                closeModal();
-                openModal('errorMessage', 'Erreur lors de la suppression du profil');
-            });
+        try {
+            await deleteOneUser(user.id)
+            closeModal();
+            openModal('successMessage', 'Profil supprimé avec succès');
+            navigate('/');
+        } catch (error) {
+            console.error("Erreur Objet", error);
+            closeModal();
+            openModal('errorMessage', 'Erreur lors de la suppression du profil');
+        };
 
     };
 

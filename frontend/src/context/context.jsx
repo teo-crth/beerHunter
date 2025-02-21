@@ -1,10 +1,7 @@
 import React, { createContext, useState, useEffect } from "react";
 import { fetchAllCities } from "../api/city/cityCrud";
 
-// Création du contexte
 export const AppContext = createContext();
-
-// Fournisseur du contexte
 export const AppProvider = ({ children }) => {
 
   const [menuOpen, setMenuOpen] = useState(false);

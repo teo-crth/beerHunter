@@ -1,5 +1,4 @@
 import React from 'react';
-
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
 const CommentsCard = ({ user }) => {

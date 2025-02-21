@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
+import { useNavigate } from 'react-router';
 import Header from '../components/header/Header';
 import Footer from '../components/footer/Footer';
 import Button from '../components/ui/Button';
-import { useNavigate } from 'react-router';
 import Modal from '../components/ui/Modal';
 import BurgerMenu from '../components/burgerMenu/BurgerMenu';
 import { AppContext } from '../context/context';
@@ -14,6 +14,7 @@ const NoFoundPage = () => {
     const handleBackToHome = () => {
         navigate("/");
     }
+    
     return (
         <>
             <Header />

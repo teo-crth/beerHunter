@@ -1,17 +1,16 @@
 import React, { useEffect, useState, useRef, useContext } from 'react';
-import { AppContext } from '../../context/context';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';
 import { LoadScript } from '@react-google-maps/api';
 import ReactStars from 'react-stars';
-import Button from '../../components/ui/Button';
-import { addFavoriteBar, deleteFavoriteBar } from '../../api/favorites_bar/favoritesBarCrud';
-import { translatedOpeningHours } from '../../services/translateOpeningHours';
-import { fetchOneUser } from '../../api/user/oneUserCrud';
-import { fetchBeersAvailableForOneBar } from '../../api/beer/beersAvailableInBar';
-import '../../../node_modules/slick-carousel/slick/slick.css';
-import '../../../node_modules/slick-carousel/slick/slick-theme.css';
-import Modal from '../../components/ui/Modal';
+import Button from '../components/ui/Button';
+import { AppContext } from '../context/context';
+import { addFavoriteBar, deleteFavoriteBar } from '../api/favorites_bar/favoritesBarCrud';
+import { translatedOpeningHours } from '../services/translateOpeningHours';
+import { fetchBeersAvailableForOneBar } from '../api/beer/beersAvailableInBar';
+import Modal from '../components/ui/Modal';
+import '../../node_modules/slick-carousel/slick/slick.css';
+import '../../node_modules/slick-carousel/slick/slick-theme.css';
 
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 const GOOGLE_KEY = import.meta.env.VITE_GOOGLE_KEY; 
@@ -33,9 +32,10 @@ const BarPage = () => {
     
     useEffect(() => {
         const fetchBeers = async () => {
-            await fetchBeersAvailableForOneBar(id)
-            .then(beers => setBeersAvailable(beers))
-            .catch(error => console.error(error));
+            try {
+                const beers = await fetchBeersAvailableForOneBar(id)
+                setBeersAvailable(beers);
+            } catch(error) {console.error(error)};
         }
 
         fetchBeers();
@@ -76,37 +76,35 @@ const BarPage = () => {
         slidesToScroll: 1,
     };
 
-    const handleFavoriteClick = () => {
+    const handleFavoriteClick = async () => {
         if (user.favoritesBars?.includes(bar.id)) {
             openModal('errorMessage', 'Ce bar est déjà dans vos favoris');
             return;
         } else {
-            addFavoriteBar(user.id, id)
-            .then(() => {
+            try {
+                await addFavoriteBar(user.id, id)
                 openModal('successMessage', 'Le bar a bien été ajouté à vos favoris');
                 if (user.favoritesBars) {
                 setUser((prev) => ({ ...prev, favoritesBars: [...prev.favoritesBars, bar] }));
                 } else {
                     setUser((prev) => ({ ...prev, favoritesBars: [bar] }));
                 }
-            })
-            .catch(error => {
+            } catch(error) {
                 console.error(error);
                 openModal('errorMessage', 'Une erreur est survenue lors de l\'ajout du bar à vos favoris');
-            });
+            };
         }
     };
 
-    const handleDeleteFavoriteClick = () => {
-        deleteFavoriteBar(user.id, id)
-        .then(() => {
+    const handleDeleteFavoriteClick = async () => {
+        try {
+            await deleteFavoriteBar(user.id, id)
             openModal('successMessage', 'Le bar a bien été supprimé de vos favoris');
             setUser((prev) => ({ ...prev, favoritesBars: prev.favoritesBars.filter(favBar => favBar.id !== bar.id) }));
-        })
-        .catch(error => {
+        } catch(error) {
             console.error(error);
             openModal('errorMessage', 'Une erreur est survenue lors de la suppression du bar de vos favoris');
-        });
+        };
     }
 
     return (

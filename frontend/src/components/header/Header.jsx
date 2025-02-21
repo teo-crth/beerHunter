@@ -2,27 +2,21 @@ import React, { useState, useContext } from 'react';
 import { NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faMoon } from '@fortawesome/free-solid-svg-icons';
-import BurgerMenu from '../burgerMenu/BurgerMenu';
 import { AppContext } from '../../context/context';
 import logo from '../../assets/logo/beerHunter-letter-white.webp';
 import logoLight from '../../assets/logo/beerHunter-letter-black.webp';
-import { link } from 'fontawesome';
+const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const Header = () => {
-    // Etat pour gérer l'ouverture du menu burger
     const { 
         menuOpen, 
         setMenuOpen, 
-        isDarkMode, 
-        toggleTheme, 
+        isDarkMode,
         isLogin, 
         openModal,
         user
     } = useContext(AppContext);
 
-    const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-
-    // Fonction pour alterner l'état du menu burger
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
     };
@@ -44,9 +38,6 @@ const Header = () => {
                     <FontAwesomeIcon icon={faBars} />
                 </div>
             </div>
-            {/* {menuOpen && (
-                <BurgerMenu />
-            )} */}
         </header>
     );
 };

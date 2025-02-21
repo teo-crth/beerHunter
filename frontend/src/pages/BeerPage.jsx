@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';
-import { fetchOneBeer, fetchBeersOftype } from '../../api/beer/beerCrud';
-import { fetchOneBeerType } from '../../api/beerType/beerTypeCrud';
-import '../../../node_modules/slick-carousel/slick/slick.css';
-import '../../../node_modules/slick-carousel/slick/slick-theme.css';
+import { fetchOneBeer, fetchBeersOftype } from '../api/beer/beerCrud';
+import { fetchOneBeerType } from '../api/beerType/beerTypeCrud';
+import '../../node_modules/slick-carousel/slick/slick.css';
+import '../../node_modules/slick-carousel/slick/slick-theme.css';
 
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -21,23 +21,16 @@ const BeerPage = () => {
 
     useEffect(() => {
         const fetch = async () => {
-            await fetchOneBeer(id)
-            .then(beer => {
+            try {
+                const beer = await fetchOneBeer(id)
                 setBeer(beer)
-
-                console.log("beer", beer);
-                fetchOneBeerType(beer.beer_type_id)
-                .then(beerType => {
-                    setBeerType(beerType)
-                    fetchBeersOftype(beerType.name)
-                    .then(beers => {
-                        setSimilarBeers(beers);
-                        console.log("similaire", similarBeers);
-                    })
-                })
-                .catch(error => console.error(error));
-            })
-            .catch(error => console.error(error));
+    
+                const beerType = await fetchOneBeerType(beer.beer_type_id)
+                setBeerType(beerType)
+    
+                const beers = await fetchBeersOftype(beerType.name)
+                setSimilarBeers(beers);
+            } catch(error) {console.error(error)};
         }
 
         fetch();
@@ -52,10 +45,6 @@ const BeerPage = () => {
         slidesToShow: slidesToShow,
         slidesToScroll: 1
     };
-
-    const Description = "Guinness est une bière emblématique d'Irlande, célèbre pour sa texture onctueuse et son goût unique qui mélange des notes de malt torréfié et une subtile amertume.";
-    const taste = 'Café, chocolat, malt torréfié';
-
 
     return (
         <div className='flex flex-col items-center justify-center p-5'>

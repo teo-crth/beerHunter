@@ -3,13 +3,11 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Home from '../pages/Home';
 import NotFoundPage from '../pages/NotFoundPage';
 import Layout from '../components/layout/Layout';
-import BeerTypes from '../components/beer/BeerType';
-import Beer from '../components/beer/Beer';
-import Bar from '../components/bar/Bar';
+import BeerOfType from '../components/beer/BeerOfType';
 import Contact from '../pages/Contact';
 import Profil from '../pages/Profil';
-import BarPage from '../pages/barPage/BarPage';
-import BeerPage from '../pages/beerPage/BeerPage';
+import BarPage from '../pages/BarPage';
+import BeerPage from '../pages/BeerPage';
 import BeerTypePage from '../pages/BeerTypePage';
 
 const router = createBrowserRouter([
@@ -28,7 +26,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'types-de-biere/:type',
-        element: <Beer />,
+        element: <BeerOfType />,
       },
       {
         path: 'bieres/:id',
@@ -36,10 +34,6 @@ const router = createBrowserRouter([
       },
       {
         path: 'bars/:id',
-        element: <BarPage />,
-      },
-      {
-        path: '/bars/',
         element: <BarPage />,
       },
       {

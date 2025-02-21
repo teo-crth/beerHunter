@@ -6,13 +6,10 @@ import CommentsCard from "../components/profil/CommentsCard";
 import FavoritesBarCard from "../components/profil/FavoritesBarCard";
 import Modal from "../components/ui/Modal";
 import NotFoundPage from "./NotFoundPage";
-
-
-import { fetchOneUser } from "../api/user/oneUserCrud";
 import { fetchFavoritesBar } from "../api/favorites_bar/favoritesBarCrud";
 import { fetchCommentsOfOneUser } from "../api/user_comments/commentsCrud";
 import { fetchImagesOfOneComment } from "../api/user_comments/imagesCommentCrud";
-import Button from "@components/ui/Button";
+import Button from "../components/ui/Button";
 
 
 export default function Profil() {
@@ -36,7 +33,7 @@ export default function Profil() {
             })
           );
           
-          setUser((prev) => ({ ...updatedUserData, comments: commentsWithImages }));
+          setUser((updatedUserData) => ({ ...updatedUserData, comments: commentsWithImages }));
           
           const favoritesBarsData = await fetchFavoritesBar(user?.id);
           setUser((prev) => ({ ...prev, favoritesBars: favoritesBarsData }));
