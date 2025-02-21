@@ -27,10 +27,10 @@ const BurgerMenu = () => {
             <div className="container-close-icon flex justify-end items-center p-5 cursor-pointer" onClick={toggleMenu}>
                 <FontAwesomeIcon icon={faXmark} />
             </div>
-            <nav className="nav-mobile flex flex-col items-center gap-5 p-5 mt-8 text-xm">
+            <nav className="nav-mobile flex flex-col items-center gap-5 p-5 mt-8 text-xm font-title font-bold tracking-wider text-xl">
                 {isLogin ? 
-                    <NavLink to="/profil" onClick={toggleMenu} aria-label="Navigation vers la page profil" className="container-profil w-10 h-10 flex items-center justify-center rounded-full border-primary border-solid  cursor-pointer box-border">
-                        <img className="w-full rounded-full" src={`${VITE_BACKEND_URL}${user.profil_picture}`} alt="Profil de l'utilisateur" />
+                    <NavLink to="/profil" onClick={toggleMenu} aria-label="Navigation vers la page profil" className="container-profil w-15 h-15 flex items-center justify-center rounded-full border-primary border-solid  cursor-pointer box-border">
+                        <img className="w-full h-full rounded-full object-cover " src={`${VITE_BACKEND_URL}${user.profil_picture}`} alt="Profil de l'utilisateur" />
                     </NavLink>                    
                     : <p className="cursor-pointer" aria-label="Ouvre un formulaire de connexion" onClick={() => { openModal('login'); toggleMenu()}}>Connexion</p>
                 }

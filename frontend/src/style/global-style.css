@@ -27,7 +27,7 @@
     box-sizing: border-box;
 }
 
-.container-profilPage, .container-contact, .container-homePage, main {
+.container-profilPage, .container-contact, .container-homePage, .container-404, main {
     background: radial-gradient(circle at center, rgb(218, 176, 38) 50%, rgba(0, 0, 0, 1) 100%);
 }
 
@@ -36,7 +36,7 @@
     display: block;
 }
 
-.light-mode .container-profilPage, .light-mode .container-contact, .light-mode .container-homePage, .light-mode main {
+.light-mode .container-profilPage, .light-mode .container-contact, .light-mode .container-homePage, .light-mode .container-404, .light-mode main {
     background: rgb(252, 255, 229);
 }
 

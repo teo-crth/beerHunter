@@ -6,6 +6,9 @@ const Footer = () => {
             <p className="text-sm">
                 © {new Date().getFullYear()} Beer Hunter. All rights reserved.
             </p>
+            <p className="text-sm">
+                L'abus d'alcool est dangereux pour la santé, à consommer avec modération
+            </p>
             <ul className="flex flex-col md:flex-row lg:flex-row justify-center mt-2 space-x-4 flex-wrap">
                 <li>
                     <a
