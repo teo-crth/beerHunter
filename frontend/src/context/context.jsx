@@ -14,7 +14,7 @@ export const AppProvider = ({ children }) => {
   const [pastResultBars, setPastResultBars] = useState([]);
 
   useEffect(() => {
-    if (pastResultBars.length > 0) {
+    if (pastResultBars && pastResultBars.length > 0) {
       console.log("Mise à jour de localStorage avec", pastResultBars);
       localStorage.setItem('pastResultBars', JSON.stringify(pastResultBars));
     }

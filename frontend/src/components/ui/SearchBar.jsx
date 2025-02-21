@@ -7,6 +7,7 @@ import { createBars, fetchBarsByCityId } from '../../api/bar/barsCrud';
 import { fetchAllBeersAvailable, createBeersAvailable } from '../../api/beer/beersAvailableInBar';
 import Button from './Button';
 import Dropdown from './Dropdown';
+import { search } from 'fontawesome';
 
 const SearchBar = () => {
     const [cities, setCities] = useState([]);
@@ -53,7 +54,7 @@ const SearchBar = () => {
     useEffect(() => {
         const fetchBeers = async () => {
             try {
-                await fetchAllBeers()
+                const data = await fetchAllBeers()
                 setBeers(data)
             } catch (error) {console.error(error)};
         }
@@ -145,16 +146,22 @@ const SearchBar = () => {
                     const createdBars = await createBars(barsToSave);                    
                     const beersToSave = [];
 
+                    console.log('bars créés en bdd', createdBars.bars);
+                    
+
                     createdBars.bars.forEach((bar) => {
                         const randomBeers = beers.sort(() => 0.5 - Math.random()).slice(0, Math.floor(Math.random() * 5) + 2);                        
                         randomBeers.forEach(beer => {
                             beersToSave.push({ bar_id: bar.id, beer_id: beer.id });
                         });
+
+                        console.log('beersToSave', beersToSave);
+                        
                     });
 
                     await createBeersAvailable(beersToSave);
-                    const beersAvailabel = await fetchAllBeersAvailable()
-                    setBeersAvailable(beersAvailabel);                    
+                    const beersAvailable = await fetchAllBeersAvailable()
+                    setBeersAvailable(beersAvailable);                    
                     setBars(createdBars.bars);
                     console.log('bars créé en bdd', createdBars.bars);                    
 
@@ -165,8 +172,11 @@ const SearchBar = () => {
                         setSearchResultBars(barsWithBeerSelected);
                         setPastResultBars(barsWithBeerSelected);     
                     } else {
+                        console.log('merdeeee', bars);
+                        
                         setSearchResultBars(bars);
                         setPastResultBars(bars);
+                        
                     }
                 }
             }
@@ -177,7 +187,7 @@ const SearchBar = () => {
             setIsloading(false);
         } 
     }   
-
+    
     return (
         <div className='w-full md:w-[60%] lg:w-[40%] flex items-center justify-center'>
             <form action="submit" className='w-full flex flex-col md:flex-row lg:flex-row items-center justify-center gap-1 text-center md:text-left lg:text-left xl:text-left m-5 text-light light-mode:text-dark-black'>
