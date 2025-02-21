@@ -62,7 +62,7 @@ export const AppProvider = ({ children }) => {
 
     const localStorageToken = localStorage.getItem('token');
 
-    if (localStorageToken) {
+    if (localStorageToken && localStorageToken !== 'undefined') {
       JSON.parse(localStorageToken);
       setIsLogin(true);
     } else {
