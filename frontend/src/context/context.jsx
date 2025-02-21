@@ -1,10 +1,7 @@
 import React, { createContext, useState, useEffect } from "react";
 import { fetchAllCities } from "../api/city/cityCrud";
 
-// Création du contexte
 export const AppContext = createContext();
-
-// Fournisseur du contexte
 export const AppProvider = ({ children }) => {
 
   const [menuOpen, setMenuOpen] = useState(false);
@@ -13,11 +10,10 @@ export const AppProvider = ({ children }) => {
   const [searchResultBars, setSearchResultBars] = useState([]);
   const [isLogin, setIsLogin] = useState(false);
   const [cities, setCities] = useState([]);
-  const [bars, setBars] = useState(null);
   const [pastResultBars, setPastResultBars] = useState([]);
 
   useEffect(() => {
-    if (pastResultBars.length > 0) {
+    if (pastResultBars && pastResultBars.length > 0) {
       console.log("Mise à jour de localStorage avec", pastResultBars);
       localStorage.setItem('pastResultBars', JSON.stringify(pastResultBars));
     }
@@ -112,8 +108,6 @@ export const AppProvider = ({ children }) => {
         setUser,
         cities,
         setCities,
-        bars,
-        setBars,
         pastResultBars,
         setPastResultBars,
         isModalEditOpen,

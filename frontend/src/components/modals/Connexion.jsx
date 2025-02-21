@@ -14,23 +14,21 @@ const Connexion = () => {
         openModal('signup');
     };
 
-        const handleSubmit = (values) => {
-            const password = values.password.trim();
-            const email = values.email;    
-    
-            connexionUser(email, password)
-                .then((data) => {
-                    setUser(data);
-                    closeModal();
-                    setIsLogin(true);
-    
-                })
-                .catch((error) => {
-                    console.error("Erreur Objet", error);
-                    closeModal();
-                    openModal('errorMessage', 'Erreur lors de la connexion, mot de passe ou email incorrect');
-                });
+    const handleSubmit = async (values) => {
+        const password = values.password.trim();
+        const email = values.email;    
+
+        try {
+            const data = await connexionUser(email, password)   
+            setUser(data);
+            closeModal();
+            setIsLogin(true);
+        } catch(error) {
+            console.error("Erreur Objet", error);
+            closeModal();
+            openModal('errorMessage', 'Erreur lors de la connexion, mot de passe ou email incorrect');
         };
+    };
 
     return (
         <div>

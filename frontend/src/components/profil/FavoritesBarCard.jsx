@@ -1,9 +1,7 @@
 import React from 'react';
 import Bar from '../bar/Bar';
 
-const FavoritesBarCard = ({ user }) => {
-    console.log('user dans favorite component', user);
-    
+const FavoritesBarCard = ({ user }) => {   
     if (!user?.favoritesBars || user?.favoritesBars.length === 0) return null;
 
     return (

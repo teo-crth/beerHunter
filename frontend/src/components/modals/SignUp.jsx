@@ -1,25 +1,15 @@
 import React, { useEffect, useContext, useState } from 'react';
-import { AppContext } from '../../context/context';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import dayjs from 'dayjs';
 import customParseFormat from "dayjs/plugin/customParseFormat";
-
+import { AppContext } from '../../context/context';
 import { createOneUser } from '../../api/user/oneUserCrud';
 import Button from '../ui/Button';
 
 const SignUp = () => {
 
-    const {
-        toggleModal,
-        cities,
-        openModal,
-        closeModal,
-        isModalOpen,
-        setIsModalOpen,
-        setCities
-    } = useContext(AppContext);
-
+    const {cities, openModal, closeModal} = useContext(AppContext);
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredCities, setFilteredCities] = useState([]);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -44,7 +34,7 @@ const SignUp = () => {
         setIsDropdownOpen(false);
     };
 
-    const handleSubmit = (values) => {
+    const handleSubmit = async (values) => {
         dayjs.extend(customParseFormat);
         const dateFormated = dayjs(values.birth_date, "DD/MM/YYYY").format("YYYY-MM-DD");
         const name = values.name;
@@ -54,16 +44,15 @@ const SignUp = () => {
         const password = values.password;
         const confirmPassword = values.confirmPassword;
         
-        createOneUser(name, email, birth_date, cityId, password, confirmPassword)
-        .then(() => {
+        try {
+            await createOneUser(name, email, birth_date, cityId, password, confirmPassword)
             closeModal();
             openModal('successMessage', 'Inscription réussie, connectez-vous !');
-        })
-        .catch((error) => {
+        } catch(error) {
             console.error(error);
             closeModal();
             openModal('errorMessage', 'Un problème est survenu, veuillez rééssayer');
-        });    
+        };
     }
 
     return (

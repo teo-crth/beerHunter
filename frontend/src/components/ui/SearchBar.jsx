@@ -1,14 +1,13 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { AppContext } from '../../context/context';
 import { fetchAllCities } from '../../api/city/cityCrud';
-import { fetchGoogleBars, fetchOneGoogleBar, fetchBarMainImage } from '../../api/google_api/fetchGoogleApi';
+import { fetchGoogleBars, fetchOneGoogleBar } from '../../api/google_api/fetchGoogleApi';
 import { fetchAllBeers } from '../../api/beer/beerCrud';
 import { createBars, fetchBarsByCityId } from '../../api/bar/barsCrud';
 import { fetchAllBeersAvailable, createBeersAvailable } from '../../api/beer/beersAvailableInBar';
-
 import Button from './Button';
 import Dropdown from './Dropdown';
-
+import { search } from 'fontawesome';
 
 const SearchBar = () => {
     const [cities, setCities] = useState([]);
@@ -20,21 +19,29 @@ const SearchBar = () => {
     const [beersAvailable, setBeersAvailable] = useState([]);
     const [beers, setBeers] = useState([]);
     const [isLoading, setIsloading] = useState(false);
-    
-    const { openModal, setOpenModal, setSearchResultBars, bars, setBars, pastResultBars, setPastResultBars } = useContext(AppContext);
-    const GOOGLE_KEY = import.meta.env.GOOGLE_KEY;
+    const { openModal, setSearchResultBars, pastResultBars, setPastResultBars } = useContext(AppContext);
 
     useEffect(() => {
         if (cities.length === 0) {
-            fetchAllCities()
-            .then(data => setCities(data))
-            .catch(error => console.error(error));
+            const fetchCities = async () => {
+                try {
+                    const data = await fetchAllCities()
+                    setCities(data);
+                } catch(error) {console.error(error)};
+            }
+
+            fetchCities();
         }
 
         if(beersAvailable.length === 0) {
-            fetchAllBeersAvailable()
-            .then(data => setBeersAvailable(data))
-            .catch(error => console.error(error));
+            const fetchBeersOfBars = async () => {
+                try {
+                    const data = await fetchAllBeersAvailable()
+                    setBeersAvailable(data)
+                } catch(error) {console.error(error)};
+            }
+
+            fetchBeersOfBars();
         }
     }, []);
 
@@ -46,9 +53,10 @@ const SearchBar = () => {
 
     useEffect(() => {
         const fetchBeers = async () => {
-            await fetchAllBeers()
-            .then(data => setBeers(data))
-            .catch(error => console.error(error));
+            try {
+                const data = await fetchAllBeers()
+                setBeers(data)
+            } catch (error) {console.error(error)};
         }
 
         fetchBeers();
@@ -71,7 +79,6 @@ const SearchBar = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setBars([]);
         setIsloading(true);
 
         const city = cities.find(city => city.id === selectedCityId);
@@ -84,7 +91,7 @@ const SearchBar = () => {
 
             const barsFromDB = await fetchBarsByCityId(selectedCityId);          
 
-            if (barsFromDB.length > 2) {
+            if (barsFromDB.length > 0) {
                 if (selectedBeerId) {    
                     console.log('beerAvailablee', beersAvailable);
                     console.log('bars from bdd when a beer filter is selected', barsFromDB);
@@ -136,34 +143,28 @@ const SearchBar = () => {
 
                 if (barsToSave.length > 0) {
                     const createdBars = await createBars(barsToSave);                    
-                    const beersToSave = [];
+                    const beersToSave = [];                    
 
                     createdBars.bars.forEach((bar) => {
                         const randomBeers = beers.sort(() => 0.5 - Math.random()).slice(0, Math.floor(Math.random() * 5) + 2);                        
                         randomBeers.forEach(beer => {
                             beersToSave.push({ bar_id: bar.id, beer_id: beer.id });
-                        });
+                        });                        
                     });
 
                     await createBeersAvailable(beersToSave);
-                    await fetchAllBeersAvailable()
-                    .then(data => setBeersAvailable(data))
-                    .catch(error => console.error(error));
-                    
-                    setBars(createdBars.bars);
-                    console.log('bars créé en bdd', createdBars.bars);
-                    console.log('bars créé en bdd qui doivent etre dans ce state', bars);
-                    
+                    const beersAvailable = await fetchAllBeersAvailable()
+                    setBeersAvailable(beersAvailable);                    
+                    const barsBDD = await fetchBarsByCityId(selectedCityId);                 
 
-                    if (selectedBeerId) {    
-                        console.log('beerAvailable', beersAvailable);
-                                            
-                        const barsWithBeerSelected = bars.filter(bar => beersAvailable.some(beer => beer.bar_id === bar.id && beer.beer_id === selectedBeerId));
+                    if (selectedBeerId) {                  
+                        const barsWithBeerSelected = barsBDD.filter(bar => beersAvailable.some(beer => beer.bar_id === bar.id && beer.beer_id === selectedBeerId));
                         setSearchResultBars(barsWithBeerSelected);
                         setPastResultBars(barsWithBeerSelected);     
                     } else {
-                        setSearchResultBars(bars);
-                        setPastResultBars(bars);
+                        setSearchResultBars(barsBDD);
+                        setPastResultBars(barsBDD);
+                        
                     }
                 }
             }
@@ -174,10 +175,7 @@ const SearchBar = () => {
             setIsloading(false);
         } 
     }   
-
-    console.log('selected beer in search bar', selectedBeerId);
     
-
     return (
         <div className='w-full md:w-[60%] lg:w-[40%] flex items-center justify-center'>
             <form action="submit" className='w-full flex flex-col md:flex-row lg:flex-row items-center justify-center gap-1 text-center md:text-left lg:text-left xl:text-left m-5 text-light light-mode:text-dark-black'>
