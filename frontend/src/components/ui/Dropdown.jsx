@@ -27,11 +27,11 @@ const Dropdown = ({ beers, selectedBeerId, setSelectedBeerId }) => {
         <div className="relative w-full md:w-[35%] lg:w-[35%] border-2 border-primary rounded-lg">
             <button
                 type='button'
-                className="bg-transparent text-center text-md relative w-full flex justify-center items-center p-2"
+                className="bg-transparent text-center text-md relative w-full flex justify-center items-center gap-1 p-2 whitespace-nowrap"
                 onClick={toggleDropdown}
             >
-                {selectText}
-                <FaChevronDown className={`transform ${isOpen ? 'rotate-180 absolute right-2' : 'absolute right-2'}`} />
+              {selectText}
+              <FaChevronDown className={`transform ${isOpen ? 'rotate-180 flex mt-1' : 'flex  mt-1'}`} />
             </button>
             
             {isOpen && (

@@ -20,7 +20,7 @@ const EditForm = () => {
         setIsModalEditOpen
     } = useContext(AppContext);
 
-    const [searchTerm, setSearchTerm] = useState(`${user.city_name}`);
+    const [searchTerm, setSearchTerm] = useState(user.city_name ? `${user.city_name}` : '');
     const [filteredCities, setFilteredCities] = useState([]);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
