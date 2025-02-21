@@ -77,14 +77,18 @@ const BarPage = () => {
     };
 
     const handleFavoriteClick = () => {
-        if (user.favoritesBars.includes(bar.id)) {
+        if (user.favoritesBars?.includes(bar.id)) {
             openModal('errorMessage', 'Ce bar est déjà dans vos favoris');
             return;
         } else {
             addFavoriteBar(user.id, id)
             .then(() => {
                 openModal('successMessage', 'Le bar a bien été ajouté à vos favoris');
+                if (user.favoritesBars) {
                 setUser((prev) => ({ ...prev, favoritesBars: [...prev.favoritesBars, bar] }));
+                } else {
+                    setUser((prev) => ({ ...prev, favoritesBars: [bar] }));
+                }
             })
             .catch(error => {
                 console.error(error);
@@ -115,7 +119,7 @@ const BarPage = () => {
                         className='rounded-lg object-cover h-full w-full shadow-md'
                     />
                     {isLogin && !user?.favoritesBars?.some(favBar => favBar.id === bar.id) && (
-                        <Button text="Ajouter aux favoris" className="bg-primary" onClick={handleFavoriteClick}/>
+                        <Button text="Ajouter aux favoris" className="bg-primary mt-2" onClick={handleFavoriteClick}/>
                     )}
                     {isLogin && user?.favoritesBars?.some(favBar => favBar.id === bar.id) && (
                         <Button text="Supprimer des favoris" className="bg-primary" onClick={handleDeleteFavoriteClick}/>
