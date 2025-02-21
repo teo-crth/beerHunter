@@ -10,7 +10,6 @@ export const AppProvider = ({ children }) => {
   const [searchResultBars, setSearchResultBars] = useState([]);
   const [isLogin, setIsLogin] = useState(false);
   const [cities, setCities] = useState([]);
-  const [bars, setBars] = useState(null);
   const [pastResultBars, setPastResultBars] = useState([]);
 
   useEffect(() => {
@@ -109,8 +108,6 @@ export const AppProvider = ({ children }) => {
         setUser,
         cities,
         setCities,
-        bars,
-        setBars,
         pastResultBars,
         setPastResultBars,
         isModalEditOpen,

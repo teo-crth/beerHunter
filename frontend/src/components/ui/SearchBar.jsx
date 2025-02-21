@@ -19,7 +19,7 @@ const SearchBar = () => {
     const [beersAvailable, setBeersAvailable] = useState([]);
     const [beers, setBeers] = useState([]);
     const [isLoading, setIsloading] = useState(false);
-    const { openModal, setSearchResultBars, bars, setBars, pastResultBars, setPastResultBars } = useContext(AppContext);
+    const { openModal, setSearchResultBars, pastResultBars, setPastResultBars } = useContext(AppContext);
 
     useEffect(() => {
         if (cities.length === 0) {
@@ -79,7 +79,6 @@ const SearchBar = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setBars([]);
         setIsloading(true);
 
         const city = cities.find(city => city.id === selectedCityId);
@@ -92,7 +91,7 @@ const SearchBar = () => {
 
             const barsFromDB = await fetchBarsByCityId(selectedCityId);          
 
-            if (barsFromDB.length > 2) {
+            if (barsFromDB.length > 0) {
                 if (selectedBeerId) {    
                     console.log('beerAvailablee', beersAvailable);
                     console.log('bars from bdd when a beer filter is selected', barsFromDB);
@@ -144,38 +143,27 @@ const SearchBar = () => {
 
                 if (barsToSave.length > 0) {
                     const createdBars = await createBars(barsToSave);                    
-                    const beersToSave = [];
-
-                    console.log('bars créés en bdd', createdBars.bars);
-                    
+                    const beersToSave = [];                    
 
                     createdBars.bars.forEach((bar) => {
                         const randomBeers = beers.sort(() => 0.5 - Math.random()).slice(0, Math.floor(Math.random() * 5) + 2);                        
                         randomBeers.forEach(beer => {
                             beersToSave.push({ bar_id: bar.id, beer_id: beer.id });
-                        });
-
-                        console.log('beersToSave', beersToSave);
-                        
+                        });                        
                     });
 
                     await createBeersAvailable(beersToSave);
                     const beersAvailable = await fetchAllBeersAvailable()
                     setBeersAvailable(beersAvailable);                    
-                    setBars(createdBars.bars);
-                    console.log('bars créé en bdd', createdBars.bars);                    
+                    const barsBDD = await fetchBarsByCityId(selectedCityId);                 
 
-                    if (selectedBeerId) {    
-                        console.log('beerAvailable', beersAvailable);
-                                            
-                        const barsWithBeerSelected = bars.filter(bar => beersAvailable.some(beer => beer.bar_id === bar.id && beer.beer_id === selectedBeerId));
+                    if (selectedBeerId) {                  
+                        const barsWithBeerSelected = barsBDD.filter(bar => beersAvailable.some(beer => beer.bar_id === bar.id && beer.beer_id === selectedBeerId));
                         setSearchResultBars(barsWithBeerSelected);
                         setPastResultBars(barsWithBeerSelected);     
                     } else {
-                        console.log('merdeeee', bars);
-                        
-                        setSearchResultBars(bars);
-                        setPastResultBars(bars);
+                        setSearchResultBars(barsBDD);
+                        setPastResultBars(barsBDD);
                         
                     }
                 }
