@@ -48,9 +48,7 @@ export default function Profil() {
     <div className="container-profilPage min-h-[calc(100vh-159px)] justify-center items-center flex flex-col">
       <h1 className=" light-mode:bg-amber-100 text-light light-mode:text-dark text-center text-3xl font-title font-bold p-5">Mon profil</h1>
       <div className="container-profil w-full min-h-full flex flex-wrap items-start justify-center light-mode:bg-amber-100 p-2 pb-5">
-        <section className="container-profilCard flex p-2 justify-center items-center">
-          <ProfilCard user={user} />
-        </section>
+        <ProfilCard user={user} />
         <section className="container-commentsAndBars flex flex-col justify-center items-center w-full p-2  md:w-[60%] lg:w-[60%] xl:w-[60%]">
           <CommentsCard user={user} />
           <FavoritesBarCard user={user} />

@@ -55,7 +55,7 @@ const CommentsCard = ({ user }) => {
     return (
         <div className='flex flex-col w-full justify-center items-center'>
             <h3 className='font-title font-bold text-light light-mode:text-dark-black text-center text-2xl lg:text-left'>Vos Commentaires</h3>
-            <div className='container-comments flex w-full gap-2 m-2 font-text p-2 flex-nowrap overflow-x-scroll'>
+            <div className={ comments?.length === 1 ? 'container-comments flex items-center justify-center w-full gap-2 m-2 font-text p-2 flex-nowrap overflow-x-scroll' : 'container-comments flex items-center justify-start w-full gap-2 m-2 font-text p-2 flex-nowrap overflow-x-scroll'}>
                 {comments && comments.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).map((comment) => (
                     <div key={comment.id} className='container-comment-Card flex flex-wrap w-[95%] items-start rounded-lg border-2 border-primary shadow-md flex-shrink-0'>
                         { comment?.commentImage ? 
