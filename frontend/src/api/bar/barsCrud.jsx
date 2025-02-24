@@ -29,3 +29,12 @@ export const fetchBarsByCityId = async (cityId) => {
     }
 }
 
+export const fetchOneBar = async (barId) => {
+    try {
+        const response = await axios.get(`${BASE_URL}/api/bars/${barId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Erreur lors de la récupération du bar :', error);
+        throw error;
+    }
+}

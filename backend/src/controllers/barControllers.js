@@ -11,9 +11,8 @@ const browse = (req, res) => {
     models.bar
         .findAll()
         .then((result) => {
-            const rows = result.rows;   
-            const traitedRows = replaceSpecialChars(rows);        
-            res.send(traitedRows);
+            const rows = result.rows;         
+            res.send(rows);
         })
         .catch((err) => {
             console.error(err);
@@ -26,9 +25,8 @@ const findAssociateComments = (req, res) => {
     models.bar
         .findCommentsOfOneBar(id)
         .then((result) => {
-            const rows = result.rows
-            const traitedRows = replaceSpecialChars(rows);    
-            res.send(traitedRows);
+            const rows = result.rows   
+            res.send(rows);
         })
         .catch((err) => {
             console.error(err);
@@ -59,8 +57,7 @@ const read = (req, res) => {
             if (rows[0] == null) {
                 res.sendStatus(404);
             } else {
-                const traitedRows = replaceSpecialChars(rows); 
-                res.send(traitedRows[0]);
+                res.send(rows[0]);
             }
         })
         .catch((err) => {

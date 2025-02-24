@@ -86,6 +86,8 @@ const add = (req, res) => {
 
 const destroy = (req, res) => {
   const id = parseInt(req.params.id, 10);
+  console.log('id', id);
+  
   models.user_comment
     .delete(id)
     .then((result) => {

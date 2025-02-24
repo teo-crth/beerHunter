@@ -4,13 +4,15 @@ import { AppContext } from '../../context/context';
 import EditForm from '../modals/EditForm';
 import EditPassword from '../modals/EditPassword';
 import DeleteProfil from '../modals/DeleteProfil';
+import DeleteComment from '../modals/DeleteComment';
 import Connexion from '../modals/Connexion';
 import Signup from '../modals/Signup';
 import MessageModal from '../modals/MessageModal';
+import AddComment from '../modals/AddComment';
 
 const Modal = () => {
   const { closeModal, modalState } = useContext(AppContext);
-  const type = modalState.type;  
+  const type = modalState.type;
   const isOpen = modalState.isOpen;
   const text = modalState.text;
 
@@ -22,8 +24,10 @@ const Modal = () => {
           { type === 'editUser' && <EditForm />}
           { type === 'editPassword' && <EditPassword />}
           { type === 'deleteProfil' && <DeleteProfil />}
+          { type === 'deleteComment' && <DeleteComment text={text}/>}
           { type === 'login' && <Connexion />}
           { type === 'signup' && <Signup />}
+          { type === 'addComment' && <AddComment />}
           { type === 'errorMessage' || type === 'successMessage' ? <MessageModal text={text} type={type} onClose={closeModal} isOpen={isOpen} /> : null}
       </div>
     </div>

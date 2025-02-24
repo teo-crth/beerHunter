@@ -70,19 +70,19 @@ const updateUserSchema = Joi.object({
 
 const updatePasswordUserSchema = Joi.object({
     password: Joi.string()
-        .min(12)
-        .max(250)
-        .pattern(/(?=.*[A-Z])/, 'at least one uppercase letter')
-        .pattern(/(?=.*\d)/, 'at least one digit')
-        .pattern(/(?=.*[!@#$%^&*(),.?":{}|<>])/ , 'at least one special character')
-        .required(),
-        confirmPassword: Joi.string()
-        .valid(Joi.ref('password'))  // Ensure confirmPassword matches password
-        .required()
-        .messages({
-            'any.only': 'Confirm password must match the password',
-            'string.empty': 'Confirm password cannot be empty',
-        }),
+    .min(12)
+    .max(250)
+    .pattern(/(?=.*[A-Z])/, 'at least one uppercase letter')
+    .pattern(/(?=.*\d)/, 'at least one digit')
+    .pattern(/(?=.*[!@#$%^&*(),.?":{}|<>])/ , 'at least one special character')
+    .required(),
+    confirmPassword: Joi.string()
+    .valid(Joi.ref('password'))  // Ensure confirmPassword matches password
+    .required()
+    .messages({
+        'any.only': 'Confirm password must match the password',
+        'string.empty': 'Confirm password cannot be empty',
+    }),
         
 });
 
@@ -118,9 +118,7 @@ const userCommentSchema = Joi.object({
 });
 
 const commentImageSchema = Joi.object({
-    image_link: Joi.string().required(),
-    image_alt: Joi.string().min(3).max(50).required(),
-    user_comment_id: Joi.number().required()
+    image: Joi.any().optional()
 });
 
 module.exports = { updatePasswordUserSchema, updateUserSchema, createUserSchema, userCommentSchema, commentImageSchema, favoriteBarSchema, barSchema, loginSchema, barsSchema };

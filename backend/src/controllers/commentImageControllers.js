@@ -1,3 +1,5 @@
+const path = require('path');
+const fs = require('fs'); 
 const models = require("../models");
 
 const browse = (req, res) => {
@@ -54,14 +56,20 @@ const edit = (req, res) => {
 };
 
 const add = (req, res) => {
-    const comment_image = req.body;
+    const image = req.body;
+    let comment_image;
 
     // TODO validations (length, format...)
+      if (req.file) {   
+        const uploadPath = path.join(__dirname, "..", "..", "public", "assets", "images", "comments-images");
+        const imageUrl = `/assets/images/comments-images/${req.file.filename}`;
+        comment_image = imageUrl;
+      }
 
     models.comment_image
         .insert(comment_image)
         .then((result) => {
-            res.location(`/comment_image/${result.insertId}`).sendStatus(201);
+            res.location(`/comment_image/${result.insertId}`).status(201).send({ id: result.insertId, image: comment_image });
         })
         .catch((err) => {
             console.error(err);

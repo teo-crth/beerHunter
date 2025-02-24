@@ -14,13 +14,22 @@ export const fetchImagesOfOneComment = async (commentId) => {
     }
 }
 
-export const createCommentImage = async (commentId, image) => {
+export const createCommentImage = async (image, token) => {
     try {
+        // const formData = new FormData();
+        // formData.append('image', image);
+        console.log('token in imageCommentCrud', token);
+        
         // Requête avec axios
-        const response = await axios.post(`${BASE_URL}/api/comment-images`, {
-            user_comment_id: commentId,
-            image
-        });
+        const response = await axios.post(`${BASE_URL}/api/comment-images`, 
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            },
+            { image }
+        );
     
         return response.data;
     } catch (error) {

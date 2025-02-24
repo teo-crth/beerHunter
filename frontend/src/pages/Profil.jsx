@@ -7,8 +7,6 @@ import FavoritesBarCard from "../components/profil/FavoritesBarCard";
 import Modal from "../components/ui/Modal";
 import NotFoundPage from "./NotFoundPage";
 import { fetchFavoritesBar } from "../api/favorites_bar/favoritesBarCrud";
-import { fetchCommentsOfOneUser } from "../api/user_comments/commentsCrud";
-import { fetchImagesOfOneComment } from "../api/user_comments/imagesCommentCrud";
 import Button from "../components/ui/Button";
 
 
@@ -22,19 +20,7 @@ export default function Profil() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        if(user) {
-          const commentsData = await fetchCommentsOfOneUser(user?.id);
-          const updatedUserData = { ...user, comments: [] };
-  
-          const commentsWithImages = await Promise.all(
-            commentsData.map(async (comment) => {
-              const commentImage = await fetchImagesOfOneComment(comment?.id);
-              return { ...comment, commentImage };
-            })
-          );
-          
-          setUser((updatedUserData) => ({ ...updatedUserData, comments: commentsWithImages }));
-          
+        if(user) {          
           const favoritesBarsData = await fetchFavoritesBar(user?.id);
           setUser((prev) => ({ ...prev, favoritesBars: favoritesBarsData }));
         }
@@ -62,9 +48,7 @@ export default function Profil() {
     <div className="container-profilPage min-h-[calc(100vh-159px)] justify-center items-center flex flex-col">
       <h1 className=" light-mode:bg-amber-100 text-light light-mode:text-dark text-center text-3xl font-title font-bold p-5">Mon profil</h1>
       <div className="container-profil w-full min-h-full flex flex-wrap items-start justify-center light-mode:bg-amber-100 p-2 pb-5">
-        <section className="container-profilCard flex p-2 justify-center items-center">
-          <ProfilCard user={user} />
-        </section>
+        <ProfilCard user={user} />
         <section className="container-commentsAndBars flex flex-col justify-center items-center w-full p-2  md:w-[60%] lg:w-[60%] xl:w-[60%]">
           <CommentsCard user={user} />
           <FavoritesBarCard user={user} />

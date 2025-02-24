@@ -1,5 +1,6 @@
 const express = require("express");
 const upload = require("./services/middleware/upload");
+const commentUpload = require("./services/middleware/comment.image.upload");
 
 const router = express.Router();
 
@@ -75,7 +76,7 @@ router.post("/api/bars", validate(barsSchema, 'body'), barControllers.addMultipl
 router.post("/api/beers", beerControllers.add);
 router.post("/api/users", validate(createUserSchema, 'body'), usersControllers.add);
 router.post("/api/comments", jwtMiddleware, validate(userCommentSchema, 'body'), userCommentControllers.add);
-router.post("/api/comment-images", jwtMiddleware, validate(commentImageSchema, 'body'), commentImageControllers.add); 
+router.post("/api/comment-images", jwtMiddleware, validate(commentImageSchema, 'body'), commentUpload.single("image"), commentImageControllers.add); 
 router.post("/api/favorite-bars", jwtMiddleware, validate(favoriteBarSchema, 'body'), favoriteBarControllers.add);
 router.post("/api/beers-available", beerAvailableControllers.addMultiple);
 
