@@ -14,6 +14,17 @@ export const fetchCommentsOfOneUser = async (userId) => {
     }
 }
 
+export const fetchCommentsOfOneBar = async (barId) => {
+    try {
+        // Requête avec axios
+        const response = await axios.get(`${BASE_URL}/api/bars/${barId}/comments`);
+        return response.data;
+    } catch (error) {
+        console.error('Erreur lors de la récupération des commentaires:', error);
+        throw error;
+    }
+}
+
 export const fetchAllComments = async () => {
     try {
         // Requête avec axios

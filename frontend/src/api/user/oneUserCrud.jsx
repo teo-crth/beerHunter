@@ -1,15 +1,10 @@
 import axios from 'axios';
 
-// Base URL de l'API Google Books
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
-
-// Fonction pour rechercher des livres
-export const fetchOneUser = async (userId, setUser) => {
+export const fetchOneUser = async (userId) => {
   try {
-    // Requête avec axios
     const response = await axios.get(`${BASE_URL}/api/users/${userId}`);
-    
     return response.data;
   } catch (error) {
     console.error('Erreur lors de la récupération du profil:', error);
@@ -20,7 +15,6 @@ export const fetchOneUser = async (userId, setUser) => {
 export const createOneUser = async (name, email, birth_date, cityId, password, confirmPassword) => {
 
   try {
-    // Requête avec axios
     const response = await axios.post(`${BASE_URL}/api/users`, {
       email: email,
       password: password,
@@ -58,7 +52,6 @@ if (profil_picture) {
 
   
   try {
-    // Requête avec axios
     const response = await axios.put(`${BASE_URL}/api/users/${id}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data', // Important de spécifier multipart/form-data
@@ -75,7 +68,6 @@ if (profil_picture) {
 
 export const changeUserPassword = async (password, confirmPassword, id) => {
   try {
-    // Requête avec axios
     const response = await axios.put(`${BASE_URL}/api/passwordUsers/${id}`, {
       password: password,
       confirmPassword: confirmPassword
@@ -90,7 +82,6 @@ export const changeUserPassword = async (password, confirmPassword, id) => {
 
 export const deleteOneUser = async (userId) => {
   try {
-    // Requête avec axios
     const response = await axios.delete(`${BASE_URL}/api/users/${userId}`);
 
     return response.data;
@@ -102,7 +93,6 @@ export const deleteOneUser = async (userId) => {
 
 export const connexionUser = async (email, password) => {
   try {
-    // Requête avec axios
     const response = await axios.post(`${BASE_URL}/api/login`, {
       email: email,
       password: password,
