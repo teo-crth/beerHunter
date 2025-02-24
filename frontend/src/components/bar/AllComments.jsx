@@ -63,7 +63,7 @@ const AllComments = ({ barId }) => {
                             : null
                         }
                         <div className={ comment?.commentImage ? "container-info rounded-md flex flex-col w-full md:w-2/3 lg:w-2/3 bg-dark-black light-mode:bg-light" : "container-info flex flex-col w-full rounded-md bg-dark-black light-mode:bg-light"}>
-                            <header className="infos flex justify-between items-center w-full p-1">
+                            <header className="infos flex justify-between items-center w-full p-1 shadow-lg">
                                 <p className='font-bold text-light light-mode:text-dark-black'>{comment.bar?.name}</p>
                                 <div className="flex items-center gap-2">
                                     <p className='text-xs text-light light-mode:text-dark-black'>{comment?.user_name}</p>
@@ -72,8 +72,8 @@ const AllComments = ({ barId }) => {
                                     </div>
                                 </div>
                             </header>       
-                            <div className='w-full flex flex-col justify-center items-center h-full p-1 bg-secondary'>
-                                <p className='text-light light-mode:text-dark-black p-2 font-title text-justify m-2 text-md w-[95%] h-20 overflow-x-scroll border-1 border-light rounded-2xl'>{comment?.text}</p>
+                            <div className='w-full flex flex-col justify-center items-center h-full p-1 bg-secondary light-mode:bg-light'>
+                                <p className='text-light light-mode:text-dark-black p-2 font-title text-justify m-2 text-md w-[95%] h-20 overflow-x-scroll border-1 border-light light-mode:border-primary rounded-2xl'>{comment?.text}</p>
                                 <p className='text-light light-mode:text-dark-black text-sm'>{dayjs(comment?.created_at).format("DD-MM-YYYY")}</p>
                                 <div className='container-rating flex items-center justify-center gap-2'>
                                     <span className='font-bold font-text text-md text-light light-mode:text-dark-black'>

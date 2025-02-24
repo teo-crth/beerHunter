@@ -109,9 +109,17 @@ export const editComment = async (commentId, text, rate) => {
 
 
 export const deleteComment = async (commentId) => {
+    const token = localStorage.getItem('token').replace(/['"]+/g, '');
     try {
         // Requête avec axios
-        const response = await axios.delete(`${BASE_URL}/api/comments/${commentId}`);
+        const response = await axios.delete(`${BASE_URL}/api/comments/${commentId}`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            }
+        );
     
         return response.data;
     } catch (error) {

@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ReactStars from 'react-stars';
 import dayjs from 'dayjs';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { AppContext } from '../../context/context';
 import { fetchCommentsOfOneUser } from '../../api/user_comments/commentsCrud';
 import { fetchOneBar } from '../../api/bar/barsCrud';
 import { fetchImagesOfOneComment } from '../../api/user_comments/imagesCommentCrud';
@@ -11,6 +14,7 @@ const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 const CommentsCard = ({ user }) => {
     const Navigate = useNavigate();
     const [comments, setComments] = useState([]);
+    const { openModal } = useContext(AppContext);
 
     useEffect(() => {
         const fetchComments = async () => {
@@ -47,6 +51,17 @@ const CommentsCard = ({ user }) => {
         Navigate(`/bars/${bar.id}`, { state: bar });
     }
 
+    const handleDeleteClick = (comment_id) => {
+        if(comment_id) {          
+            openModal("deleteComment", { commentId: comment_id, onDeleteSuccess: handleDeleteSuccess });
+        }
+    }
+
+
+    const handleDeleteSuccess = (commentId) => {
+        setComments(prevComments => prevComments.filter(comment => comment.id !== commentId));
+    };
+
     if (!comments || comments.length === 0) return null;
 
     console.log('comments', comments);
@@ -64,7 +79,7 @@ const CommentsCard = ({ user }) => {
                             </div>
                             : null
                         }
-                        <div className={ comment?.commentImage ? "container-info rounded-md flex flex-col w-full md:w-2/3 lg:w-2/3 bg-dark-black light-mode:bg-light" : "container-info flex flex-col w-full rounded-md bg-dark-black light-mode:bg-light"}>
+                        <div className={ comment?.commentImage ? "container-info rounded-md flex flex-col w-full md:w-2/3 lg:w-2/3 bg-dark-black light-mode:bg-light relative" : "container-info flex flex-col w-full rounded-md bg-dark-black light-mode:bg-light relative"}>
                             <header className="infos flex justify-between items-center w-full p-1">
                                 <p className='font-bold text-light light-mode:text-dark-black' onClick={() => handleClickBarName(comment.bar)}>{comment.bar?.name}</p>
                                 <div className="flex items-center gap-2">
@@ -74,7 +89,7 @@ const CommentsCard = ({ user }) => {
                                     </div>
                                 </div>
                             </header>       
-                            <div className='w-full flex flex-col justify-center items-center h-full p-1 bg-secondary'>
+                            <div className='container-rate w-full flex flex-col justify-center items-center h-full p-1 bg-secondary'>
                                 <p className='text-light light-mode:text-dark-black p-2 font-title text-justify m-2 text-md w-[95%] h-20 overflow-x-scroll border-1 border-light rounded-2xl'>{comment?.text}</p>
                                 <p className='text-light light-mode:text-dark-black text-sm'>{dayjs(comment?.created_at).format("DD-MM-YYYY")}</p>
                                 <div className='container-rating flex items-center justify-center gap-2'>
@@ -90,6 +105,7 @@ const CommentsCard = ({ user }) => {
                                     />
                                 </div>
                             </div>
+                            <FontAwesomeIcon icon={faTrash} className='text-red-600 absolute bottom-2 right-2 cursor-pointer' onClick={() => handleDeleteClick(comment?.id)} />
                         </div>
                     </div>
                 ))}

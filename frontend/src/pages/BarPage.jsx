@@ -111,81 +111,83 @@ const BarPage = () => {
     const handleChangeClick = () => openModal('addComment');
 
     return (
-        <div className='container-barPage min-h-[calc(100vh-159px)] flex flex-col items-center justify-center w-full light-mode:bg-light md:p-10 lg:p-20 xl:p-20'>
-            <section className="container-bar-img-description flex flex-wrap justify-center items-center w-full mb-5">
-                <div className="container-img flex flex-col justify-center items-center w-[95%] md:w-[40%] lg:w-[40%] xl:w-[40%] h-[25em]">
-                    <img
-                        src={`${BASE_URL}${bar?.bar_picture}`}
-                        alt={`photo ${bar?.name}`}
-                        className='rounded-lg object-cover h-full w-full shadow-md'
-                    />
-                    {isLogin && !user?.favoritesBars?.some(favBar => favBar.id === bar.id) && (
-                        <Button text="Ajouter aux favoris" className="bg-primary mt-2" onClick={handleFavoriteClick}/>
-                    )}
-                    {isLogin && user?.favoritesBars?.some(favBar => favBar.id === bar.id) && (
-                        <Button text="Supprimer des favoris" className="bg-primary mt-2" onClick={handleDeleteFavoriteClick}/>
-                    )}
-                </div>
-                <div className='container-description flex flex-col justify-start gap-3 p-3 items-start w-[95%] md:w-[60%] lg:w-[60%] xl:w-[60%] h-[25em]'>
-                    <div className="container-title w-full flex flex-col justify-start items-center mt-2">
-                        <h1 className='font-title font-bold text-center text-2xl text-light light-mode:text-dark-black tracking-wider'>{bar?.name}</h1>
-                        <div className='container-rating flex items-center justify-center gap-2'>
-                            <span className='font-bold font-text text-md text-light light-mode:text-dark-black'>
-                                Note : {bar?.rate}/5
-                            </span>
-                            <ReactStars
-                                count={5}
-                                value={bar?.rate}
-                                size={24}
-                                activeColor="#FEC514"
-                                edit={false}
-                            />
+        <>
+            <div className='container-barPage min-h-[calc(100vh-159px)] flex flex-col items-center justify-center w-full light-mode:bg-light md:p-10 lg:p-20 xl:p-20'>
+                <section className="container-bar-img-description flex flex-wrap justify-center items-center w-full mb-5">
+                    <div className="container-img flex flex-col justify-center items-center w-[95%] md:w-[40%] lg:w-[40%] xl:w-[40%] h-[25em]">
+                        <img
+                            src={`${BASE_URL}${bar?.bar_picture}`}
+                            alt={`photo ${bar?.name}`}
+                            className='rounded-lg object-cover h-full w-full shadow-md'
+                        />
+                        {isLogin && !user?.favoritesBars?.some(favBar => favBar.id === bar.id) && (
+                            <Button text="Ajouter aux favoris" className="bg-primary mt-2" onClick={handleFavoriteClick}/>
+                        )}
+                        {isLogin && user?.favoritesBars?.some(favBar => favBar.id === bar.id) && (
+                            <Button text="Supprimer des favoris" className="bg-primary mt-2" onClick={handleDeleteFavoriteClick}/>
+                        )}
+                    </div>
+                    <div className='container-description flex flex-col justify-start gap-3 p-3 items-start w-[95%] md:w-[60%] lg:w-[60%] xl:w-[60%] h-[25em]'>
+                        <div className="container-title w-full flex flex-col justify-start items-center mt-2">
+                            <h1 className='font-title font-bold text-center text-2xl text-light light-mode:text-dark-black tracking-wider'>{bar?.name}</h1>
+                            <div className='container-rating flex items-center justify-center gap-2'>
+                                <span className='font-bold font-text text-md text-light light-mode:text-dark-black'>
+                                    Note : {bar?.rate}/5
+                                </span>
+                                <ReactStars
+                                    count={5}
+                                    value={bar?.rate}
+                                    size={24}
+                                    activeColor="#FEC514"
+                                    edit={false}
+                                />
+                            </div>
                         </div>
-                    </div>
-                    <div className='container-openingHours w-full flex  flex-col justify-center items-center gap-3'>
-                        <h1 className='font-bold font-title text-light light-mode:text-dark-black text-md text-center'>Horaires d'ouverture</h1>
-                        <ul className='font-text text-light light-mode:text-dark-black text-md text-center flex flex-wrap justify-center items-center gap-1'>
-                            {openingHours.map((item, index) => (
-                                <li key={index} className='border-2 border-primary rounded-lg p-0.5 whitespace-nowrap'>
-                                    <strong>{item.day} :</strong> {item.hours}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                    <div className='container-availableBeers flex flex-col justify-start items-center w-full'>
-                        <h1 className='font-title text-center text-lg text-light light-mode:text-dark-black font-bold'>Bières disponibles pour ce bar</h1>
-                        <div className='w-full md:w-[80%] lg:w-[80%] xl:w-[80%] items-center'>
-                            <Slider {...settings}>
-                                {beersAvailable.length > 0 && beersAvailable.map((beer, index) => (
-                                    <div key={index} className='flex items-center justify-center p-1 cursor-pointer' onClick={() => handleBeerClick(beer.id)} aria-label={`Navigation vers la page de la bière ${beer.name}`}>
-                                        <img src={`${BASE_URL}${beer.image_link}`} alt={`Biere-${index}`} className='border-1 border-primary rounded-2xl items-center' />
-                                    </div>
+                        <div className='container-openingHours w-full flex  flex-col justify-center items-center gap-3'>
+                            <h1 className='font-bold font-title text-light light-mode:text-dark-black text-md text-center'>Horaires d'ouverture</h1>
+                            <ul className='font-text text-light light-mode:text-dark-black text-md text-center flex flex-wrap justify-center items-center gap-1'>
+                                {openingHours.map((item, index) => (
+                                    <li key={index} className='border-2 border-primary rounded-lg p-0.5 whitespace-nowrap'>
+                                        <strong>{item.day} :</strong> {item.hours}
+                                    </li>
                                 ))}
-                            </Slider>
+                            </ul>
+                        </div>
+                        <div className='container-availableBeers flex flex-col justify-start items-center w-full'>
+                            <h1 className='font-title text-center text-lg text-light light-mode:text-dark-black font-bold'>Bières disponibles pour ce bar</h1>
+                            <div className='w-full md:w-[80%] lg:w-[80%] xl:w-[80%] items-center'>
+                                <Slider {...settings}>
+                                    {beersAvailable.length > 0 && beersAvailable.map((beer, index) => (
+                                        <div key={index} className='flex items-center justify-center p-1 cursor-pointer' onClick={() => handleBeerClick(beer.id)} aria-label={`Navigation vers la page de la bière ${beer.name}`}>
+                                            <img src={`${BASE_URL}${beer.image_link}`} alt={`Biere-${index}`} className='border-1 border-primary rounded-2xl items-center' />
+                                        </div>
+                                    ))}
+                                </Slider>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </section>
-            <aside className="flex w-full mt-5 flex-col items-center justify-center">
-                <div className='container-map flex flex-col items-center justify-center w-[90%] md:w-[60%] lg:w-[60%] xl:w-[60%]'>
-                    <LoadScript googleMapsApiKey={GOOGLE_KEY} onLoad={handleScriptLoad} libraries={LIBRAIRIES}>
-                        <div ref={mapRef} className='shadow-md rounded-lg w-full h-80' />
-                    </LoadScript>
-                    <div className='container-address flex flex-col items-center justify-center w-full text-light light-mode:text-dark-black p-2'>
-                        <p className='font-text text-sm'><strong>Adresse : </strong>{bar?.address}</p>
-                        <p className='font-text text-sm'><strong>Téléphone : </strong>{bar?.phone_number}</p>
-                        <a href={bar?.website} target='blank' className='font-text text-md text-blue-600 underline cursor-pointer'>Site internet</a>
+                </section>
+                <aside className="flex w-full mt-5 flex-col items-center justify-center">
+                    <div className='container-map flex flex-col items-center justify-center w-[90%] md:w-[60%] lg:w-[60%] xl:w-[60%]'>
+                        <LoadScript googleMapsApiKey={GOOGLE_KEY} onLoad={handleScriptLoad} libraries={LIBRAIRIES}>
+                            <div ref={mapRef} className='shadow-md rounded-lg w-full h-80' />
+                        </LoadScript>
+                        <div className='container-address flex flex-col items-center justify-center w-full text-light light-mode:text-dark-black p-2'>
+                            <p className='font-text text-sm'><strong>Adresse : </strong>{bar?.address}</p>
+                            <p className='font-text text-sm'><strong>Téléphone : </strong>{bar?.phone_number}</p>
+                            <a href={bar?.website} target='blank' className='font-text text-md text-blue-600 underline cursor-pointer'>Site internet</a>
+                        </div>
                     </div>
-                </div>
-            </aside>
-            { isLogin && (
-                <div className='coontainer-button flex flex-col items-center justify-center w-full p-5'>
-                    <Button text="Ajouter un commentaire" className='bg-primary hover:bg-secondary' onClick={handleChangeClick} />
-                </div>
-            )}
-            < AllComments barId={id} />
+                </aside>
+                { isLogin && (
+                    <div className='coontainer-button flex flex-col items-center justify-center w-full p-5'>
+                        <Button text="Ajouter un commentaire" className='bg-primary hover:bg-secondary' onClick={handleChangeClick} />
+                    </div>
+                )}
+                < AllComments barId={id} />
+            </div>
             <Modal />
-        </div>
+        </>
     );
 };
 
