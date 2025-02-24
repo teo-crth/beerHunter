@@ -7,8 +7,6 @@ import FavoritesBarCard from "../components/profil/FavoritesBarCard";
 import Modal from "../components/ui/Modal";
 import NotFoundPage from "./NotFoundPage";
 import { fetchFavoritesBar } from "../api/favorites_bar/favoritesBarCrud";
-import { fetchCommentsOfOneUser } from "../api/user_comments/commentsCrud";
-import { fetchImagesOfOneComment } from "../api/user_comments/imagesCommentCrud";
 import Button from "../components/ui/Button";
 
 
@@ -22,19 +20,7 @@ export default function Profil() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        if(user) {
-          const commentsData = await fetchCommentsOfOneUser(user?.id);
-          const updatedUserData = { ...user, comments: [] };
-  
-          const commentsWithImages = await Promise.all(
-            commentsData.map(async (comment) => {
-              const commentImage = await fetchImagesOfOneComment(comment?.id);
-              return { ...comment, commentImage };
-            })
-          );
-          
-          setUser((updatedUserData) => ({ ...updatedUserData, comments: commentsWithImages }));
-          
+        if(user) {          
           const favoritesBarsData = await fetchFavoritesBar(user?.id);
           setUser((prev) => ({ ...prev, favoritesBars: favoritesBarsData }));
         }

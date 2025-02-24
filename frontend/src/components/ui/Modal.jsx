@@ -7,6 +7,7 @@ import DeleteProfil from '../modals/DeleteProfil';
 import Connexion from '../modals/Connexion';
 import Signup from '../modals/Signup';
 import MessageModal from '../modals/MessageModal';
+import AddComment from '../modals/AddComment';
 
 const Modal = () => {
   const { closeModal, modalState } = useContext(AppContext);
@@ -24,6 +25,7 @@ const Modal = () => {
           { type === 'deleteProfil' && <DeleteProfil />}
           { type === 'login' && <Connexion />}
           { type === 'signup' && <Signup />}
+          { type === 'addComment' && <AddComment />}
           { type === 'errorMessage' || type === 'successMessage' ? <MessageModal text={text} type={type} onClose={closeModal} isOpen={isOpen} /> : null}
       </div>
     </div>

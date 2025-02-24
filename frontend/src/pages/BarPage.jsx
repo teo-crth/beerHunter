@@ -19,7 +19,7 @@ const LIBRAIRIES = ['places', 'marker'];
 
 const BarPage = () => {
     const mapRef = useRef(null);
-    const markerRef = useRef(null);   
+    const markerRef = useRef(null);
     const { id } = useParams();
     const location = useLocation();
     const barObject = location.state;
@@ -66,7 +66,7 @@ const BarPage = () => {
         setGoogleLoaded(true);
     };
 
-    const openingHours = translatedOpeningHours(bar.opening_hours);
+    const openingHours = translatedOpeningHours(bar?.opening_hours);
 
     const settings = {
         dots: true,
@@ -107,13 +107,15 @@ const BarPage = () => {
         };
     }
 
+    const handleChangeClick = () => openModal('addComment');
+
     return (
         <div className='container-barPage min-h-[calc(100vh-159px)] flex flex-col items-center justify-center w-full light-mode:bg-light md:p-10 lg:p-20 xl:p-20'>
             <section className="container-bar-img-description flex flex-wrap justify-center items-center w-full mb-5">
                 <div className="container-img flex flex-col justify-center items-center w-[95%] md:w-[40%] lg:w-[40%] xl:w-[40%] h-[25em]">
                     <img
-                        src={`${BASE_URL}${bar.bar_picture}`}
-                        alt={`photo ${bar.name}`}
+                        src={`${BASE_URL}${bar?.bar_picture}`}
+                        alt={`photo ${bar?.name}`}
                         className='rounded-lg object-cover h-full w-full shadow-md'
                     />
                     {isLogin && !user?.favoritesBars?.some(favBar => favBar.id === bar.id) && (
@@ -125,14 +127,14 @@ const BarPage = () => {
                 </div>
                 <div className='container-description flex flex-col justify-start gap-3 p-3 items-start w-[95%] md:w-[60%] lg:w-[60%] xl:w-[60%] h-[25em]'>
                     <div className="container-title w-full flex flex-col justify-start items-center mt-2">
-                        <h1 className='font-title font-bold text-center text-2xl text-light light-mode:text-dark-black tracking-wider'>{bar.name}</h1>
+                        <h1 className='font-title font-bold text-center text-2xl text-light light-mode:text-dark-black tracking-wider'>{bar?.name}</h1>
                         <div className='container-rating flex items-center justify-center gap-2'>
                             <span className='font-bold font-text text-md text-light light-mode:text-dark-black'>
-                                Note : {bar.rate}/5
+                                Note : {bar?.rate}/5
                             </span>
                             <ReactStars
                                 count={5}
-                                value={bar.rate}
+                                value={bar?.rate}
                                 size={24}
                                 activeColor="#FEC514"
                                 edit={false}
@@ -169,15 +171,17 @@ const BarPage = () => {
                         <div ref={mapRef} className='shadow-md rounded-lg w-full h-80' />
                     </LoadScript>
                     <div className='container-address flex flex-col items-center justify-center w-full text-light light-mode:text-dark-black p-2'>
-                        <p className='font-text text-sm'><strong>Adresse : </strong>{bar.address}</p>
-                        <p className='font-text text-sm'><strong>Téléphone : </strong>{bar.phone_number}</p>
-                        <a href={bar.website} target='blank' className='font-text text-md text-blue-600 underline cursor-pointer'>Site internet</a>
+                        <p className='font-text text-sm'><strong>Adresse : </strong>{bar?.address}</p>
+                        <p className='font-text text-sm'><strong>Téléphone : </strong>{bar?.phone_number}</p>
+                        <a href={bar?.website} target='blank' className='font-text text-md text-blue-600 underline cursor-pointer'>Site internet</a>
                     </div>
                 </div>
             </aside>
-            <div className='coontainer-button flex flex-col items-center justify-center w-full p-5'>
-                <Button text="Ajouter un commentaire" className='bg-primary hover:bg-secondary' />
-            </div>
+            { isLogin && (
+                <div className='coontainer-button flex flex-col items-center justify-center w-full p-5'>
+                    <Button text="Ajouter un commentaire" className='bg-primary hover:bg-secondary' onClick={handleChangeClick} />
+                </div>
+            )}
             <Modal />
         </div>
     );

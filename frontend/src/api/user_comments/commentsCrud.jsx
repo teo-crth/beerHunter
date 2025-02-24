@@ -7,7 +7,6 @@ export const fetchCommentsOfOneUser = async (userId) => {
     try {
         // Requête avec axios
         const response = await axios.get(`${BASE_URL}/api/users/${userId}/comments`);
-    
         return response.data;
     } catch (error) {
         console.error('Erreur lors de la récupération des commentaires:', error);
@@ -30,8 +29,7 @@ export const fetchAllComments = async () => {
 export const fetchOneComment = async (commentId) => {
     try {
         // Requête avec axios
-        const response = await axios.get(`${BASE_URL}/api/comments/${commentId}`);
-    
+        const response = await axios.get(`${BASE_URL}/api/comments/${commentId}`);      
         return response.data;
     } catch (error) {
         console.error('Erreur lors de la récupération du commentaire:', error);
@@ -40,11 +38,12 @@ export const fetchOneComment = async (commentId) => {
 }
 
 export const addComment = async (text, rate, user_id, bar_id, image) => {
+    const token = localStorage.getItem('token').replace(/['"]+/g, '');
+    let image_id;
 
     if (image) {
         try {
-            const imageResponse = await createCommentImage(commentId, image);
-            image = imageResponse.image;
+            const imageResponse = await createCommentImage(image, token);
             image_id = imageResponse.id;
         } catch (error) {
             console.error('Erreur lors de l\'ajout de l\'image:', error);
@@ -56,13 +55,23 @@ export const addComment = async (text, rate, user_id, bar_id, image) => {
 
     try {
         // Requête avec axios
-        const response = await axios.post(`${BASE_URL}/api/comments`, {
-            text,
-            rate,
-            user_id,
-            bar_id,
-            comment_image_id: image_id
-        });
+        console.log('token in addComment', token);
+        
+        const response = await axios.post(`${BASE_URL}/api/comments`, 
+            {
+                text,
+                rate,
+                user_id,
+                bar_id,
+                comment_image_id: image_id
+            },
+            { 
+                headers: { 
+                    'Content-Type': 'application/json', 
+                    'Authorization': `Bearer ${token}`
+                }
+            }
+        );
     
         return response.data;
     } catch (error) {

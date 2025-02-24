@@ -90,7 +90,6 @@ const edit = (req, res) => {
   if (userData.password) updatedFields.password = userData.password;
 
   if (req.file) {   
-    const profilePicturePath = path.join("public", "assets", "images", "profil-pictures", req.file.filename);
     const uploadPath = path.join(__dirname, "..", "..", "public", "assets", "images", "profil-pictures");
     const uploadedFileName = req.file.filename;
     const imageUrl = `/assets/images/profil-pictures/${req.file.filename}`;
