@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Outlet } from 'react-router-dom';
 import { AppContext } from '../../context/context';
 import Header from '../header/Header';
-import Footer from '@footer/Footer';
+import Footer from '../footer/Footer';
 import BurgerMenu from '../burgerMenu/BurgerMenu';
 
 const Layout = () => {
