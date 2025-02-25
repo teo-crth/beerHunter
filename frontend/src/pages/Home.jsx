@@ -1,5 +1,5 @@
 import React from "react";
-import SearchResultBars from "../components/Bar/SearchResultBars";
+import SearchResultBars from "../components/ar/SearchResultBars";
 import SearchBar from "../components/ui/SearchBar";
 import Modal from "../components/ui/Modal";
 

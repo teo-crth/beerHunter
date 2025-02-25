@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import dayjs from 'dayjs';
-import EditProfil from '../Modals/EditProfil';
+import EditProfil from '../odals/EditProfil';
 import { AppContext } from '../../context/context';
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
