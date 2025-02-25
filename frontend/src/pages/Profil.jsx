@@ -1,9 +1,9 @@
 import React, { useEffect, useContext } from "react";
 import { useNavigate } from 'react-router-dom';
 import { AppContext } from "../context/context";
-import ProfilCard from "../components/profil/ProfilCard";
-import CommentsCard from "../components/profil/CommentsCard";
-import FavoritesBarCard from "../components/profil/FavoritesBarCard";
+import ProfilCard from "../components/Profil/ProfilCard";
+import CommentsCard from "../components/Profil/CommentsCard";
+import FavoritesBarCard from "../components/Profil/FavoritesBarCard";
 import Modal from "../components/ui/Modal";
 import NotFoundPage from "./NotFoundPage";
 import { fetchFavoritesBar } from "../api/favorites_bar/favoritesBarCrud";

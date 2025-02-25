@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useForm, ValidationError } from '@formspree/react';
 import Button from '../components/ui/Button';
 import Modal from '../components/ui/Modal';
-import ContactForm from '../components/contact/ContactForm';
+import ContactForm from '../components/Contact/ContactForm';
 
 const Contact = () => {
     const [state, handleSubmit] = useForm("xanqjakq");
