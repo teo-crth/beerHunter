@@ -9,5 +9,16 @@
         }
       }
     ],
-    "rewrites": [{ "source": "/(.)", "destination": "/index.html" }]
+    "headers": [
+    {
+      "source": "/(.)",
+      "headers": [{ "key": "Cache-Control", "value": "no-cache" }]
+    }
+  ],
+    "routes": [
+      {
+        "src": "/(.*)",
+        "dest": "/index.html"
+      }
+    ]
   }
