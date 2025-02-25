@@ -1,14 +1,14 @@
 import React, { useContext } from 'react';
 import { AppContext } from '../../context/context';
 
-import EditForm from '../odals/EditForm';
-import EditPassword from '../odals/EditPassword';
-import DeleteProfil from '../odals/DeleteProfil';
-import DeleteComment from '../odals/DeleteComment';
-import Connexion from '../odals/Connexion';
-import Signup from '../odals/SignUp';
-import MessageModal from '../odals/MessageModal';
-import AddComment from '../odals/AddComment';
+import EditForm from '../Modals/EditForm';
+import EditPassword from '../Modals/EditPassword';
+import DeleteProfil from '../Modals/DeleteProfil';
+import DeleteComment from '../Modals/DeleteComment';
+import Connexion from '../Modals/Connexion';
+import Signup from '../Modals/SignUp';
+import MessageModal from '../Modals/MessageModal';
+import AddComment from '../Modals/AddComment';
 
 const Modal = () => {
   const {closeModal, modalState} = useContext(AppContext);

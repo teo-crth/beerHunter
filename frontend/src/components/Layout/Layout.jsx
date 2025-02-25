@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom';
 import { AppContext } from '../../context/context';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
-import BurgerMenu from '../urgerMenu/BurgerMenu';
+import BurgerMenu from '../BurgerMenu/BurgerMenu';
 
 const Layout = () => {
 
