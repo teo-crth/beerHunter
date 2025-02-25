@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router';
 import Header from '../components/header/Header';
-import Footer from '../components/footer/Footer';
+import Footer from '@components/footer/Footer';
 import Button from '../components/ui/Button';
 import Modal from '../components/ui/Modal';
 import BurgerMenu from '../components/burgerMenu/BurgerMenu';
