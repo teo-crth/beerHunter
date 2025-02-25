@@ -18,8 +18,12 @@ app.use(express.json({limit: '50mb'}));
 const cors = require("cors");
 
 app.use(
-  cors({
-    origin: process.env.FRONTEND_URL ?? "http://localhost:3000",
+  // cors({
+  //   origin: process.env.FRONTEND_URL ?? "http://localhost:3000",
+  //   optionsSuccessStatus: 200,
+  // })
+    cors({
+    origin: '*',
     optionsSuccessStatus: 200,
   })
 );
