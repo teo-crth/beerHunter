@@ -6,7 +6,7 @@ import EditPassword from '../modals/EditPassword';
 import DeleteProfil from '../modals/DeleteProfil';
 import DeleteComment from '../modals/DeleteComment';
 import Connexion from '../modals/Connexion';
-import Signup from '../modals/Signup';
+import Signup from '../modals/Signup.jsx';
 import MessageModal from '../modals/MessageModal';
 import AddComment from '../modals/AddComment';
 
