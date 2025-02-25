@@ -11,7 +11,7 @@ import MessageModal from '../Modals/MessageModal';
 import AddComment from '../Modals/AddComment';
 
 const Modal = () => {
-  const { closeModal, modalState } = useContext(AppContext);
+  const {closeModal, modalState} = useContext(AppContext);
   const type = modalState.type;
   const isOpen = modalState.isOpen;
   const text = modalState.text;

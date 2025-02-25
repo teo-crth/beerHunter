@@ -11,7 +11,7 @@ import { fetchBeersAvailableForOneBar } from '../api/beer/beersAvailableInBar';
 import Modal from '../components/ui/Modal';
 import '../../node_modules/slick-carousel/slick/slick.css';
 import '../../node_modules/slick-carousel/slick/slick-theme.css';
-import AllComments from '../components/bar/AllComments';
+import AllComments from '../components/Bar/AllComments';
 
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 const GOOGLE_KEY = import.meta.env.VITE_GOOGLE_KEY; 

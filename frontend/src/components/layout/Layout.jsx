@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import { Outlet } from 'react-router-dom';
 import { AppContext } from '../../context/context';
-import Header from '../header/Header';
+import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
-import BurgerMenu from '../burgerMenu/BurgerMenu';
+import BurgerMenu from '../BurgerMenu/BurgerMenu';
 
 const Layout = () => {
 

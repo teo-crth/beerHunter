@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { useNavigate } from 'react-router';
 import Button from '../components/ui/Button';
 import Modal from '../components/ui/Modal';
-import BurgerMenu from '../components/burgerMenu/BurgerMenu';
+import BurgerMenu from '../components/BurgerMenu/BurgerMenu';
 import { AppContext } from '../context/context';
 
 const NoFoundPage = () => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import Bar from '../bar/Bar';
+import Bar from '../Bar/Bar';
 
 const FavoritesBarCard = ({ user }) => {   
     if (!user?.favoritesBars || user?.favoritesBars.length === 0) return null;
