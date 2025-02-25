@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Outlet } from 'react-router-dom';
 import { AppContext } from '../../context/context';
 import Header from '../header/Header';
-// import Footer from '@components/footer/Footer';
+import Footer from '../Footer/Footer';
 import BurgerMenu from '../burgerMenu/BurgerMenu';
 
 const Layout = () => {
@@ -15,7 +15,7 @@ const Layout = () => {
       <main className='min-h-[calc(100vh-159px)]'>
         <Outlet />
       </main>
-      {/* <Footer /> */}
+      <Footer />
       {menuOpen && (
           <BurgerMenu />
       )}
