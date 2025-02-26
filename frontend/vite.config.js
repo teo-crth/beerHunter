@@ -5,18 +5,7 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: 
-    [
-      react(), 
-      tailwindcss(), 
-      ViteHtmlPlugin({
-        inject: {
-          injectData: {
-            favicon: '/assets/logo/BeerHunter-carre.webp'
-          }
-        }
-      })
-    ], 
+  plugins: [react(), tailwindcss()], 
   base: "./",
   server: {
     historyApiFallback: true,
