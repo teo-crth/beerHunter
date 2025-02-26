@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faMoon } from '@fortawesome/free-solid-svg-icons';
 import { AppContext } from '../../context/context';
-import logo from '../../assets/logo/beerHunter-letter-white.webp';
+import logo from '../../../public/assets/logo/beerHunter-letter-white.webp';
 import logoLight from '../../assets/logo/beerHunter-letter-black.webp';
 const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
