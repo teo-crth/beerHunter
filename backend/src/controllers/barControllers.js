@@ -116,10 +116,11 @@ const addMultipleBars = async (req, res) => {
             
             if (bar.photo_reference) {
                 const photo_reference = bar.photo_reference;
-                const imageBuffer = await processImage(photo_reference);
+                // const imageBuffer = await processImage(photo_reference);
                 const imageName = `${uuid.v4()}.webp`;
                 const imagePath = path.join(__dirname, "..", "..", "public", 'assets', 'images', 'bar-images', imageName);
-                fs.writeFileSync(imagePath, imageBuffer);
+                // fs.writeFileSync(imagePath, imageBuffer);
+                fs.writeFileSync(imagePath, photo_reference);
                 bar.bar_picture = `/assets/images/bar-images/${imageName}`;
             } else {
                 bar.bar_picture = '/assets/images/bar-images/bar-default.webp';

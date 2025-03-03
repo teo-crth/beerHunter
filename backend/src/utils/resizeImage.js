@@ -6,6 +6,7 @@ const GOOGLE_KEY = process.env.GOOGLE_KEY;
 const processImage = async (photo_reference) => {
     try {
         const response = await axios.get(`https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${photo_reference}&key=${GOOGLE_KEY}`, { responseType: 'arraybuffer' });
+        console.log('response resized:', response);
         
         const buffer = Buffer.from(response.data, 'binary');
         const resizedBuffer = await sharp(buffer)
